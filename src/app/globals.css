@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/*
+  ============================================================================
+  MIGAJA — TOKENS DE DISEÑO (ÚNICA FUENTE DE VERDAD)
+  ----------------------------------------------------------------------------
+  Todo lo provisional de la marca vive aquí y en src/lib/brand.ts.
+  Para reemplazar la identidad visual, cambia SOLO este archivo y brand.ts.
+  ============================================================================
+*/
+
+@theme inline {
+  /* --- Paleta (provisional) ------------------------------------------------ */
+  --color-crema: #f6eedc; /* fondo principal            */
+  --color-papel: #fbf6ea; /* fondo de fichas/tarjetas   */
+  --color-crema-hondo: #eadfc6; /* paneles y líneas      */
+  --color-cacao: #3b2418; /* texto principal            */
+  --color-tinta-suave: #6b5546; /* texto secundario     */
+  --color-guayaba: #c8453b; /* acción principal (relleno) */
+  --color-guayaba-tinta: #a5382f; /* guayaba para texto (AA) */
+  --color-pistacho: #8aa17a; /* acento puntual          */
+  --color-kraft: #c9a878; /* detalles, bordes decorativos */
+  --color-linea: #d8c7a8; /* bordes finos               */
+
+  /* --- Tipografía ---------------------------------------------------------- */
+  --font-serif: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
+
+  /* --- Radios (esquinas poco redondeadas) ---------------------------------- */
+  --radius-ticket: 3px;
+  --radius-soft: 6px;
+
+  /* --- Movimiento ---------------------------------------------------------- */
+  --ease-papel: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-crema);
+    color: var(--color-cacao);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background-color: var(--color-kraft);
+    color: var(--color-cacao);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-guayaba-tinta);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@layer utilities {
+  /* Cifras tabulares para precios y datos */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Textura sutil de papel (CSS ligero, sin imágenes pesadas) */
+  .texture-paper {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+
+  /* Borde tipo etiqueta troquelada */
+  .borde-ticket {
+    border: 1px solid var(--color-linea);
+  }
+
+  /* Reveal discreto al entrar */
+  .reveal {
+    animation: reveal-ficha 220ms var(--ease-papel) both;
+  }
+}
+
+@keyframes reveal-ficha {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

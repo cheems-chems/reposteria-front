@@ -106,10 +106,34 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
             {product.name}
           </h1>
           <PriceSeal amount={product.price} compareAt={product.compareAt} size="lg" />
+          <p className="font-sans text-xs text-tinta-suave">
+            Precio estimado: la repostería confirma el valor final.
+          </p>
           <StatusBadge
             label={product.available ? "Disponible por encargo" : "No disponible"}
             tone={product.available ? "pistacho" : "apagado"}
           />
+          {product.pricing?.mode === "perUnit" ? (
+            <p className="font-sans text-sm text-tinta-suave">
+              Precio por {product.pricing.unitLabel ?? "unidad"}
+              {product.pricing.minQty
+                ? ` · mínimo ${product.pricing.minQty}`
+                : ""}
+              {product.pricing.stepQty && product.pricing.stepQty > 1
+                ? `, de a ${product.pricing.stepQty}`
+                : ""}
+              .
+            </p>
+          ) : null}
+          {product.preparations && product.preparations.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {product.preparations.map((preparation) => (
+                <Tag key={preparation.id} accent="pistacho">
+                  {preparation.label}
+                </Tag>
+              ))}
+            </div>
+          ) : null}
           {product.shortDescription ? (
             <p className="text-tinta-suave">{product.shortDescription}</p>
           ) : null}

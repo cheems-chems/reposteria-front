@@ -7,7 +7,7 @@ import { getCategories, getProducts } from "@/lib/api";
 export const metadata: Metadata = {
   title: "Tienda",
   description:
-    "Catálogo de tortas, bizcochos y postres hechos por encargo.",
+    "Catálogo de tortas, bizcochos, postres y pasabocas hechos por encargo.",
 };
 
 export default async function TiendaPage() {

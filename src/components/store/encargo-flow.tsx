@@ -4,10 +4,18 @@ import { useState } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/field";
+import { PasabocaBuilder } from "@/components/store/pasaboca-builder";
 import { cn } from "@/lib/cn";
 import { formatCOP } from "@/lib/format";
 import { normalizeWhatsApp, whatsappUrl } from "@/lib/whatsapp";
-import type { ProductListItem } from "@/lib/api";
+import {
+  buildLines,
+  lineTotal,
+  orderTotals,
+  selectionProblems,
+  type BuilderSelection,
+} from "@/lib/encargo";
+import type { OrderLine, ProductListItem } from "@/lib/api";
 
 type Fulfillment = "recogida" | "domicilio";
 
@@ -24,6 +32,10 @@ const STEP_TITLES = [
   "¿Lo recoges o lo llevamos?",
 ];
 
+/** Valor del selector del paso 0: "" | slug | "bandeja" | "otro". */
+const BANDEJA = "bandeja";
+const OTRO = "otro";
+
 /** Formatea 'YYYY-MM-DD' a 'DD/MM/YYYY' sin depender de la zona horaria. */
 function formatDate(iso: string): string {
   const [year, month, day] = iso.split("-");
@@ -37,14 +49,26 @@ export function EncargoFlow({
   initialProductSlug,
 }: EncargoFlowProps) {
   const hasProducts = products.length > 0;
+  const unitProducts = products.filter((p) => p.pricing?.mode === "perUnit");
+  const simpleProducts = products.filter((p) => p.pricing?.mode !== "perUnit");
+  const initialProduct = products.find((p) => p.slug === initialProductSlug);
+  const initialIsUnit = initialProduct?.pricing?.mode === "perUnit";
+
   const [step, setStep] = useState(0);
-  const [productSlug, setProductSlug] = useState(
-    initialProductSlug && products.some((p) => p.slug === initialProductSlug)
-      ? initialProductSlug
-      : hasProducts
-        ? ""
-        : "otro",
-  );
+  const [choice, setChoice] = useState<string>(() => {
+    if (initialProduct) return initialIsUnit ? BANDEJA : initialProduct.slug;
+    return hasProducts ? "" : OTRO;
+  });
+  const [tray, setTray] = useState<BuilderSelection>(() => {
+    if (!initialProduct || !initialIsUnit) return {};
+    const min = Math.max(1, initialProduct.pricing?.minQty ?? 1);
+    return {
+      [initialProduct.slug]: {
+        quantity: min,
+        preparationId: initialProduct.preparations?.[0]?.id ?? null,
+      },
+    };
+  });
   const [customProduct, setCustomProduct] = useState("");
   const [date, setDate] = useState("");
   const [people, setPeople] = useState("");
@@ -55,18 +79,64 @@ export function EncargoFlow({
   const [error, setError] = useState<string | null>(null);
   const [opened, setOpened] = useState(false);
 
-  const selectedProduct = products.find((p) => p.slug === productSlug);
+  const isBandeja = choice === BANDEJA;
+  const selectedProduct = simpleProducts.find((p) => p.slug === choice);
+  const isCustom = choice === OTRO || (!isBandeja && !selectedProduct);
   const waNumber = normalizeWhatsApp(whatsapp);
-  const isCustom = productSlug === "otro" || !selectedProduct;
 
-  const productLabel = isCustom
-    ? customProduct.trim() || "Pedido especial"
-    : (selectedProduct?.name ?? "Pedido especial");
+  const productLabel = isBandeja
+    ? "Bandeja de pasabocas"
+    : isCustom
+      ? customProduct.trim() || "Pedido especial"
+      : (selectedProduct?.name ?? "Pedido especial");
+
+  /**
+   * Líneas del encargo. Un producto fijo es una línea de 1 unidad; una bandeja
+   * son varias líneas con cantidad y preparación. El precio es un estimado.
+   */
+  const orderLines: OrderLine[] = isBandeja
+    ? buildLines(unitProducts, tray)
+    : selectedProduct
+      ? [
+          {
+            productSlug: selectedProduct.slug,
+            name: selectedProduct.name,
+            quantity: 1,
+            unitPrice: selectedProduct.price,
+            preparationId: null,
+            preparationLabel: null,
+          },
+        ]
+      : [];
+  const totals = orderTotals(orderLines);
+
+  function setQuantity(slug: string, quantity: number) {
+    setTray((prev) => ({
+      ...prev,
+      [slug]: {
+        quantity,
+        preparationId:
+          prev[slug]?.preparationId ??
+          unitProducts.find((p) => p.slug === slug)?.preparations?.[0]?.id ??
+          null,
+      },
+    }));
+  }
+
+  function setPreparation(slug: string, preparationId: string) {
+    setTray((prev) => ({
+      ...prev,
+      [slug]: { quantity: prev[slug]?.quantity ?? 0, preparationId },
+    }));
+  }
 
   function validate(current: number): string | null {
     if (current === 0) {
-      if (!productSlug) return "Elige un producto para continuar.";
-      if (isCustom && !customProduct.trim()) {
+      if (!choice) return "Elige un producto para continuar.";
+      if (isBandeja) {
+        const problems = selectionProblems(unitProducts, tray);
+        if (problems.length > 0) return problems[0];
+      } else if (isCustom && !customProduct.trim()) {
         return "Cuéntanos qué quieres encargar.";
       }
     }
@@ -108,10 +178,24 @@ export function EncargoFlow({
 
   function buildMessage(): string {
     const lines = ["¡Hola! Quiero hacer un encargo:"];
-    lines.push("", `Producto: ${productLabel}`);
+    if (isBandeja) {
+      lines.push("", "Pasabocas (bandeja):");
+      for (const line of orderLines) {
+        const prep = line.preparationLabel ? ` (${line.preparationLabel})` : "";
+        lines.push(`- ${line.name}${prep} ×${line.quantity}`);
+      }
+      lines.push("", `Unidades totales: ${totals.units}`);
+    } else {
+      lines.push("", `Producto: ${productLabel}`);
+    }
     if (date) lines.push(`Para: ${formatDate(date)}`);
     if (people) lines.push(`Personas: ${people}`);
     if (details.trim()) lines.push(`Personalización: ${details.trim()}`);
+    if (totals.total > 0) {
+      lines.push(
+        `Precio estimado: ${formatCOP(totals.total)} (la repostería confirma el valor final)`,
+      );
+    }
     lines.push(
       `Entrega: ${
         fulfillment === "domicilio"
@@ -173,15 +257,15 @@ export function EncargoFlow({
               <div className="flex flex-col gap-4">
                 {hasProducts ? (
                   <ul className="grid gap-2 sm:grid-cols-2">
-                    {products.map((product) => (
+                    {simpleProducts.map((product) => (
                       <li key={product.slug}>
                         <button
                           type="button"
-                          onClick={() => setProductSlug(product.slug)}
-                          aria-pressed={productSlug === product.slug}
+                          onClick={() => setChoice(product.slug)}
+                          aria-pressed={choice === product.slug}
                           className={cn(
                             "w-full border px-4 py-3 text-left transition-colors",
-                            productSlug === product.slug
+                            choice === product.slug
                               ? "border-cacao bg-crema-hondo"
                               : "border-linea hover:bg-crema-hondo/60",
                           )}
@@ -195,14 +279,36 @@ export function EncargoFlow({
                         </button>
                       </li>
                     ))}
+                    {unitProducts.length > 0 ? (
+                      <li>
+                        <button
+                          type="button"
+                          onClick={() => setChoice(BANDEJA)}
+                          aria-pressed={isBandeja}
+                          className={cn(
+                            "w-full border px-4 py-3 text-left transition-colors",
+                            isBandeja
+                              ? "border-cacao bg-crema-hondo"
+                              : "border-linea hover:bg-crema-hondo/60",
+                          )}
+                        >
+                          <span className="block font-serif text-lg text-cacao">
+                            Arma tu bandeja
+                          </span>
+                          <span className="block text-sm text-tinta-suave">
+                            Elige pasabocas y cantidades
+                          </span>
+                        </button>
+                      </li>
+                    ) : null}
                     <li>
                       <button
                         type="button"
-                        onClick={() => setProductSlug("otro")}
-                        aria-pressed={productSlug === "otro"}
+                        onClick={() => setChoice(OTRO)}
+                        aria-pressed={isCustom}
                         className={cn(
                           "w-full border px-4 py-3 text-left transition-colors",
-                          productSlug === "otro"
+                          isCustom
                             ? "border-cacao bg-crema-hondo"
                             : "border-linea hover:bg-crema-hondo/60",
                         )}
@@ -216,6 +322,15 @@ export function EncargoFlow({
                       </button>
                     </li>
                   </ul>
+                ) : null}
+
+                {isBandeja ? (
+                  <PasabocaBuilder
+                    products={unitProducts}
+                    selection={tray}
+                    onChangeQuantity={setQuantity}
+                    onChangePreparation={setPreparation}
+                  />
                 ) : null}
 
                 {isCustom ? (
@@ -363,12 +478,42 @@ export function EncargoFlow({
                 </span>
               </div>
               <dl className="flex flex-col divide-y divide-dashed divide-cacao/30 px-4 py-3 text-sm">
-                <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-tinta-suave">Producto</dt>
-                  <dd className="text-right font-medium text-cacao">
-                    {productLabel}
-                  </dd>
-                </div>
+                {isBandeja ? (
+                  <div className="flex flex-col gap-2 py-2">
+                    <dt className="text-tinta-suave">Pasabocas</dt>
+                    <dd className="flex flex-col gap-1.5">
+                      {orderLines.map((line) => (
+                        <span
+                          key={line.productSlug}
+                          className="flex justify-between gap-4 text-cacao"
+                        >
+                          <span>
+                            {line.name}
+                            {line.preparationLabel
+                              ? ` · ${line.preparationLabel}`
+                              : ""}
+                          </span>
+                          <span className="tabular whitespace-nowrap">
+                            ×{line.quantity} · {formatCOP(lineTotal(line))}
+                          </span>
+                        </span>
+                      ))}
+                      <span className="mt-1 flex justify-between gap-4 border-t border-dashed border-cacao/30 pt-1.5 text-tinta-suave">
+                        <span>Unidades totales</span>
+                        <span className="tabular text-cacao">
+                          {totals.units}
+                        </span>
+                      </span>
+                    </dd>
+                  </div>
+                ) : (
+                  <div className="flex justify-between gap-4 py-2">
+                    <dt className="text-tinta-suave">Producto</dt>
+                    <dd className="text-right font-medium text-cacao">
+                      {productLabel}
+                    </dd>
+                  </div>
+                )}
                 <div className="flex justify-between gap-4 py-2">
                   <dt className="text-tinta-suave">Para</dt>
                   <dd className="tabular text-right text-cacao">
@@ -400,11 +545,22 @@ export function EncargoFlow({
                   </div>
                 ) : null}
                 <div className="flex justify-between gap-4 py-2">
+                  <dt className="text-tinta-suave">Precio estimado</dt>
+                  <dd className="tabular text-right font-medium text-guayaba-tinta">
+                    {totals.total > 0 ? formatCOP(totals.total) : "—"}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4 py-2">
                   <dt className="text-tinta-suave">Nombre</dt>
                   <dd className="text-right text-cacao">{name.trim()}</dd>
                 </div>
               </dl>
             </div>
+
+            <p className="font-sans text-xs text-tinta-suave">
+              El precio mostrado es una estimación: la repostería confirma el
+              valor final por WhatsApp.
+            </p>
 
             {waNumber ? (
               <Alert tone="info" title="Se abrirá WhatsApp">

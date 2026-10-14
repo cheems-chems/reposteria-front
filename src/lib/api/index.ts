@@ -37,6 +37,8 @@ function toListItem(product: Product): ProductListItem {
     featured: product.featured,
     imageUrl: product.imageUrl,
     shortDescription: product.shortDescription,
+    pricing: product.pricing,
+    preparations: product.preparations,
   };
 }
 

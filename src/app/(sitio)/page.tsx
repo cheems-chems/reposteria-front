@@ -84,7 +84,7 @@ export default async function HomePage() {
 					<h2 className="font-serif text-3xl text-cacao">
 						Explora por categoría
 					</h2>
-					<div className="mt-6 grid gap-4 sm:grid-cols-3">
+					<div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 						{categories.map((category) => (
 							<Link
 								key={category.slug}

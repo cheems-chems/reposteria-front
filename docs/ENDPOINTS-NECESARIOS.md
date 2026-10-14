@@ -147,6 +147,20 @@ Notas críticas de honestidad de datos:
 }
 ```
 
+## 8. Pasabocas, preparaciones y armado de bandeja (pendiente)
+
+El frontend ya usa estos campos en la capa `src/lib/api` (tipos y datos
+provisionales); el backend aún no los provee.
+
+- `Product`/`ProductListItem`: campos nuevos opcionales `pricing` (`mode`, `unitLabel`, `minQty`, `stepQty`) y `preparations[]` (`id`, `label`, `priceDelta`, `description`).
+- Categoría `pasabocas` servida por `GET /categories` (sin cambios de forma).
+- `GET /products?category=pasabocas` debe devolver `pricing` y `preparations`.
+- **Validaciones**: `minQty`/`stepQty` por producto; coherencia `mode: "perUnit"` ↔ reglas presentes; `priceDelta` entero ≥ 0.
+- **Cálculo de precio autoritativo** en servidor: `unitPrice = price + priceDelta(preparación)`; `lineTotal = unitPrice × quantity`; `total = Σ lineTotal`; `units = Σ quantity`. El front solo estima.
+- `POST /orders` (o `/encargos`): cuerpo con `items[]` (`productSlug`, `quantity`, `preparationId`), `date`, `people`, `details`, `fulfillment`, `address`, `name`, y total **recalculado** en servidor (nunca confiar en el total del cliente).
+- `GET /trays` (opcional): `TrayPreset[]` si la dueña define bandejas fijas.
+- Sin decimales: precios enteros COP.
+
 ---
 
 ## Notas de implementación

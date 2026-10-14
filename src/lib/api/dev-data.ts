@@ -30,6 +30,21 @@ export const DEV_CATEGORIES: Category[] = [
     name: "Postres",
     description: "Postres individuales y para compartir.",
   },
+  {
+    slug: "pasabocas",
+    name: "Pasabocas",
+    description: "Bocaditos por unidad o por bandeja, crudos o fritos.",
+  },
+];
+
+/**
+ * PROVISIONAL — preparaciones de ejemplo para pasabocas. `priceDelta` es el
+ * ajuste por unidad en COP; se deja en 0 hasta que la dueña confirme si
+ * crudo y frito cuestan distinto.
+ */
+const DEV_PASABOCA_PREPARATIONS = [
+  { id: "crudo", label: "Crudos (para freír en casa)", priceDelta: 0 },
+  { id: "frito", label: "Fritos", priceDelta: 0 },
 ];
 
 export const DEV_PRODUCTS: Product[] = [
@@ -128,6 +143,100 @@ export const DEV_PRODUCTS: Product[] = [
     ingredients: ["Harina", "Leche condensada", "Leche evaporada", "Crema de leche", "Huevo"],
     allergens: ["Gluten", "Huevo", "Lácteos"],
     prepDays: 2,
+  },
+  /*
+    --------------------------------------------------------------------------
+    PASABOCAS — PROVISIONAL. Precios FICTICIOS (por unidad) solo para construir
+    y validar el armador de bandeja. NO son precios reales: la dueña los
+    confirmará por WhatsApp. `ingredients: []` y `allergens: null` a propósito
+    (no inventar datos). Tampoco son reales `minQty` ni `stepQty`.
+    --------------------------------------------------------------------------
+  */
+  {
+    slug: "deditos-de-queso",
+    name: "Deditos de queso",
+    categorySlug: "pasabocas",
+    categoryName: "Pasabocas",
+    price: 1000, // FICTICIO: precio por unidad
+    available: true,
+    imageUrl: null,
+    shortDescription: "Deditos de masa con queso. Se venden por unidad.",
+    description:
+      "Se venden por unidad. Pueden ir crudos (para freír en casa) o fritos.",
+    ingredients: [],
+    allergens: null,
+    prepDays: null,
+    pricing: { mode: "perUnit", unitLabel: "unidad", minQty: 5, stepQty: 5 },
+    preparations: DEV_PASABOCA_PREPARATIONS,
+  },
+  {
+    slug: "deditos-de-bocadillo",
+    name: "Deditos de bocadillo",
+    categorySlug: "pasabocas",
+    categoryName: "Pasabocas",
+    price: 1000, // FICTICIO: precio por unidad
+    available: true,
+    imageUrl: null,
+    shortDescription: "Deditos de masa con bocadillo. Se venden por unidad.",
+    description:
+      "Se venden por unidad. Pueden ir crudos (para freír en casa) o fritos.",
+    ingredients: [],
+    allergens: null,
+    prepDays: null,
+    pricing: { mode: "perUnit", unitLabel: "unidad", minQty: 5, stepQty: 5 },
+    preparations: DEV_PASABOCA_PREPARATIONS,
+  },
+  {
+    slug: "deditos-de-queso-y-bocadillo",
+    name: "Deditos de queso y bocadillo",
+    categorySlug: "pasabocas",
+    categoryName: "Pasabocas",
+    price: 1200, // FICTICIO: precio por unidad
+    available: true,
+    imageUrl: null,
+    shortDescription:
+      "Deditos de masa con queso y bocadillo. Se venden por unidad.",
+    description:
+      "Se venden por unidad. Pueden ir crudos (para freír en casa) o fritos.",
+    ingredients: [],
+    allergens: null,
+    prepDays: null,
+    pricing: { mode: "perUnit", unitLabel: "unidad", minQty: 5, stepQty: 5 },
+    preparations: DEV_PASABOCA_PREPARATIONS,
+  },
+  {
+    slug: "ojitos",
+    name: "Ojitos",
+    categorySlug: "pasabocas",
+    categoryName: "Pasabocas",
+    price: 800, // FICTICIO: precio por unidad
+    available: true,
+    imageUrl: null,
+    shortDescription: "Bocaditos pequeños de masa. Se venden por unidad.",
+    description:
+      "Se venden por unidad. Confirmar con la repostería si hay crudos y fritos.",
+    ingredients: [],
+    allergens: null,
+    prepDays: null,
+    pricing: { mode: "perUnit", unitLabel: "unidad", minQty: 5, stepQty: 5 },
+    preparations: DEV_PASABOCA_PREPARATIONS,
+  },
+  {
+    slug: "empanaditas-pequenas",
+    name: "Empanaditas pequeñas",
+    categorySlug: "pasabocas",
+    categoryName: "Pasabocas",
+    price: 700, // FICTICIO: precio por unidad
+    available: true,
+    imageUrl: null,
+    shortDescription: "Empanaditas pequeñas. Se venden por unidad.",
+    description:
+      "Se venden por unidad. Pueden ir crudas (para freír en casa) o fritas.",
+    ingredients: [],
+    allergens: null,
+    prepDays: null,
+    pricing: { mode: "perUnit", unitLabel: "unidad", minQty: 10, stepQty: 10 },
+    preparations: DEV_PASABOCA_PREPARATIONS,
   },
 ];
 

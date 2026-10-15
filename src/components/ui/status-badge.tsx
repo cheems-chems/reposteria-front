@@ -8,12 +8,12 @@ import { cn } from "@/lib/cn";
 type Tone = "neutro" | "kraft" | "pistacho" | "guayaba" | "cacao" | "apagado";
 
 const tones: Record<Tone, string> = {
-  neutro: "border-linea text-tinta-suave",
-  kraft: "border-kraft bg-kraft/15 text-cacao",
-  pistacho: "border-pistacho bg-pistacho/20 text-cacao",
-  guayaba: "border-guayaba bg-guayaba/10 text-guayaba-tinta",
-  cacao: "border-cacao bg-cacao text-crema",
-  apagado: "border-tinta-suave/40 text-tinta-suave",
+  neutro: "border-linea text-brown-soft",
+  kraft: "border-kraft bg-kraft/15 text-brown-text",
+  pistacho: "border-soft-pink bg-soft-pink/20 text-brown-text",
+  guayaba: "border-fuchsia bg-soft-pink/30 text-fuchsia-ink",
+  cacao: "border-brown-text bg-brown-text text-white",
+  apagado: "border-brown-soft/40 text-brown-soft",
 };
 
 interface StatusBadgeProps {

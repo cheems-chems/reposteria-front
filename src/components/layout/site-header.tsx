@@ -10,10 +10,9 @@ const links = [
   { href: "/contacto", label: "Contacto" },
 ];
 
-/** Cabecera pública. En móvil la navegación va en una fila desplazable. */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-linea bg-crema/95 backdrop-blur supports-backdrop-filter:bg-crema/80">
+    <header className="sticky top-0 z-40 border-b border-linea bg-bg/95 backdrop-blur supports-backdrop-filter:bg-bg/80">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <Logo size="sm" />
 
@@ -25,7 +24,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-(--radius-soft) px-3 py-2 font-sans text-sm text-cacao/80 transition-colors hover:bg-crema-hondo hover:text-cacao"
+              className="rounded-soft px-3 py-2 font-sans text-sm text-brown-text/80 transition-colors hover:bg-soft-pink/40 hover:text-brown-text"
             >
               {link.label}
             </Link>
@@ -45,7 +44,7 @@ export function SiteHeader() {
           <Link
             key={link.href}
             href={link.href}
-            className="whitespace-nowrap rounded-(--radius-soft) px-3 py-1.5 font-sans text-sm text-cacao/80 transition-colors hover:bg-crema-hondo hover:text-cacao"
+            className="whitespace-nowrap rounded-soft px-3 py-1.5 font-sans text-sm text-brown-text/80 transition-colors hover:bg-soft-pink/40 hover:text-brown-text"
           >
             {link.label}
           </Link>

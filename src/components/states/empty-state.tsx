@@ -24,7 +24,7 @@ export function EmptyState({
     >
       <svg
         viewBox="0 0 120 60"
-        className="w-20 text-cacao/30"
+        className="w-20 text-brown-text/30"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}
@@ -35,9 +35,9 @@ export function EmptyState({
         <path d="M30 46V30h60v16" />
         <path d="M30 30c0-8 13-14 30-14s30 6 30 14" />
       </svg>
-      <h3 className="font-serif text-2xl text-cacao">{title}</h3>
+      <h3 className="font-serif text-2xl text-brown-text">{title}</h3>
       {description ? (
-        <p className="max-w-md text-sm text-tinta-suave">{description}</p>
+        <p className="max-w-md text-sm text-brown-soft">{description}</p>
       ) : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>

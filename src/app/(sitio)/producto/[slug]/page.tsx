@@ -11,9 +11,33 @@ import { PriceSeal } from "@/components/ui/price-seal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Skeleton } from "@/components/states/skeleton";
 import { useProvisionalData } from "@/lib/api";
-import { getProductBySlug, getProducts } from "@/lib/api";
+import {
+  getComboItems,
+  getProductBySlug,
+  getProducts,
+  type Product,
+} from "@/lib/api";
 
 type ProductoParams = Promise<{ slug: string }>;
+
+/** Precio a mostrar: unitario en ítems de armador, fijo en el resto. */
+function priceAmount(product: Product): number {
+  return product.saleMode === "builder" ? product.unitPrice : product.price;
+}
+
+/** Rótulo del tipo de venta para la ficha. */
+function fichaTypeLabel(product: Product): string | null {
+  switch (product.saleMode) {
+    case "combo":
+      return `Combo · ${product.totalUnits} unidades`;
+    case "pack":
+      return `Bandeja · ${product.unitsPerPack} unidades`;
+    case "builder":
+      return "Se elige por unidades en el armador";
+    default:
+      return null;
+  }
+}
 
 export async function generateStaticParams() {
   const products = await getProducts();
@@ -64,21 +88,39 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
 
   if (!product) notFound();
 
+  const comboItems =
+    product.saleMode === "combo" ? await getComboItems() : [];
+  const composition =
+    product.saleMode === "combo"
+      ? product.composition.map((item) => ({
+          name:
+            comboItems.find((c) => c.slug === item.productSlug)?.name ??
+            item.productSlug,
+          quantity: item.quantity,
+        }))
+      : undefined;
+
+  const typeLabel = fichaTypeLabel(product);
+  const cta =
+    product.saleMode === "builder"
+      ? { href: `/encargo?categoria=${product.categorySlug}`, label: "Armar mi combo" }
+      : { href: `/encargo?producto=${product.slug}`, label: "Hacer encargo" };
+
   return (
     <>
-      <nav aria-label="Ruta" className="mb-6 flex flex-wrap gap-2 text-sm text-tinta-suave">
-        <Link className="hover:text-cacao" href="/tienda">
+      <nav aria-label="Ruta" className="mb-6 flex flex-wrap gap-2 text-sm text-brown-soft">
+        <Link className="hover:text-brown-text" href="/tienda">
           Tienda
         </Link>
         <span aria-hidden="true">/</span>
-        <Link className="hover:text-cacao" href={`/tienda/${product.categorySlug}`}>
+        <Link className="hover:text-brown-text" href={`/tienda/${product.categorySlug}`}>
           {product.categoryName}
         </Link>
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         {/* Media */}
-        <div className="relative overflow-hidden border border-linea bg-crema">
+        <div className="relative overflow-hidden border border-linea bg-bg">
           {product.imageUrl ? (
             <div className="relative aspect-4/3">
               <Image
@@ -102,29 +144,22 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
         {/* Resumen */}
         <div className="flex flex-col gap-4">
           <Tag accent="guayaba">{product.categoryName}</Tag>
-          <h1 className="font-serif text-4xl text-cacao sm:text-5xl">
+          <h1 className="font-serif text-4xl text-brown-text sm:text-5xl">
             {product.name}
           </h1>
-          <PriceSeal amount={product.price} compareAt={product.compareAt} size="lg" />
-          <p className="font-sans text-xs text-tinta-suave">
-            Precio estimado: la repostería confirma el valor final.
+          <PriceSeal amount={priceAmount(product)} compareAt={product.compareAt} size="lg" />
+          {typeLabel ? (
+            <p className="font-sans text-sm font-medium text-label-pink">
+              {typeLabel}
+            </p>
+          ) : null}
+          <p className="font-sans text-xs text-brown-soft">
+            El valor final lo confirmamos por WhatsApp.
           </p>
           <StatusBadge
             label={product.available ? "Disponible por encargo" : "No disponible"}
             tone={product.available ? "pistacho" : "apagado"}
           />
-          {product.pricing?.mode === "perUnit" ? (
-            <p className="font-sans text-sm text-tinta-suave">
-              Precio por {product.pricing.unitLabel ?? "unidad"}
-              {product.pricing.minQty
-                ? ` · mínimo ${product.pricing.minQty}`
-                : ""}
-              {product.pricing.stepQty && product.pricing.stepQty > 1
-                ? `, de a ${product.pricing.stepQty}`
-                : ""}
-              .
-            </p>
-          ) : null}
           {product.preparations && product.preparations.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {product.preparations.map((preparation) => (
@@ -135,28 +170,23 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
             </div>
           ) : null}
           {product.shortDescription ? (
-            <p className="text-tinta-suave">{product.shortDescription}</p>
+            <p className="text-brown-soft">{product.shortDescription}</p>
           ) : null}
 
           {product.available ? (
-            <ButtonLink
-              href={`/encargo?producto=${product.slug}`}
-              size="lg"
-              fullWidth
-              className="mt-2"
-            >
-              Hacer encargo
+            <ButtonLink href={cta.href} size="lg" fullWidth className="mt-2">
+              {cta.label}
             </ButtonLink>
           ) : (
-            <p className="rounded-(--radius-soft) border border-linea bg-papel px-4 py-3 text-sm text-tinta-suave">
+            <p className="rounded-soft border border-linea bg-papel px-4 py-3 text-sm text-brown-soft">
               Por ahora no lo tenemos disponible. Escríbenos y te avisamos
               cuando vuelva.
             </p>
           )}
 
           {useProvisionalData ? (
-            <p className="font-sans text-xs text-tinta-suave">
-              Ficha con datos de desarrollo (precio, foto e ingredientes
+            <p className="font-sans text-xs text-brown-soft">
+              Ficha con datos de desarrollo (precio, foto y datos
               provisionales).
             </p>
           ) : null}
@@ -171,6 +201,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
             ingredients: product.ingredients,
             allergens: product.allergens ?? undefined,
             prepDays: product.prepDays,
+            composition,
           }}
         />
       </div>
@@ -178,7 +209,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
       <div className="mt-10">
         <Link
           href={`/tienda/${product.categorySlug}`}
-          className="font-sans text-sm text-guayaba-tinta underline decoration-kraft underline-offset-4 hover:text-cacao"
+          className="font-sans text-sm text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
         >
           ← Ver más de {product.categoryName}
         </Link>

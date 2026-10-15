@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { brand } from "@/lib/brand";
 import { cn } from "@/lib/cn";
@@ -5,66 +6,58 @@ import { cn } from "@/lib/cn";
 type LogoSize = "sm" | "md" | "lg";
 type LogoVariant = "default" | "inverse";
 
-const sizes: Record<LogoSize, { word: string; tag: string; stroke: number }> = {
-  sm: { word: "text-2xl", tag: "text-[10px]", stroke: 3 },
-  md: { word: "text-3xl", tag: "text-xs", stroke: 4 },
-  lg: { word: "text-5xl sm:text-6xl", tag: "text-sm", stroke: 5 },
+const sizes: Record<LogoSize, { logo: number; tag: string; word: string }> = {
+  sm: { logo: 32, tag: "text-[10px]", word: "text-2xl" },
+  md: { logo: 48, tag: "text-xs", word: "text-3xl" },
+  lg: { logo: 72, tag: "text-sm", word: "text-5xl sm:text-6xl" },
 };
 
 interface LogoProps {
   size?: LogoSize;
   variant?: LogoVariant;
   withTagline?: boolean;
-  /** Si se pasa href, el logo es un enlace (por defecto a la home). */
   href?: string | null;
   className?: string;
+  showImage?: boolean;
 }
 
-/**
- * ÚNICO lugar del wordmark. Tipográfico, sin iconos ni clip-art.
- * PROVISIONAL: el texto viene de src/lib/brand.ts.
- */
 export function Logo({
   size = "md",
   variant = "default",
   withTagline = false,
   href = "/",
   className,
+  showImage = true,
 }: LogoProps) {
   const s = sizes[size];
-  const color = variant === "inverse" ? "text-crema" : "text-cacao";
-  const tagColor = variant === "inverse" ? "text-kraft" : "text-tinta-suave";
+  const color = variant === "inverse" ? "text-white" : "text-brown-text";
+  const tagColor = variant === "inverse" ? "text-white/80" : "text-brown-soft";
 
   const content = (
-    <span className={cn("inline-flex flex-col leading-none", className)}>
+    <span className={cn("inline-flex flex-col items-center leading-none", className)}>
+      {showImage ? (
+        <Image
+          src={brand.logo}
+          alt={brand.name}
+          width={s.logo}
+          height={s.logo}
+          className="h-auto w-auto"
+          priority={size === "lg"}
+        />
+      ) : null}
       <span
         className={cn(
-          "font-serif italic font-semibold tracking-[-0.02em]",
+          "mt-1 font-serif font-semibold tracking-[-0.01em]",
           s.word,
           color,
         )}
       >
         {brand.wordmark}
       </span>
-      <svg
-        viewBox="0 0 120 8"
-        className="mt-1 h-2 w-full"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M1 5.5C24 2.5 47 2 70 4.5c16 1.7 33 1.2 49-1.5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={s.stroke}
-          strokeLinecap="round"
-          className={variant === "inverse" ? "text-kraft" : "text-kraft"}
-        />
-      </svg>
       {withTagline ? (
         <span
           className={cn(
-            "mt-2 font-sans uppercase tracking-[0.22em]",
+            "mt-1 font-cursive",
             s.tag,
             tagColor,
           )}
@@ -78,7 +71,7 @@ export function Logo({
   if (!href) return content;
 
   return (
-    <Link href={href} className="inline-flex rounded-sm" aria-label={brand.name}>
+    <Link href={href} className="inline-flex rounded-sm" aria-label={brand.name + ", " + brand.tagline}>
       {content}
     </Link>
   );

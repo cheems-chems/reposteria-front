@@ -21,12 +21,12 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-center gap-3 border border-guayaba/40 bg-guayaba/5 px-6 py-12 text-center",
+        "flex flex-col items-center gap-3 border border-fuchsia/40 bg-fuchsia/5 px-6 py-12 text-center",
         className,
       )}
     >
-      <h3 className="font-serif text-2xl text-guayaba-tinta">{title}</h3>
-      <p className="max-w-md text-sm text-tinta-suave">{description}</p>
+      <h3 className="font-serif text-2xl text-fuchsia-ink">{title}</h3>
+      <p className="max-w-md text-sm text-brown-soft">{description}</p>
       {onRetry ? (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {retryLabel}

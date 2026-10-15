@@ -5,26 +5,26 @@ export default function RootNotFound() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-20 text-center">
       <Logo size="md" href={null} />
-      <h1 className="font-serif text-3xl text-cacao">Página no encontrada</h1>
-      <p className="max-w-md text-sm text-tinta-suave">
+      <h1 className="font-serif text-3xl text-brown-text">Página no encontrada</h1>
+      <p className="max-w-md text-sm text-brown-soft">
         La dirección que abriste no existe. Vuelve al inicio o entra a la
         tienda.
       </p>
       <nav className="flex gap-5 text-sm">
         <Link
-          className="text-guayaba-tinta underline decoration-kraft underline-offset-4 hover:text-cacao"
+          className="text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
           href="/"
         >
           Inicio
         </Link>
         <Link
-          className="text-guayaba-tinta underline decoration-kraft underline-offset-4 hover:text-cacao"
+          className="text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
           href="/tienda"
         >
           Tienda
         </Link>
         <Link
-          className="text-guayaba-tinta underline decoration-kraft underline-offset-4 hover:text-cacao"
+          className="text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
           href="/contacto"
         >
           Contacto

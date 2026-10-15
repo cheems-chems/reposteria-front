@@ -20,8 +20,8 @@ const steps = [
 		text: 'Confirmamos disponibilidad y fecha de entrega según el tiempo de anticipación.',
 	},
 	{
-		title: 'Recoge el día señalado',
-		text: 'Horneamos cerca de la entrega para que llegue fresco, en tandas pequeñas.',
+		title: 'Recibe el día señalado',
+		text: 'Lo preparamos en casa, cerca de tu fecha, en tandas pequeñas.',
 	},
 ];
 
@@ -40,11 +40,11 @@ export default async function HomePage() {
 			{/* Hero */}
 			<section className="mx-auto w-full max-w-6xl px-5 pb-12 pt-12 sm:px-8 sm:pt-16">
 				<div className="flex flex-col gap-6">
-					<h1 className="max-w-3xl font-serif text-4xl italic leading-tight text-cacao sm:text-6xl">
-						Lo horneamos para la fecha que importa.
+					<h1 className="max-w-3xl font-serif text-4xl italic leading-tight text-brown-text sm:text-6xl">
+						Hecho en casa, pensado para compartir.
 					</h1>
-					<p className="max-w-xl text-lg text-tinta-suave">
-						{store.description}
+					<p className="max-w-xl text-lg text-brown-soft">
+						{store.description ?? 'El sabor que une, lo hacemos con amor.'}
 					</p>
 					<div className="flex flex-col gap-3 sm:flex-row">
 						<ButtonLink href="/tienda" size="lg">
@@ -61,13 +61,13 @@ export default async function HomePage() {
 			<section className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8">
 				<div className="mb-8 flex items-end justify-between gap-4">
 					<div>
-						<h2 className="mt-1 font-serif text-3xl text-cacao">
+						<h2 className="mt-1 font-serif text-3xl text-brown-text">
 							Lo más pedido
 						</h2>
 					</div>
 					<Link
 						href="/tienda"
-						className="shrink-0 font-sans text-sm text-guayaba-tinta underline decoration-kraft underline-offset-4 hover:text-cacao"
+						className="shrink-0 font-sans text-sm text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
 					>
 						Ver todo
 					</Link>
@@ -81,7 +81,7 @@ export default async function HomePage() {
 			{/* Categorías */}
 			<section className="border-t border-linea bg-papel">
 				<div className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8">
-					<h2 className="font-serif text-3xl text-cacao">
+					<h2 className="font-serif text-3xl text-brown-text">
 						Explora por categoría
 					</h2>
 					<div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -89,11 +89,11 @@ export default async function HomePage() {
 							<Link
 								key={category.slug}
 								href={`/tienda/${category.slug}`}
-								className="flex flex-col gap-2 border border-linea bg-crema p-5 transition-colors hover:border-cacao/60"
+								className="flex flex-col gap-2 border border-linea bg-bg p-5 transition-colors hover:border-brown-text/60"
 							>
 								<Tag>{category.name}</Tag>
 								{category.description ? (
-									<p className="text-sm text-tinta-suave">
+									<p className="text-sm text-brown-soft">
 										{category.description}
 									</p>
 								) : null}
@@ -105,22 +105,22 @@ export default async function HomePage() {
 
 			{/* Cómo funciona */}
 			<section className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8">
-				<h2 className="font-serif text-3xl text-cacao">Cómo funciona</h2>
+				<h2 className="font-serif text-3xl text-brown-text">Cómo funciona</h2>
 				<ol className="mt-6 grid gap-6 sm:grid-cols-3">
 					{steps.map((step, index) => (
 						<li key={step.title} className="flex flex-col gap-2">
-							<span className="font-serif text-2xl italic text-kraft">
+							<span className="font-serif text-2xl italic text-fuchsia-ink">
 								{String(index + 1).padStart(2, '0')}
 							</span>
-							<h3 className="font-serif text-xl text-cacao">{step.title}</h3>
-							<p className="text-sm text-tinta-suave">{step.text}</p>
+							<h3 className="font-serif text-xl text-brown-text">{step.title}</h3>
+							<p className="text-sm text-brown-soft">{step.text}</p>
 						</li>
 					))}
 				</ol>
 			</section>
 
 			{/* Cierre */}
-			<section className="border-t border-linea bg-cacao text-crema">
+			<section className="border-t border-linea bg-brown-text text-bg">
 				<div className="mx-auto flex w-full max-w-6xl flex-col items-start gap-6 px-5 py-14 sm:px-8">
 					<Logo size="md" variant="inverse" />
 					<p className="max-w-xl font-serif text-2xl italic leading-snug">

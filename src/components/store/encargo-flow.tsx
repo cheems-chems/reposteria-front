@@ -1,28 +1,49 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/field";
+import { ComboEditor } from "@/components/store/combo-editor";
+import { PackSelector } from "@/components/store/pack-selector";
 import { PasabocaBuilder } from "@/components/store/pasaboca-builder";
 import { cn } from "@/lib/cn";
 import { formatCOP } from "@/lib/format";
 import { normalizeWhatsApp, whatsappUrl } from "@/lib/whatsapp";
 import {
-  buildLines,
-  lineTotal,
+  buildBuilderLines,
+  buildPackLines,
+  builderProblems,
+  categorySaleKind,
+  comboFill,
+  comboOrderLine,
+  comboQuantitiesOf,
   orderTotals,
-  selectionProblems,
+  singleLine,
   type BuilderSelection,
+  type PackSelection,
 } from "@/lib/encargo";
-import type { OrderLine, ProductListItem } from "@/lib/api";
+import type {
+  BuilderItemProduct,
+  Category,
+  ComboProduct,
+  OrderLine,
+  PackProduct,
+  ProductListItem,
+  SingleProduct,
+} from "@/lib/api";
 
 type Fulfillment = "recogida" | "domicilio";
 
 interface EncargoFlowProps {
   products: ProductListItem[];
+  comboItems: BuilderItemProduct[];
+  categories: Category[];
   whatsapp: string | null;
   initialProductSlug?: string;
+  initialCategorySlug?: string;
 }
 
 const STEP_TITLES = [
@@ -32,8 +53,8 @@ const STEP_TITLES = [
   "¿Lo recoges o lo llevamos?",
 ];
 
-/** Valor del selector del paso 0: "" | slug | "bandeja" | "otro". */
-const BANDEJA = "bandeja";
+/** Valor del selector del paso 0: "" | slug de producto | "builder" | "otro". */
+const BUILDER = "builder";
 const OTRO = "otro";
 
 /** Formatea 'YYYY-MM-DD' a 'DD/MM/YYYY' sin depender de la zona horaria. */
@@ -43,32 +64,86 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
-export function EncargoFlow({
-  products,
-  whatsapp,
-  initialProductSlug,
-}: EncargoFlowProps) {
-  const hasProducts = products.length > 0;
-  const unitProducts = products.filter((p) => p.pricing?.mode === "perUnit");
-  const simpleProducts = products.filter((p) => p.pricing?.mode !== "perUnit");
-  const initialProduct = products.find((p) => p.slug === initialProductSlug);
-  const initialIsUnit = initialProduct?.pricing?.mode === "perUnit";
+interface InitialState {
+  categorySlug: string | null;
+  choice: string;
+  comboSelection: PackSelection;
+  builderSelection: BuilderSelection;
+  packSelection: PackSelection;
+}
 
-  const [step, setStep] = useState(0);
-  const [choice, setChoice] = useState<string>(() => {
-    if (initialProduct) return initialIsUnit ? BANDEJA : initialProduct.slug;
-    return hasProducts ? "" : OTRO;
-  });
-  const [tray, setTray] = useState<BuilderSelection>(() => {
-    if (!initialProduct || !initialIsUnit) return {};
-    const min = Math.max(1, initialProduct.pricing?.minQty ?? 1);
-    return {
-      [initialProduct.slug]: {
-        quantity: min,
-        preparationId: initialProduct.preparations?.[0]?.id ?? null,
+/** Deriva el estado inicial a partir de la URL (?categoria= / ?producto=). */
+function computeInitial(props: EncargoFlowProps): InitialState {
+  const { products, comboItems, categories } = props;
+  const product = products.find((p) => p.slug === props.initialProductSlug);
+  const comboItem = comboItems.find(
+    (p) => p.slug === props.initialProductSlug,
+  );
+
+  let categorySlug: string | null = null;
+  if (product) categorySlug = product.categorySlug;
+  else if (comboItem) categorySlug = comboItem.categorySlug;
+  else if (
+    props.initialCategorySlug &&
+    categories.some((c) => c.slug === props.initialCategorySlug)
+  ) {
+    categorySlug = props.initialCategorySlug;
+  }
+
+  const state: InitialState = {
+    categorySlug,
+    choice: "",
+    comboSelection: {},
+    builderSelection: {},
+    packSelection: {},
+  };
+
+  if (!categorySlug) return state;
+
+  if (product?.saleMode === "single") {
+    state.choice = product.slug;
+  } else if (product?.saleMode === "combo") {
+    state.choice = product.slug;
+    state.comboSelection = comboQuantitiesOf(product);
+  } else if (product?.saleMode === "pack") {
+    state.packSelection = { [product.slug]: Math.max(1, product.minPacks) };
+  } else if (comboItem) {
+    state.choice = BUILDER;
+    state.builderSelection = {
+      [comboItem.slug]: {
+        quantity: comboItem.stepQty,
+        preparationId: comboItem.preparations?.[0]?.id ?? null,
       },
     };
-  });
+  }
+
+  return state;
+}
+
+export function EncargoFlow(props: EncargoFlowProps) {
+  const {
+    products,
+    comboItems,
+    categories,
+    whatsapp,
+  } = props;
+  const router = useRouter();
+  const initial = computeInitial(props);
+
+  const [step, setStep] = useState(0);
+  const [categorySlug, setCategorySlug] = useState<string | null>(
+    initial.categorySlug,
+  );
+  const [choice, setChoice] = useState<string>(initial.choice);
+  const [comboSelection, setComboSelection] = useState<PackSelection>(
+    initial.comboSelection,
+  );
+  const [builderSelection, setBuilderSelection] = useState<BuilderSelection>(
+    initial.builderSelection,
+  );
+  const [packSelection, setPackSelection] = useState<PackSelection>(
+    initial.packSelection,
+  );
   const [customProduct, setCustomProduct] = useState("");
   const [date, setDate] = useState("");
   const [people, setPeople] = useState("");
@@ -79,65 +154,160 @@ export function EncargoFlow({
   const [error, setError] = useState<string | null>(null);
   const [opened, setOpened] = useState(false);
 
-  const isBandeja = choice === BANDEJA;
-  const selectedProduct = simpleProducts.find((p) => p.slug === choice);
-  const isCustom = choice === OTRO || (!isBandeja && !selectedProduct);
+  const category =
+    categorySlug !== null
+      ? (categories.find((c) => c.slug === categorySlug) ?? null)
+      : null;
+  const categoryProducts =
+    categorySlug !== null
+      ? products.filter((p) => p.categorySlug === categorySlug)
+      : [];
+  const categoryItems =
+    categorySlug !== null
+      ? comboItems.filter((p) => p.categorySlug === categorySlug)
+      : [];
+  const kind = categorySlug !== null ? categorySaleKind(categoryProducts) : null;
+  const minTotalUnits = category?.builderMinTotalUnits ?? 0;
+
+  const singleProducts = categoryProducts.filter(
+    (p): p is SingleProduct => p.saleMode === "single",
+  );
+  const comboProducts = categoryProducts.filter(
+    (p): p is ComboProduct => p.saleMode === "combo",
+  );
+  const packProducts = categoryProducts.filter(
+    (p): p is PackProduct => p.saleMode === "pack",
+  );
+
+  const selectedSingle =
+    singleProducts.find((p) => p.slug === choice) ?? null;
+  const selectedCombo = comboProducts.find((p) => p.slug === choice) ?? null;
+  const isBuilderChoice = choice === BUILDER;
+  const isCustom = choice === OTRO;
   const waNumber = normalizeWhatsApp(whatsapp);
 
-  const productLabel = isBandeja
-    ? "Bandeja de pasabocas"
-    : isCustom
-      ? customProduct.trim() || "Pedido especial"
-      : (selectedProduct?.name ?? "Pedido especial");
-
-  /**
-   * Líneas del encargo. Un producto fijo es una línea de 1 unidad; una bandeja
-   * son varias líneas con cantidad y preparación. El precio es un estimado.
-   */
-  const orderLines: OrderLine[] = isBandeja
-    ? buildLines(unitProducts, tray)
-    : selectedProduct
-      ? [
-          {
-            productSlug: selectedProduct.slug,
-            name: selectedProduct.name,
-            quantity: 1,
-            unitPrice: selectedProduct.price,
-            preparationId: null,
-            preparationLabel: null,
-          },
-        ]
-      : [];
+  const orderLines: OrderLine[] = (() => {
+    if (categorySlug === null) return [];
+    if (kind === "single") {
+      return selectedSingle ? [singleLine(selectedSingle)] : [];
+    }
+    if (kind === "combo") {
+      if (isBuilderChoice) {
+        return buildBuilderLines(categoryItems, builderSelection);
+      }
+      if (selectedCombo) {
+        return [comboOrderLine(selectedCombo, comboSelection, categoryItems)];
+      }
+      return [];
+    }
+    if (kind === "pack") {
+      return buildPackLines(packProducts, packSelection);
+    }
+    return [];
+  })();
   const totals = orderTotals(orderLines);
 
-  function setQuantity(slug: string, quantity: number) {
-    setTray((prev) => ({
+  function setBuilderQuantity(slug: string, quantity: number) {
+    setBuilderSelection((prev) => ({
       ...prev,
       [slug]: {
         quantity,
-        preparationId:
-          prev[slug]?.preparationId ??
-          unitProducts.find((p) => p.slug === slug)?.preparations?.[0]?.id ??
-          null,
+        preparationId: prev[slug]?.preparationId ?? null,
       },
     }));
   }
 
-  function setPreparation(slug: string, preparationId: string) {
-    setTray((prev) => ({
+  function setBuilderPreparation(slug: string, preparationId: string) {
+    setBuilderSelection((prev) => ({
       ...prev,
       [slug]: { quantity: prev[slug]?.quantity ?? 0, preparationId },
     }));
   }
 
+  function setComboQuantity(slug: string, quantity: number) {
+    setComboSelection((prev) => ({ ...prev, [slug]: quantity }));
+  }
+
+  function setPackCount(slug: string, count: number) {
+    setPackSelection((prev) => ({ ...prev, [slug]: count }));
+  }
+
+  /** Entra a una categoría: arranca la selección vacía. */
+  function openCategory(slug: string) {
+    setError(null);
+    setCategorySlug(slug);
+    setChoice("");
+    setComboSelection({});
+    setBuilderSelection({});
+    setPackSelection({});
+  }
+
+  function selectCombo(combo: ComboProduct) {
+    setError(null);
+    setChoice(combo.slug);
+    setComboSelection(comboQuantitiesOf(combo));
+  }
+
+  function selectBuilder() {
+    setError(null);
+    setChoice(BUILDER);
+    setBuilderSelection({});
+  }
+
+  /** Vuelve a la selección de tipo sin salir de /encargo. */
+  function backToTypes() {
+    setError(null);
+    setCategorySlug(null);
+    setChoice("");
+    setComboSelection({});
+    setBuilderSelection({});
+    setPackSelection({});
+  }
+
+  /** Sale de /encargo: a la página anterior o a la tienda. */
+  function leaveEncargo() {
+    setError(null);
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/tienda");
+    }
+  }
+
   function validate(current: number): string | null {
     if (current === 0) {
-      if (!choice) return "Elige un producto para continuar.";
-      if (isBandeja) {
-        const problems = selectionProblems(unitProducts, tray);
-        if (problems.length > 0) return problems[0];
-      } else if (isCustom && !customProduct.trim()) {
-        return "Cuéntanos qué quieres encargar.";
+      if (categorySlug === null) {
+        if (choice !== OTRO) return "Elige qué quieres encargar.";
+        if (!customProduct.trim()) return "Cuéntanos qué quieres encargar.";
+        return null;
+      }
+      if (kind === "single") {
+        if (!selectedSingle) return "Elige un producto para continuar.";
+      } else if (kind === "combo") {
+        if (isBuilderChoice) {
+          const problems = builderProblems(builderSelection, minTotalUnits);
+          if (problems.length > 0) return problems[0];
+        } else if (selectedCombo) {
+          if (selectedCombo.editable) {
+            const fill = comboFill(selectedCombo, comboSelection);
+            if (!fill.matches) {
+              return fill.missing > 0
+                ? `Te faltan ${fill.missing} ${
+                    fill.missing === 1 ? "unidad" : "unidades"
+                  } del combo.`
+                : `Te sobran ${fill.excess} ${
+                    fill.excess === 1 ? "unidad" : "unidades"
+                  } del combo.`;
+            }
+          }
+        } else {
+          return "Elige un combo para continuar.";
+        }
+      } else if (kind === "pack") {
+        const packs = Object.values(packSelection).reduce((a, b) => a + b, 0);
+        if (packs <= 0) return "Elige al menos una bandeja.";
+      } else {
+        return "Esta categoría aún no tiene productos.";
       }
     }
     if (current === 1) {
@@ -173,34 +343,67 @@ export function EncargoFlow({
 
   function back() {
     setError(null);
+    if (step === 0) {
+      if (categorySlug !== null) {
+        backToTypes();
+      } else {
+        leaveEncargo();
+      }
+      return;
+    }
     setStep((s) => Math.max(s - 1, 0));
   }
 
   function buildMessage(): string {
-    const lines = ["¡Hola! Quiero hacer un encargo:"];
-    if (isBandeja) {
-      lines.push("", "Pasabocas (bandeja):");
-      for (const line of orderLines) {
-        const prep = line.preparationLabel ? ` (${line.preparationLabel})` : "";
-        lines.push(`- ${line.name}${prep} ×${line.quantity}`);
-      }
-      lines.push("", `Unidades totales: ${totals.units}`);
+    const lines = ["¡Hola! Quiero hacer un encargo:", ""];
+    if (isCustom) {
+      lines.push(`Pedido especial: ${customProduct.trim()}`);
     } else {
-      lines.push("", `Producto: ${productLabel}`);
+      for (const line of orderLines) {
+        switch (line.kind) {
+          case "single":
+            lines.push(`Producto: ${line.name}`);
+            break;
+          case "combo": {
+            lines.push(`Combo: ${line.name} (${line.totalUnits} unidades)`);
+            if (line.composition.length > 0) {
+              lines.push(
+                `Composición: ${line.composition
+                  .map((item) => `${item.name} ${item.quantity}`)
+                  .join(", ")}`,
+              );
+            }
+            break;
+          }
+          case "builder":
+            lines.push(`- ${line.name} ×${line.quantity}`);
+            break;
+          case "pack":
+            lines.push(
+              `- ${line.name}: ${line.packCount} ${
+                line.packCount === 1 ? "bandeja" : "bandejas"
+              } (${line.packCount * line.unitsPerPack} unidades)`,
+            );
+            break;
+        }
+      }
+      if (totals.units > 0) {
+        lines.push("", `Unidades totales: ${totals.units}`);
+      }
     }
     if (date) lines.push(`Para: ${formatDate(date)}`);
     if (people) lines.push(`Personas: ${people}`);
     if (details.trim()) lines.push(`Personalización: ${details.trim()}`);
     if (totals.total > 0) {
       lines.push(
-        `Precio estimado: ${formatCOP(totals.total)} (la repostería confirma el valor final)`,
+        `Precio estimado: ${formatCOP(totals.total)} (confirmamos el valor final)`,
       );
     }
     lines.push(
       `Entrega: ${
         fulfillment === "domicilio"
           ? `a domicilio — ${address.trim()}`
-          : "recoger en el obrador"
+          : "recoger en casa"
       }`,
     );
     lines.push(`Nombre: ${name.trim()}`);
@@ -220,17 +423,32 @@ export function EncargoFlow({
       return;
     }
     setError(null);
-    window.open(whatsappUrl(waNumber, buildMessage()), "_blank", "noopener,noreferrer");
+    window.open(
+      whatsappUrl(waNumber, buildMessage()),
+      "_blank",
+      "noopener,noreferrer",
+    );
     setOpened(true);
   }
 
   const isSummary = step >= STEP_TITLES.length;
+  const stepHeading = (() => {
+    if (step !== 0 || categorySlug === null) return STEP_TITLES[step];
+    if (kind === "single") return category?.name ?? STEP_TITLES[0];
+    if (kind === "combo") {
+      if (isBuilderChoice) return "Arma el tuyo desde cero";
+      if (isCustom) return "Otra idea";
+      return selectedCombo ? "Ajusta tu combo" : (category?.name ?? "Combos");
+    }
+    if (kind === "pack") return "Elige tus bandejas";
+    return category?.name ?? STEP_TITLES[0];
+  })();
 
   return (
     <div className="flex flex-col gap-6">
       {/* Progreso */}
       <div className="flex items-center justify-between gap-4">
-        <p className="font-sans text-xs uppercase tracking-[0.2em] text-tinta-suave">
+        <p className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
           {isSummary ? "Resumen" : `Paso ${step + 1} de ${STEP_TITLES.length}`}
         </p>
         <div className="flex flex-1 items-center gap-1.5">
@@ -239,99 +457,74 @@ export function EncargoFlow({
               key={index}
               className={cn(
                 "h-1.5 flex-1 rounded-full",
-                index <= step ? "bg-guayaba" : "bg-crema-hondo",
+                index <= step ? "bg-fuchsia" : "bg-soft-pink/40",
               )}
             />
           ))}
         </div>
       </div>
 
-      <div className="rounded-(--radius-soft) border border-linea bg-papel p-5 sm:p-6">
+      <div className="rounded-soft border border-linea bg-papel p-5 sm:p-6">
         {!isSummary ? (
           <div className="flex flex-col gap-5">
-            <h2 className="font-serif text-2xl text-cacao">
-              {STEP_TITLES[step]}
+            <h2 className="font-serif text-2xl text-brown-text">
+              {stepHeading}
             </h2>
 
-            {step === 0 ? (
+            {step === 0 && categorySlug !== null && kind === "pack" ? (
+              <p className="text-sm text-brown-soft">
+                Elige cuántas bandejas quieres de cada tipo; el total se estima
+                en vivo. Son congeladas (crudas, para freír en casa).
+              </p>
+            ) : null}
+
+            {step === 0 && categorySlug !== null && kind === "combo" ? (
+              <p className="text-sm text-brown-soft">
+                Elige un combo o arma el tuyo desde cero. Puedes ajustar la
+                distribución de un combo sin cambiar su precio.
+              </p>
+            ) : null}
+
+            {step === 0 && categorySlug === null ? (
               <div className="flex flex-col gap-4">
-                {hasProducts ? (
-                  <ul className="grid gap-2 sm:grid-cols-2">
-                    {simpleProducts.map((product) => (
-                      <li key={product.slug}>
-                        <button
-                          type="button"
-                          onClick={() => setChoice(product.slug)}
-                          aria-pressed={choice === product.slug}
-                          className={cn(
-                            "w-full border px-4 py-3 text-left transition-colors",
-                            choice === product.slug
-                              ? "border-cacao bg-crema-hondo"
-                              : "border-linea hover:bg-crema-hondo/60",
-                          )}
-                        >
-                          <span className="block font-serif text-lg text-cacao">
-                            {product.name}
-                          </span>
-                          <span className="block text-sm text-tinta-suave tabular">
-                            {formatCOP(product.price)} · {product.categoryName}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                    {unitProducts.length > 0 ? (
-                      <li>
-                        <button
-                          type="button"
-                          onClick={() => setChoice(BANDEJA)}
-                          aria-pressed={isBandeja}
-                          className={cn(
-                            "w-full border px-4 py-3 text-left transition-colors",
-                            isBandeja
-                              ? "border-cacao bg-crema-hondo"
-                              : "border-linea hover:bg-crema-hondo/60",
-                          )}
-                        >
-                          <span className="block font-serif text-lg text-cacao">
-                            Arma tu bandeja
-                          </span>
-                          <span className="block text-sm text-tinta-suave">
-                            Elige pasabocas y cantidades
-                          </span>
-                        </button>
-                      </li>
-                    ) : null}
-                    <li>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {categories.map((item) => (
+                    <li key={item.slug}>
                       <button
                         type="button"
-                        onClick={() => setChoice(OTRO)}
-                        aria-pressed={isCustom}
-                        className={cn(
-                          "w-full border px-4 py-3 text-left transition-colors",
-                          isCustom
-                            ? "border-cacao bg-crema-hondo"
-                            : "border-linea hover:bg-crema-hondo/60",
-                        )}
+                        onClick={() => openCategory(item.slug)}
+                        className="w-full border border-linea px-4 py-3 text-left transition-colors hover:bg-soft-pink/40/60"
                       >
-                        <span className="block font-serif text-lg text-cacao">
-                          Otra idea
+                        <span className="block font-serif text-lg text-brown-text">
+                          {item.name}
                         </span>
-                        <span className="block text-sm text-tinta-suave">
-                          Cuéntanos qué tienes en mente
+                        <span className="block text-sm text-brown-soft">
+                          {item.description ?? "Ver productos"}
                         </span>
                       </button>
                     </li>
-                  </ul>
-                ) : null}
-
-                {isBandeja ? (
-                  <PasabocaBuilder
-                    products={unitProducts}
-                    selection={tray}
-                    onChangeQuantity={setQuantity}
-                    onChangePreparation={setPreparation}
-                  />
-                ) : null}
+                  ))}
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setChoice(OTRO)}
+                      aria-pressed={isCustom}
+                      className={cn(
+                        "w-full border px-4 py-3 text-left transition-colors",
+                        isCustom
+                          ? "border-brown-text bg-soft-pink/40"
+                          : "border-linea hover:bg-soft-pink/40/60",
+                      )}
+                    >
+                      <span className="block font-serif text-lg text-brown-text">
+                        Otra idea
+                      </span>
+                      <span className="block text-sm text-brown-soft">
+                        Cuéntanos qué tienes en mente
+                      </span>
+                    </button>
+                  </li>
+                </ul>
 
                 {isCustom ? (
                   <Field
@@ -347,6 +540,124 @@ export function EncargoFlow({
                     />
                   </Field>
                 ) : null}
+              </div>
+            ) : null}
+
+            {step === 0 && categorySlug !== null && kind === "single" ? (
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {singleProducts.map((product) => (
+                  <li key={product.slug}>
+                    <button
+                      type="button"
+                      onClick={() => setChoice(product.slug)}
+                      aria-pressed={choice === product.slug}
+                      className={cn(
+                        "w-full border px-4 py-3 text-left transition-colors",
+                        choice === product.slug
+                          ? "border-brown-text bg-soft-pink/40"
+                          : "border-linea hover:bg-soft-pink/40/60",
+                      )}
+                    >
+                      <span className="block font-serif text-lg text-brown-text">
+                        {product.name}
+                      </span>
+                      <span className="block text-sm text-brown-soft tabular">
+                        {formatCOP(product.price)}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+
+            {step === 0 && categorySlug !== null && kind === "combo" ? (
+              <div className="flex flex-col gap-4">
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {comboProducts.map((combo) => (
+                    <li key={combo.slug}>
+                      <button
+                        type="button"
+                        onClick={() => selectCombo(combo)}
+                        aria-pressed={choice === combo.slug}
+                        className={cn(
+                          "w-full border px-4 py-3 text-left transition-colors",
+                          choice === combo.slug
+                            ? "border-brown-text bg-soft-pink/40"
+                            : "border-linea hover:bg-soft-pink/40/60",
+                        )}
+                      >
+                        <span className="block font-serif text-lg text-brown-text">
+                          {combo.name}
+                        </span>
+                        <span className="block text-sm text-brown-soft tabular">
+                          {formatCOP(combo.price)} · {combo.totalUnits} unidades
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                  <li>
+                    <button
+                      type="button"
+                      onClick={selectBuilder}
+                      aria-pressed={isBuilderChoice}
+                      className={cn(
+                        "w-full border px-4 py-3 text-left transition-colors",
+                        isBuilderChoice
+                          ? "border-brown-text bg-soft-pink/40"
+                          : "border-linea hover:bg-soft-pink/40/60",
+                      )}
+                    >
+                      <span className="block font-serif text-lg text-brown-text">
+                        Arma el tuyo desde cero
+                      </span>
+                      <span className="block text-sm text-brown-soft">
+                        Elige pasabocas y cantidades
+                      </span>
+                    </button>
+                  </li>
+                </ul>
+
+                {selectedCombo && selectedCombo.editable ? (
+                  <ComboEditor
+                    combo={selectedCombo}
+                    items={comboItems}
+                    selection={comboSelection}
+                    onChangeQuantity={setComboQuantity}
+                  />
+                ) : null}
+
+                {isBuilderChoice ? (
+                  <PasabocaBuilder
+                    items={categoryItems}
+                    selection={builderSelection}
+                    minTotalUnits={minTotalUnits}
+                    onChangeQuantity={setBuilderQuantity}
+                    onChangePreparation={setBuilderPreparation}
+                  />
+                ) : null}
+
+                <Link
+                  href="/encargo"
+                  className="self-start font-sans text-sm text-fuchsia-ink underline decoration-kraft underline-offset-4 transition-colors hover:text-brown-text"
+                >
+                  ¿Quieres encargar otra cosa?
+                </Link>
+              </div>
+            ) : null}
+
+            {step === 0 && categorySlug !== null && kind === "pack" ? (
+              <div className="flex flex-col gap-4">
+                <PackSelector
+                  packs={packProducts}
+                  selection={packSelection}
+                  onChangePacks={setPackCount}
+                />
+                <Link
+                  href="/encargo"
+                  className="self-start font-sans text-sm text-fuchsia-ink underline decoration-kraft underline-offset-4 transition-colors hover:text-brown-text"
+                >
+                  ¿Quieres encargar otra cosa?
+                </Link>
               </div>
             ) : null}
 
@@ -398,7 +709,7 @@ export function EncargoFlow({
                 <div className="grid gap-2 sm:grid-cols-2">
                   {(
                     [
-                      ["recogida", "Recojo en el obrador"],
+                      ["recogida", "Recojo en casa"],
                       ["domicilio", "Entrega a domicilio"],
                     ] as const
                   ).map(([value, label]) => (
@@ -410,8 +721,8 @@ export function EncargoFlow({
                       className={cn(
                         "border px-4 py-3 text-left font-sans text-sm transition-colors",
                         fulfillment === value
-                          ? "border-cacao bg-crema-hondo text-cacao"
-                          : "border-linea text-cacao/80 hover:bg-crema-hondo/60",
+                          ? "border-brown-text bg-soft-pink/40 text-brown-text"
+                          : "border-linea text-brown-text/80 hover:bg-soft-pink/40/60",
                       )}
                     >
                       {label}
@@ -448,12 +759,7 @@ export function EncargoFlow({
             ) : null}
 
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={back}
-                disabled={step === 0}
-              >
+              <Button type="button" variant="ghost" onClick={back}>
                 Atrás
               </Button>
               <Button type="button" onClick={next}>
@@ -463,109 +769,148 @@ export function EncargoFlow({
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <h2 className="font-serif text-2xl text-cacao">
+            <h2 className="font-serif text-2xl text-brown-text">
               Revisa tu encargo
             </h2>
 
             {/* Ticket de resumen */}
-            <div className="texture-paper border border-cacao bg-crema">
-              <div className="flex items-center justify-between border-b border-dashed border-cacao/40 px-4 py-2">
-                <span className="font-sans text-xs uppercase tracking-[0.2em] text-tinta-suave">
+            <div className="texture-paper border border-brown-text bg-bg">
+              <div className="flex items-center justify-between border-b border-dashed border-brown-text/40 px-4 py-2">
+                <span className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
                   Mi encargo
                 </span>
-                <span className="font-sans text-xs uppercase tracking-[0.2em] text-tinta-suave">
+                <span className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
                   Borrador
                 </span>
               </div>
-              <dl className="flex flex-col divide-y divide-dashed divide-cacao/30 px-4 py-3 text-sm">
-                {isBandeja ? (
-                  <div className="flex flex-col gap-2 py-2">
-                    <dt className="text-tinta-suave">Pasabocas</dt>
-                    <dd className="flex flex-col gap-1.5">
-                      {orderLines.map((line) => (
+              <dl className="flex flex-col divide-y divide-dashed divide-brown-text/30 px-4 py-3 text-sm">
+                <div className="flex flex-col gap-2 py-2">
+                  <dt className="text-brown-soft">
+                    {isCustom ? "Pedido especial" : (category?.name ?? "Encargo")}
+                  </dt>
+                  <dd className="flex flex-col gap-1.5">
+                    {isCustom ? (
+                      <span className="text-brown-text">
+                        {customProduct.trim() || "—"}
+                      </span>
+                    ) : (
+                      orderLines.map((line) => (
                         <span
-                          key={line.productSlug}
-                          className="flex justify-between gap-4 text-cacao"
+                          key={`${line.kind}-${line.productSlug}`}
+                          className="flex justify-between gap-4 text-brown-text"
                         >
                           <span>
-                            {line.name}
-                            {line.preparationLabel
-                              ? ` · ${line.preparationLabel}`
-                              : ""}
+                            {line.kind === "combo"
+                              ? `${line.name} · ${line.totalUnits} unidades`
+                              : line.kind === "pack"
+                                ? `${line.name} · ${line.packCount} ${
+                                    line.packCount === 1 ? "bandeja" : "bandejas"
+                                  } (${line.packCount * line.unitsPerPack} u.)`
+                                : line.name}
                           </span>
                           <span className="tabular whitespace-nowrap">
-                            ×{line.quantity} · {formatCOP(lineTotal(line))}
+                            ×
+                            {line.kind === "combo"
+                              ? line.totalUnits
+                              : line.kind === "pack"
+                                ? line.packCount * line.unitsPerPack
+                                : line.quantity}{" "}
+                            ·{" "}
+                            {line.kind === "single"
+                              ? formatCOP(line.unitPrice * line.quantity)
+                              : line.kind === "builder"
+                                ? formatCOP(line.unitPrice * line.quantity)
+                                : line.kind === "combo"
+                                  ? formatCOP(line.total)
+                                  : formatCOP(line.unitPrice * line.packCount)}
                           </span>
                         </span>
-                      ))}
-                      <span className="mt-1 flex justify-between gap-4 border-t border-dashed border-cacao/30 pt-1.5 text-tinta-suave">
-                        <span>Unidades totales</span>
-                        <span className="tabular text-cacao">
-                          {totals.units}
-                        </span>
+                      ))
+                    )}
+                    {!isCustom && orderLines.length === 0 ? (
+                      <span className="text-brown-text">—</span>
+                    ) : null}
+                  </dd>
+                  {!isCustom && totals.units > 0 ? (
+                    <span className="mt-1 flex justify-between gap-4 border-t border-dashed border-brown-text/30 pt-1.5 text-brown-soft">
+                      <span>Unidades totales</span>
+                      <span className="tabular text-brown-text">
+                        {totals.units}
                       </span>
-                    </dd>
-                  </div>
-                ) : (
-                  <div className="flex justify-between gap-4 py-2">
-                    <dt className="text-tinta-suave">Producto</dt>
-                    <dd className="text-right font-medium text-cacao">
-                      {productLabel}
-                    </dd>
-                  </div>
+                    </span>
+                  ) : null}
+                </div>
+                {orderLines.map((line) =>
+                  line.kind === "combo" && line.composition.length > 0 ? (
+                    <div
+                      key={`comp-${line.productSlug}`}
+                      className="flex flex-col gap-1 py-2"
+                    >
+                      <dt className="text-brown-soft">Contenido del combo</dt>
+                      <dd className="flex flex-col gap-0.5 text-brown-text/90">
+                        {line.composition.map((item) => (
+                          <span key={item.name} className="tabular">
+                            {item.name} ×{item.quantity}
+                          </span>
+                        ))}
+                      </dd>
+                    </div>
+                  ) : null,
                 )}
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-tinta-suave">Para</dt>
-                  <dd className="tabular text-right text-cacao">
+                  <dt className="text-brown-soft">Para</dt>
+                  <dd className="tabular text-right text-brown-text">
                     {date ? formatDate(date) : "—"}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-tinta-suave">Personas</dt>
-                  <dd className="tabular text-right text-cacao">
+                  <dt className="text-brown-soft">Personas</dt>
+                  <dd className="tabular text-right text-brown-text">
                     {people || "—"}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-tinta-suave">Entrega</dt>
-                  <dd className="text-right text-cacao">
+                  <dt className="text-brown-soft">Entrega</dt>
+                  <dd className="text-right text-brown-text">
                     {fulfillment === "domicilio" ? "A domicilio" : "Recogida"}
                   </dd>
                 </div>
                 {fulfillment === "domicilio" && address.trim() ? (
                   <div className="flex justify-between gap-4 py-2">
-                    <dt className="text-tinta-suave">Dirección</dt>
-                    <dd className="text-right text-cacao">{address.trim()}</dd>
+                    <dt className="text-brown-soft">Dirección</dt>
+                    <dd className="text-right text-brown-text">
+                      {address.trim()}
+                    </dd>
                   </div>
                 ) : null}
                 {details.trim() ? (
                   <div className="flex flex-col gap-1 py-2">
-                    <dt className="text-tinta-suave">Personalización</dt>
-                    <dd className="text-cacao">{details.trim()}</dd>
+                    <dt className="text-brown-soft">Personalización</dt>
+                    <dd className="text-brown-text">{details.trim()}</dd>
                   </div>
                 ) : null}
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-tinta-suave">Precio estimado</dt>
-                  <dd className="tabular text-right font-medium text-guayaba-tinta">
+                  <dt className="text-brown-soft">Precio estimado</dt>
+                  <dd className="tabular text-right font-medium text-fuchsia-ink">
                     {totals.total > 0 ? formatCOP(totals.total) : "—"}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-tinta-suave">Nombre</dt>
-                  <dd className="text-right text-cacao">{name.trim()}</dd>
+                  <dt className="text-brown-soft">Nombre</dt>
+                  <dd className="text-right text-brown-text">{name.trim()}</dd>
                 </div>
               </dl>
             </div>
 
-            <p className="font-sans text-xs text-tinta-suave">
-              El precio mostrado es una estimación: la repostería confirma el
-              valor final por WhatsApp.
+            <p className="font-sans text-xs text-brown-soft">
+              El precio mostrado es una estimación: confirmamos el valor final
+              por WhatsApp.
             </p>
 
             {waNumber ? (
               <Alert tone="info" title="Se abrirá WhatsApp">
                 El mensaje va listo para enviar. La confirmación final del
-                encargo la hace la repostería.
+                encargo la hacemos por WhatsApp.
               </Alert>
             ) : (
               <Alert tone="warning" title="WhatsApp no configurado">
@@ -576,7 +921,8 @@ export function EncargoFlow({
 
             {opened ? (
               <Alert tone="success" title="Casi listo">
-                Abrimos WhatsApp con tu encargo. Envíalo para que lo confirmemos.
+                Abrimos WhatsApp con tu encargo. Envíalo para que lo
+                confirmemos.
               </Alert>
             ) : null}
 

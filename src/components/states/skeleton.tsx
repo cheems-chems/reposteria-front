@@ -5,7 +5,7 @@ export function Skeleton({ className }: { className?: string }) {
   return (
     <div
       aria-hidden="true"
-      className={cn("animate-pulse rounded-ticket bg-crema-hondo", className)}
+      className={cn("animate-pulse rounded-ticket bg-soft-pink/40", className)}
     />
   );
 }

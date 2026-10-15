@@ -34,23 +34,23 @@ export function Field({
     <div className={cn("flex flex-col gap-1.5", className)}>
       <label
         htmlFor={htmlFor}
-        className="font-sans text-sm font-medium text-cacao"
+        className="font-sans text-sm font-medium text-brown-text"
       >
         {label}
         {required ? (
-          <span className="ml-0.5 text-guayaba-tinta" aria-hidden="true">
+          <span className="ml-0.5 text-fuchsia-ink" aria-hidden="true">
             *
           </span>
         ) : null}
       </label>
       {children}
       {hint && !error ? (
-        <p id={hintId} className="text-xs text-tinta-suave">
+        <p id={hintId} className="text-xs text-brown-soft">
           {hint}
         </p>
       ) : null}
       {error ? (
-        <p id={errorId} className="text-xs font-medium text-guayaba-tinta">
+        <p id={errorId} className="text-xs font-medium text-fuchsia-ink">
           {error}
         </p>
       ) : null}
@@ -61,7 +61,7 @@ export function Field({
 /* --- Controles base -------------------------------------------------------- */
 
 const control =
-  "w-full rounded-(--radius-soft) border border-linea bg-papel px-3.5 py-2.5 font-sans text-base text-cacao placeholder:text-tinta-suave/60 transition-colors duration-200 focus:border-cacao focus:outline-none aria-invalid:border-guayaba-tinta";
+  "w-full rounded-soft border border-linea bg-papel px-3.5 py-2.5 font-sans text-base text-brown-text placeholder:text-brown-soft/60 transition-colors duration-150 focus:border-fuchsia-ink focus:outline-none aria-invalid:border-fuchsia-ink";
 
 export type InputProps = InputHTMLAttributes<HTMLInputElement>;
 

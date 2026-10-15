@@ -5,17 +5,17 @@ export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 font-sans font-medium rounded-(--radius-soft) border transition-colors duration-200 ease-papel disabled:opacity-45 disabled:cursor-not-allowed select-none";
+  "inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-soft border transition-colors duration-150 ease-papel disabled:opacity-45 disabled:cursor-not-allowed select-none";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-guayaba text-white border-guayaba hover:bg-guayaba-tinta hover:border-guayaba-tinta",
+    "bg-fuchsia text-white border-fuchsia hover:bg-fuchsia-ink hover:border-fuchsia-ink shadow-sm",
   secondary:
-    "bg-transparent text-cacao border-cacao/70 hover:bg-cacao hover:text-crema",
+    "bg-transparent text-brown-text border-brown-text/70 hover:bg-soft-pink/30",
   ghost:
-    "bg-transparent text-cacao border-transparent hover:bg-crema-hondo",
+    "bg-transparent text-brown-text border-transparent hover:bg-soft-pink/30",
   danger:
-    "bg-transparent text-guayaba-tinta border-guayaba-tinta/60 hover:bg-guayaba-tinta hover:text-crema hover:border-guayaba-tinta",
+    "bg-transparent text-fuchsia-ink border-fuchsia-ink/60 hover:bg-fuchsia-ink hover:text-white hover:border-fuchsia-ink",
 };
 
 const sizes: Record<ButtonSize, string> = {

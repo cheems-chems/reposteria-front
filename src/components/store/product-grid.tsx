@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ProductTicket } from "@/components/product/product-ticket";
 import { EmptyState } from "@/components/states/empty-state";
+import { productPrice, productTypeLabel } from "@/lib/encargo";
 import type { ProductListItem } from "@/lib/api";
 
 interface ProductGridProps {
@@ -42,12 +43,13 @@ export function ProductGrid({
             product={{
               slug: product.slug,
               name: product.name,
-              price: product.price,
+              price: productPrice(product),
               category: product.categoryName,
               imageUrl: product.imageUrl,
               available: product.available,
               compareAt: product.compareAt,
               featured: product.featured,
+              typeLabel: productTypeLabel(product),
             }}
             className="h-full"
           />

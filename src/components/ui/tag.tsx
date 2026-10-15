@@ -9,9 +9,9 @@ interface TagProps {
 }
 
 const accents = {
-  kraft: "border-kraft text-tinta-suave",
-  pistacho: "border-pistacho text-cacao",
-  guayaba: "border-guayaba text-guayaba-tinta",
+  kraft: "border-kraft text-brown-soft",
+  pistacho: "border-soft-pink text-brown-text",
+  guayaba: "border-fuchsia text-fuchsia-ink",
 };
 
 /** Rótulo pequeño de categoría, tipo etiqueta impresa. */

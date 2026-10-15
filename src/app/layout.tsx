@@ -1,18 +1,24 @@
 import type { Metadata } from "next";
-import { Fraunces, DM_Sans } from "next/font/google";
+import { Playfair_Display, Nunito_Sans, Dancing_Script } from "next/font/google";
 import { brand } from "@/lib/brand";
 import "./globals.css";
 
-const fraunces = Fraunces({
+const playfair = Playfair_Display({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  variable: "--font-fraunces",
+  variable: "--font-playfair",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const nunito = Nunito_Sans({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-nunito",
+  display: "swap",
+});
+
+const dancing = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-cursive",
   display: "swap",
 });
 
@@ -29,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-CO"
       data-scroll-behavior="smooth"
-      className={`${fraunces.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${playfair.variable} ${nunito.variable} ${dancing.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

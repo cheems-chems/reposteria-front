@@ -7,8 +7,7 @@ import { getStoreInfo } from '@/lib/api';
 
 export const metadata = {
 	title: 'Nosotros',
-	description:
-		'Un obrador de repostería por encargo: tandas pequeñas, horneado cerca de la entrega.',
+	description: 'Hecho en casa, pensado para compartir.',
 };
 
 export default async function NosotrosPage() {
@@ -18,45 +17,45 @@ export default async function NosotrosPage() {
 		<main className="mx-auto w-full max-w-3xl flex-1 px-5 py-10 sm:px-8">
 			<PageHeader
 				eyebrow="Nosotros"
-				title="Un obrador pequeño, por encargo"
+				title="Hecho en casa"
 				description={store.description ?? undefined}
 			/>
 
-			<div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-cacao/90">
+			<div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-brown-text/90">
 				<p>
-					Trabajamos en tandas pequeñas y horneamos cerca de la fecha de
-					entrega. No tenemos vitrina de productos listos: cada encargo se
-					prepara para el día que lo necesitas
+					Elvi&apos;s nace de cocinar en casa, para la gente que queremos. Cada
+					pedido se prepara en tandas pequeñas, cerca de la fecha en que lo
+					necesitas
 					{store.city ? `, en ${store.city}` : ''}.
 				</p>
 				<p>
-					La idea es simple: menos volumen, más cuidado. Elegimos ingredientes
-					concretos, tiempos reales de anticipación y una conversación directa
-					para confirmar cada pedido.
+					Elegimos ingredientes seleccionados y tiempos reales de anticipación.
+					Nos gusta el trato directo: conversamos cada encargo y lo confirmamos
+					contigo por WhatsApp.
 				</p>
 			</div>
 
 			<div className="mt-10 grid gap-6 sm:grid-cols-3">
 				{[
 					{
-						title: 'Fresco, no de vitrina',
-						text: 'Se hornea para tu fecha, no para tener stock.',
+						title: 'Hecho en casa',
+						text: 'Cocinamos en tandas pequeñas, cerca de tu fecha.',
 					},
 					{
-						title: 'Tiempos claros',
-						text: 'Cada ficha indica con cuántos días avisar.',
+						title: 'Ingredientes seleccionados',
+						text: 'Elegimos cada ingrediente con cuidado.',
 					},
 					{
-						title: 'Trato directo',
-						text: 'Confirmamos cada encargo por WhatsApp.',
+						title: 'Perfectos para cualquier ocasión',
+						text: 'Dulces y salados para compartir.',
 					},
 				].map((item) => (
 					<div
 						key={item.title}
 						className="flex flex-col gap-2 border-t-2 border-kraft pt-3"
 					>
-						<h2 className="font-serif text-xl text-cacao">{item.title}</h2>
-						<p className="text-sm text-tinta-suave">{item.text}</p>
+						<h2 className="font-serif text-xl text-brown-text">{item.title}</h2>
+						<p className="text-sm text-brown-soft">{item.text}</p>
 					</div>
 				))}
 			</div>
@@ -75,11 +74,11 @@ export default async function NosotrosPage() {
 				</ButtonLink>
 			</div>
 
-			<p className="mt-8 text-sm text-tinta-suave">
+			<p className="mt-8 text-sm text-brown-soft">
 				¿Buscas algo puntual?{' '}
 				<Link
 					href="/contacto"
-					className="text-guayaba-tinta underline decoration-kraft underline-offset-4 hover:text-cacao"
+					className="text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
 				>
 					Escríbenos
 				</Link>

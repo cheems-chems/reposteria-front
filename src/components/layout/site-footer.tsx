@@ -17,10 +17,10 @@ function Column({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="font-sans text-xs uppercase tracking-[0.18em] text-tinta-suave">
+      <h2 className="font-sans text-xs uppercase tracking-[0.18em] text-brown-soft">
         {title}
       </h2>
-      <div className="flex flex-col gap-2 text-sm text-cacao/90">{children}</div>
+      <div className="flex flex-col gap-2 text-sm text-brown-text/90">{children}</div>
     </div>
   );
 }
@@ -45,19 +45,24 @@ export async function SiteFooter() {
       <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
         <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
           <Logo size="sm" />
-          <p className="max-w-xs text-sm text-tinta-suave">
+          <p className="max-w-xs text-sm text-brown-soft">
             {store.description}
           </p>
+          <div className="mt-2 flex flex-wrap gap-3 text-sm text-brown-soft">
+            <span className="icon-heart">Hecho en casa</span>
+            <span>Ingredientes seleccionados</span>
+            <span>Perfectos para cualquier ocasión</span>
+          </div>
         </div>
 
         <Column title="Tienda">
-          <Link className="hover:text-cacao" href="/tienda">
+          <Link className="hover:text-fuchsia-ink" href="/tienda">
             Todo el catálogo
           </Link>
           {categories.map((category) => (
             <Link
               key={category.slug}
-              className="hover:text-cacao"
+              className="hover:text-fuchsia-ink"
               href={`/tienda/${category.slug}`}
             >
               {category.name}
@@ -67,7 +72,7 @@ export async function SiteFooter() {
 
         <Column title="Legal">
           {legalLinks.map((link) => (
-            <Link key={link.href} className="hover:text-cacao" href={link.href}>
+            <Link key={link.href} className="hover:text-fuchsia-ink" href={link.href}>
               {link.label}
             </Link>
           ))}
@@ -77,11 +82,11 @@ export async function SiteFooter() {
           {contactLines.length > 0 ? (
             contactLines.map((line) => <p key={line}>{line}</p>)
           ) : (
-            <p className="text-tinta-suave">
+            <p className="text-brown-soft">
               Datos de contacto pendientes de confirmar.
             </p>
           )}
-          <Link className="text-guayaba-tinta hover:text-cacao" href="/contacto">
+          <Link className="text-fuchsia-ink hover:text-brown-text" href="/contacto">
             Escríbenos
           </Link>
         </Column>

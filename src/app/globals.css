@@ -2,33 +2,34 @@
 
 /*
   ============================================================================
-  MIGAJA — TOKENS DE DISEÑO (ÚNICA FUENTE DE VERDAD)
+  ELVI'S — TOKENS DE DISEÑO (ÚNICA FUENTE DE VERDAD)
   ----------------------------------------------------------------------------
-  Todo lo provisional de la marca vive aquí y en src/lib/brand.ts.
-  Para reemplazar la identidad visual, cambia SOLO este archivo y brand.ts.
+  Paleta rosa/fucsia inspirada en "Hecho en casa".
   ============================================================================
 */
 
 @theme inline {
-  /* --- Paleta (provisional) ------------------------------------------------ */
-  --color-crema: #f6eedc; /* fondo principal            */
-  --color-papel: #fbf6ea; /* fondo de fichas/tarjetas   */
-  --color-crema-hondo: #eadfc6; /* paneles y líneas      */
-  --color-cacao: #3b2418; /* texto principal            */
-  --color-tinta-suave: #6b5546; /* texto secundario     */
-  --color-guayaba: #c8453b; /* acción principal (relleno) */
-  --color-guayaba-tinta: #a5382f; /* guayaba para texto (AA) */
-  --color-pistacho: #8aa17a; /* acento puntual          */
-  --color-kraft: #c9a878; /* detalles, bordes decorativos */
-  --color-linea: #d8c7a8; /* bordes finos               */
+  /* --- Paleta rosa/fucsia --------------------------------------------------- */
+  --color-bg: #FFF7F6; /* fondo principal */
+  --color-papel: #FFFBFB; /* fondo de fichas/tarjetas */
+  --color-soft-pink: #F6C6DA; /* acento suave */
+  --color-fuchsia: #DC2A67; /* acción principal */
+  --color-fuchsia-ink: #B71F53; /* para texto/sobre fucsia (AA) */
+  --color-label-pink: #D45B7E; /* etiquetas y detalles */
+  --color-pale-pink-border: #F0C9D2; /* bordes finos */
+  --color-brown-text: #5B3A2E; /* texto principal */
+  --color-brown-soft: #7C5A4D; /* texto secundario */
+  --color-kraft: #E7B9C7; /* detalles decorativos */
+  --color-linea: #F0C9D2; /* bordes */
 
   /* --- Tipografía ---------------------------------------------------------- */
-  --font-serif: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
-  --font-sans: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-playfair), "Georgia", "Times New Roman", serif;
+  --font-sans: var(--font-nunito), system-ui, -apple-system, sans-serif;
+  --font-cursive: var(--font-cursive), cursive;
 
-  /* --- Radios (esquinas poco redondeadas) ---------------------------------- */
-  --radius-ticket: 3px;
-  --radius-soft: 6px;
+  /* --- Radios (esquinas suavemente redondeadas) ----------------------------- */
+  --radius-ticket: 6px;
+  --radius-soft: 10px;
 
   /* --- Movimiento ---------------------------------------------------------- */
   --ease-papel: cubic-bezier(0.2, 0, 0, 1);
@@ -41,8 +42,8 @@
   }
 
   body {
-    background-color: var(--color-crema);
-    color: var(--color-cacao);
+    background-color: var(--color-bg);
+    color: var(--color-brown-text);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
@@ -53,18 +54,18 @@
   h3,
   h4 {
     font-family: var(--font-serif);
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
 
   ::selection {
-    background-color: var(--color-kraft);
-    color: var(--color-cacao);
+    background-color: var(--color-soft-pink);
+    color: var(--color-brown-text);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-guayaba-tinta);
+    outline: 2px solid var(--color-fuchsia-ink);
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -77,14 +78,36 @@
     font-feature-settings: "tnum" 1;
   }
 
-  /* Textura sutil de papel (CSS ligero, sin imágenes pesadas) */
+  /* Textura sutil de papel (CSS ligero) */
   .texture-paper {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   }
 
-  /* Borde tipo etiqueta troquelada */
+  /* Borde tipo etiqueta */
   .borde-ticket {
-    border: 1px solid var(--color-linea);
+    border: 1px solid var(--color-pale-pink-border);
+  }
+
+  /* Ornaments: small heart/circle dots */
+  .dot-sep::before,
+  .dot-sep::after {
+    content: "•";
+    display: inline-block;
+    margin: 0 0.25rem;
+    opacity: 0.7;
+  }
+
+  /* Heart icon small */
+  .icon-heart {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .icon-heart::before {
+    content: "♥";
+    font-size: 0.9em;
+    line-height: 1;
   }
 
   /* Reveal discreto al entrar */

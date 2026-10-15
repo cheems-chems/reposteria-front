@@ -26,20 +26,25 @@ export function PriceSeal({
   className,
 }: PriceSealProps) {
   return (
-    <span className={cn("inline-flex items-baseline gap-2", className)}>
-      <span
-        className={cn(
-          "tabular font-serif font-semibold text-guayaba-tinta",
-          sizes[size],
-        )}
-      >
-        {formatCOP(amount)}
+    <span className={cn("inline-flex flex-col items-start", className)}>
+      <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-label-pink">
+        Valor
       </span>
-      {compareAt && compareAt > amount ? (
-        <span className="tabular text-sm text-tinta-suave line-through">
-          {formatCOP(compareAt)}
+      <span className="mt-1 flex items-baseline gap-2 rounded-ticket border border-fuchsia/60 bg-soft-pink/20 px-2.5 py-1">
+        <span
+          className={cn(
+            "tabular font-serif font-bold text-fuchsia-ink",
+            sizes[size],
+          )}
+        >
+          {formatCOP(amount)}
         </span>
-      ) : null}
+        {compareAt && compareAt > amount ? (
+          <span className="tabular text-sm text-brown-soft line-through">
+            {formatCOP(compareAt)}
+          </span>
+        ) : null}
+      </span>
     </span>
   );
 }

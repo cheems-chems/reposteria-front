@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Elvi's">
+  <circle cx="32" cy="32" r="32" fill="#F6C6DA" />
+  <circle cx="32" cy="32" r="26" fill="#FFFBFB" />
+  <path d="M20 14h23v7H29v8h10v7H29v8h14v7H20z" fill="#B71F53" />
+</svg>

@@ -19,6 +19,8 @@ export interface ProductTicketData {
   available?: boolean;
   compareAt?: number | null;
   featured?: boolean;
+  /** Tipo de venta legible, p. ej. "Combo · 60 unidades". */
+  typeLabel?: string | null;
 }
 
 function seedFrom(text: string): number {
@@ -51,12 +53,12 @@ export function ProductTicket({
       href={`/producto/${product.slug}`}
       className={cn(
         "group flex flex-col bg-papel transition-colors duration-200 ease-papel",
-        "border border-linea hover:border-cacao/60",
+        "border border-linea hover:border-brown-text/60",
         !available && "opacity-70",
         className,
       )}
     >
-      <div className="relative m-2 overflow-hidden border border-linea bg-crema">
+      <div className="relative m-2 overflow-hidden border border-linea bg-bg">
         {product.imageUrl ? (
           <Image
             src={product.imageUrl}
@@ -87,12 +89,17 @@ export function ProductTicket({
         {product.category ? <Tag>{product.category}</Tag> : null}
         <h3
           className={cn(
-            "font-serif font-semibold text-cacao",
+            "font-serif font-bold text-brown-text",
             featured ? "text-3xl" : "text-xl",
           )}
         >
           {product.name}
         </h3>
+        {product.typeLabel ? (
+          <p className="font-sans text-sm text-label-pink">
+            {product.typeLabel}
+          </p>
+        ) : null}
         <div className="mt-auto pt-1">
           <PriceSeal
             amount={product.price}

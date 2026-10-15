@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-import { CategoryNav } from '@/components/store/category-nav';
+import { SectionNav } from '@/components/store/section-nav';
 import { PageHeader } from '@/components/store/page-header';
 import { ProductGrid } from '@/components/store/product-grid';
 import { ButtonLink } from '@/components/ui/button-link';
 import { Skeleton } from '@/components/states/skeleton';
-import { getCategories, getCategoryBySlug, getProducts } from '@/lib/api';
+import { categorySaleKind } from '@/lib/encargo';
+import { getCategories, getCategoryBySlug, getProducts, getSections } from '@/lib/api';
 
 type CategoriaParams = Promise<{ categoria: string }>;
 
@@ -45,13 +46,21 @@ function CategoriaFallback() {
 
 async function CategoriaContenido({ params }: { params: CategoriaParams }) {
 	const { categoria } = await params;
-	const [category, categories, products] = await Promise.all([
+	const [category, products, sections] = await Promise.all([
 		getCategoryBySlug(categoria),
-		getCategories(),
 		getProducts(categoria),
+		getSections(),
 	]);
 
 	if (!category) notFound();
+
+	const kind = categorySaleKind(products);
+	const ctaLabel =
+		kind === 'pack'
+			? 'Elegir bandejas'
+			: kind === 'empty'
+				? null
+				: 'Hacer encargo';
 
 	return (
 		<>
@@ -59,10 +68,26 @@ async function CategoriaContenido({ params }: { params: CategoriaParams }) {
 				eyebrow="Categoría"
 				title={category.name}
 				description={category.description ?? undefined}
-			/>
+			>
+				{ctaLabel ? (
+					<ButtonLink
+						href={`/encargo?categoria=${category.slug}`}
+						className="mt-6"
+					>
+						{ctaLabel}
+					</ButtonLink>
+				) : null}
+			</PageHeader>
 
-			<div className="mt-6">
-				<CategoryNav categories={categories} current={category.slug} />
+			<div className="mt-6 flex flex-col gap-3">
+				{sections.length > 0 ? (
+					<SectionNav sections={sections} current={category.sectionSlug ?? null} />
+				) : null}
+				<div>
+					<ButtonLink href="/tienda" variant="ghost" size="sm">
+						← Volver a la tienda
+					</ButtonLink>
+				</div>
 			</div>
 
 			<div className="mt-8">

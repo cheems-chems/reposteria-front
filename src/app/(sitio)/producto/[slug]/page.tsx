@@ -4,12 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { RecipeDetail } from "@/components/product/recipe-detail";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Tag } from "@/components/ui/tag";
 import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Skeleton } from "@/components/states/skeleton";
+import { orderLineForProduct } from "@/lib/encargo";
 import { useProvisionalData } from "@/lib/api";
 import {
   getComboItems,
@@ -105,22 +107,25 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
     product.saleMode === "builder"
       ? { href: `/encargo?categoria=${product.categorySlug}`, label: "Armar mi combo" }
       : { href: `/encargo?producto=${product.slug}`, label: "Hacer encargo" };
+  const cartLine = product.available
+    ? orderLineForProduct(product, comboItems)
+    : null;
 
   return (
     <>
-      <nav aria-label="Ruta" className="mb-6 flex flex-wrap gap-2 text-sm text-brown-soft">
-        <Link className="hover:text-brown-text" href="/tienda">
+      <nav aria-label="Ruta" className="mb-6 flex flex-wrap gap-2 text-sm text-texto-suave">
+        <Link className="hover:text-vino" href="/tienda">
           Tienda
         </Link>
         <span aria-hidden="true">/</span>
-        <Link className="hover:text-brown-text" href={`/tienda/${product.categorySlug}`}>
+        <Link className="hover:text-vino" href={`/tienda/${product.categorySlug}`}>
           {product.categoryName}
         </Link>
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         {/* Media */}
-        <div className="relative overflow-hidden border border-linea bg-bg">
+        <div className="relative overflow-hidden border border-borde bg-lienzo">
           {product.imageUrl ? (
             <div className="relative aspect-4/3">
               <Image
@@ -144,16 +149,16 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
         {/* Resumen */}
         <div className="flex flex-col gap-4">
           <Tag accent="guayaba">{product.categoryName}</Tag>
-          <h1 className="font-serif text-4xl text-brown-text sm:text-5xl">
+          <h1 className="font-serif text-4xl text-vino sm:text-5xl">
             {product.name}
           </h1>
           <PriceSeal amount={priceAmount(product)} compareAt={product.compareAt} size="lg" />
           {typeLabel ? (
-            <p className="font-sans text-sm font-medium text-label-pink">
+            <p className="font-sans text-sm font-medium text-fucsia-hover">
               {typeLabel}
             </p>
           ) : null}
-          <p className="font-sans text-xs text-brown-soft">
+          <p className="font-sans text-xs text-texto-suave">
             El valor final lo confirmamos por WhatsApp.
           </p>
           <StatusBadge
@@ -170,22 +175,32 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
             </div>
           ) : null}
           {product.shortDescription ? (
-            <p className="text-brown-soft">{product.shortDescription}</p>
+            <p className="text-texto-suave">{product.shortDescription}</p>
           ) : null}
 
           {product.available ? (
-            <ButtonLink href={cta.href} size="lg" fullWidth className="mt-2">
-              {cta.label}
-            </ButtonLink>
+            <div className="mt-2 flex flex-col gap-2">
+              <ButtonLink href={cta.href} size="lg" fullWidth>
+                {cta.label}
+              </ButtonLink>
+              {cartLine ? (
+                <AddToCartButton
+                  line={cartLine}
+                  size="lg"
+                  variant="secondary"
+                  fullWidth
+                />
+              ) : null}
+            </div>
           ) : (
-            <p className="rounded-soft border border-linea bg-papel px-4 py-3 text-sm text-brown-soft">
+            <p className="rounded-soft border border-borde bg-tarjeta px-4 py-3 text-sm text-texto-suave">
               Por ahora no lo tenemos disponible. Escríbenos y te avisamos
               cuando vuelva.
             </p>
           )}
 
           {useProvisionalData ? (
-            <p className="font-sans text-xs text-brown-soft">
+            <p className="font-sans text-xs text-texto-suave">
               Ficha con datos de desarrollo (precio, foto y datos
               provisionales).
             </p>
@@ -209,7 +224,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
       <div className="mt-10">
         <Link
           href={`/tienda/${product.categorySlug}`}
-          className="font-sans text-sm text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
+          className="font-sans text-sm text-fucsia-hover underline decoration-rosa-medio underline-offset-4 hover:text-vino"
         >
           ← Ver más de {product.categoryName}
         </Link>

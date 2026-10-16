@@ -1,12 +1,24 @@
+import { CartDrawer } from "@/components/cart/cart-drawer";
+import { CartProvider } from "@/components/cart/cart-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { getStoreInfo } from "@/lib/api";
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const store = await getStoreInfo();
+
   return (
-    <div className="flex min-h-full flex-1 flex-col">
-      <SiteHeader />
-      <div className="flex flex-1 flex-col">{children}</div>
-      <SiteFooter />
-    </div>
+    <CartProvider whatsapp={store.whatsapp ?? null}>
+      <div className="flex min-h-full flex-1 flex-col">
+        <SiteHeader />
+        <div className="flex flex-1 flex-col">{children}</div>
+        <SiteFooter />
+      </div>
+      <CartDrawer />
+    </CartProvider>
   );
 }

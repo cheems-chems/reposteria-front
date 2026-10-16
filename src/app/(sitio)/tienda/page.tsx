@@ -4,7 +4,12 @@ import { SectionNav } from "@/components/store/section-nav";
 import { PageHeader } from "@/components/store/page-header";
 import { ProductGrid } from "@/components/store/product-grid";
 import { Skeleton } from "@/components/states/skeleton";
-import { getCategories, getProducts, getSections } from "@/lib/api";
+import {
+  getCategories,
+  getComboItems,
+  getProducts,
+  getSections,
+} from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "Tienda",
@@ -32,12 +37,14 @@ async function TiendaContenido({
 }: {
   searchParams: TiendaSearchParams;
 }) {
-  const [params, products, categories, sections] = await Promise.all([
-    searchParams,
-    getProducts(),
-    getCategories(),
-    getSections(),
-  ]);
+  const [params, products, categories, sections, comboItems] =
+    await Promise.all([
+      searchParams,
+      getProducts(),
+      getCategories(),
+      getSections(),
+      getComboItems(),
+    ]);
 
   const raw = params.seccion;
   const requested = Array.isArray(raw) ? raw[0] : raw;
@@ -71,10 +78,13 @@ async function TiendaContenido({
       <SectionNav sections={sections} current={sectionSlug} />
       {orderedCategories.map((category) => (
         <div key={category.slug} className="flex flex-col gap-3">
-          <h2 className="font-serif text-xl text-brown-text">
+          <h2 className="font-serif text-xl text-vino">
             {category.name}
           </h2>
-          <ProductGrid products={productsByCategory.get(category.slug) ?? []} />
+          <ProductGrid
+            products={productsByCategory.get(category.slug) ?? []}
+            comboItems={comboItems}
+          />
         </div>
       ))}
     </div>

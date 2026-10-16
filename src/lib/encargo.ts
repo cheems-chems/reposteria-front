@@ -289,6 +289,19 @@ export function lineTotal(line: OrderLine): number {
   }
 }
 
+/** Unidades que representa una línea (para el total del encargo). */
+export function lineUnits(line: OrderLine): number {
+  switch (line.kind) {
+    case "single":
+    case "builder":
+      return line.quantity;
+    case "combo":
+      return line.totalUnits;
+    case "pack":
+      return line.packCount * line.unitsPerPack;
+  }
+}
+
 /** Unidades y total estimado de un conjunto de líneas. */
 export function orderTotals(lines: OrderLine[]): {
   units: number;
@@ -298,18 +311,40 @@ export function orderTotals(lines: OrderLine[]): {
   let total = 0;
   for (const line of lines) {
     total += lineTotal(line);
-    switch (line.kind) {
-      case "single":
-      case "builder":
-        units += line.quantity;
-        break;
-      case "combo":
-        units += line.totalUnits;
-        break;
-      case "pack":
-        units += line.packCount * line.unitsPerPack;
-        break;
-    }
+    units += lineUnits(line);
   }
   return { units, total };
+}
+
+/* --- Línea de encargo desde un producto del catálogo ----------------------- */
+
+/**
+ * Convierte un producto vendible en UNA línea de encargo (para "Agregar al
+ * encargo" desde tarjetas y fichas). Los ítems de armador (`saleMode`
+ * "builder") no se venden solos: devuelve `null` y se resuelven en el flujo de
+ * /encargo.
+ *
+ * - `single`: una pieza.
+ * - `combo`: combo con su composición de fábrica (nombres resueltos si se
+ *   pasan los ítems de armador).
+ * - `pack`: una bandeja (respetando `minPacks`).
+ */
+export function orderLineForProduct(
+  product: ProductListItem,
+  comboItems: BuilderItemProduct[] = [],
+): OrderLine | null {
+  switch (product.saleMode) {
+    case "single":
+      return singleLine(product, 1);
+    case "combo":
+      return comboOrderLine(product, comboQuantitiesOf(product), comboItems);
+    case "pack":
+      return (
+        buildPackLines([product], {
+          [product.slug]: Math.max(1, product.minPacks),
+        })[0] ?? null
+      );
+    case "builder":
+      return null;
+  }
 }

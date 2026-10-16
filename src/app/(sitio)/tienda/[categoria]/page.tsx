@@ -7,7 +7,7 @@ import { ProductGrid } from '@/components/store/product-grid';
 import { ButtonLink } from '@/components/ui/button-link';
 import { Skeleton } from '@/components/states/skeleton';
 import { categorySaleKind } from '@/lib/encargo';
-import { getCategories, getCategoryBySlug, getProducts, getSections } from '@/lib/api';
+import { getCategories, getCategoryBySlug, getComboItems, getProducts, getSections } from '@/lib/api';
 
 type CategoriaParams = Promise<{ categoria: string }>;
 
@@ -46,10 +46,11 @@ function CategoriaFallback() {
 
 async function CategoriaContenido({ params }: { params: CategoriaParams }) {
 	const { categoria } = await params;
-	const [category, products, sections] = await Promise.all([
+	const [category, products, sections, comboItems] = await Promise.all([
 		getCategoryBySlug(categoria),
 		getProducts(categoria),
 		getSections(),
+		getComboItems(),
 	]);
 
 	if (!category) notFound();
@@ -93,6 +94,7 @@ async function CategoriaContenido({ params }: { params: CategoriaParams }) {
 			<div className="mt-8">
 				<ProductGrid
 					products={products}
+					comboItems={comboItems}
 					emptyTitle="Todavía no hay productos en esta categoría"
 					emptyAction={
 						<ButtonLink href="/tienda" variant="secondary" size="sm">

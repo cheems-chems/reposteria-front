@@ -78,8 +78,9 @@ banner: {
 
 ## Logo
 
-- Optimizado (header/footer): `public/brand/logo-elvis.webp`.
-- Maestro 800×800: `public/brand/logo-elvis.png`.
+- Imagen única (header/footer): `public/brand/logo-elvis-512.png` (círculo con
+  fondo transparente, 180×180).
+- Favicon: `src/app/icon.png` (la misma imagen).
 - Ajusta la ruta en `src/lib/brand.ts` (`logo` / `logoMaster`).
 
 ## Textos de marca

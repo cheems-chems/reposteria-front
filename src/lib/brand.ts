@@ -7,8 +7,8 @@ export const brand = {
   description:
     "El sabor que une, lo hacemos con amor. Hechos en casa, pensados para compartir.",
 
-  logo: "/brand/logo-elvis.webp",
-  logoMaster: "/brand/logo-elvis.png",
+  logo: "/brand/logo-elvis-512.png",
+  logoMaster: "/brand/logo-elvis-512.png",
 
   // null = "foto pendiente".
   hero: {

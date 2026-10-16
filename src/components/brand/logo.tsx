@@ -3,18 +3,43 @@ import Link from "next/link";
 import { brand } from "@/lib/brand";
 import { cn } from "@/lib/cn";
 
-type LogoSize = "sm" | "md" | "lg";
+type LogoSize = "sm" | "md" | "lg" | "header" | "footer";
 type LogoVariant = "default" | "inverse";
+/** "stack" apila icono y texto (por defecto); "row" los pone en una línea;
+ *  "row-mobile" los pone en una línea solo por debajo de sm. */
+type LogoOrientation = "stack" | "row" | "row-mobile";
 
-const sizes: Record<LogoSize, { logo: number; tag: string; word: string }> = {
-  sm: { logo: 32, tag: "text-[10px]", word: "text-2xl" },
-  md: { logo: 48, tag: "text-xs", word: "text-3xl" },
-  lg: { logo: 72, tag: "text-sm", word: "text-5xl sm:text-6xl" },
+const sizes: Record<
+  LogoSize,
+  { logo: number; img: string; tag: string; word: string }
+> = {
+  sm: { logo: 32, img: "size-8", tag: "text-[10px]", word: "text-2xl" },
+  md: { logo: 48, img: "size-12", tag: "text-xs", word: "text-3xl" },
+  lg: {
+    logo: 72,
+    img: "size-[72px]",
+    tag: "text-sm",
+    word: "text-5xl sm:text-6xl",
+  },
+  // Header: 52 px en móvil, 60 px en escritorio (altura del header ~68/76 px).
+  header: {
+    logo: 60,
+    img: "size-[52px] sm:size-[60px]",
+    tag: "text-xs",
+    word: "text-2xl",
+  },
+  // Footer: 96 px.
+  footer: { logo: 96, img: "size-24", tag: "text-xs", word: "text-3xl" },
 };
 
 interface LogoProps {
   size?: LogoSize;
   variant?: LogoVariant;
+  orientation?: LogoOrientation;
+  /** Tipografía más pequeña del wordmark (útil en el header móvil). */
+  compact?: boolean;
+  /** Oculta el wordmark visible y deja el nombre en un texto sr-only. */
+  showText?: boolean;
   withTagline?: boolean;
   href?: string | null;
   className?: string;
@@ -24,6 +49,9 @@ interface LogoProps {
 export function Logo({
   size = "md",
   variant = "default",
+  orientation = "stack",
+  compact = false,
+  showText = true,
   withTagline = false,
   href = "/",
   className,
@@ -32,46 +60,87 @@ export function Logo({
   const s = sizes[size];
   const color = variant === "inverse" ? "text-white" : "text-vino";
   const tagColor = variant === "inverse" ? "text-white/80" : "text-texto-suave";
+  const mobileRow = orientation === "row-mobile";
+  const row = orientation === "row" || mobileRow;
+  const wordClass = compact
+    ? mobileRow
+      ? "text-xl sm:text-2xl"
+      : "text-xl"
+    : s.word;
+
+  const wordmark = (
+    <span
+      className={cn(
+        "font-serif font-semibold tracking-[-0.01em]",
+        wordClass,
+        color,
+        orientation === "stack" && "mt-1",
+        mobileRow && "sm:mt-1",
+      )}
+    >
+      {brand.wordmark}
+    </span>
+  );
+
+  const tagline = withTagline ? (
+    <span className={cn("mt-1 font-cursive", s.tag, tagColor)}>
+      {brand.tagline}
+    </span>
+  ) : null;
 
   const content = (
-    <span className={cn("inline-flex flex-col items-center leading-none", className)}>
+    <span
+      className={cn(
+        "inline-flex leading-none",
+        showText && orientation === "row" && "flex-row items-center gap-2",
+        showText &&
+          mobileRow &&
+          "flex-row items-center gap-2 sm:flex-col sm:items-center sm:gap-0",
+        showText && orientation === "stack" && "flex-col items-center",
+        !showText && "items-center",
+        className,
+      )}
+    >
       {showImage ? (
         <Image
           src={brand.logo}
-          alt={brand.name}
+          // El nombre vive en el alt y en el texto sr-only; nunca como texto visible.
+          alt={`${brand.name} — ${brand.tagline}`}
           width={s.logo}
           height={s.logo}
-          className="h-auto w-auto"
-          preload={size === "lg"}
+          // Círculo sin fondo ni cuadro, sin deformar la imagen.
+          className={cn("rounded-full object-contain", s.img)}
+          preload={size === "header" || size === "lg"}
         />
       ) : null}
-      <span
-        className={cn(
-          "mt-1 font-serif font-semibold tracking-[-0.01em]",
-          s.word,
-          color,
-        )}
-      >
-        {brand.wordmark}
-      </span>
-      {withTagline ? (
-        <span
-          className={cn(
-            "mt-1 font-cursive",
-            s.tag,
-            tagColor,
-          )}
-        >
-          {brand.tagline}
+      {showText ? (
+        row && withTagline ? (
+          <span className="flex flex-col items-start">
+            {wordmark}
+            {tagline}
+          </span>
+        ) : (
+          <>
+            {wordmark}
+            {tagline}
+          </>
+        )
+      ) : (
+        <span className="sr-only">
+          {brand.name} — {brand.tagline}
         </span>
-      ) : null}
+      )}
     </span>
   );
 
   if (!href) return content;
 
   return (
-    <Link href={href} className="inline-flex rounded-sm" aria-label={brand.name + ", " + brand.tagline}>
+    <Link
+      href={href}
+      aria-label={`${brand.name} — ${brand.tagline}`}
+      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fucsia focus-visible:ring-offset-2 focus-visible:ring-offset-lienzo"
+    >
       {content}
     </Link>
   );

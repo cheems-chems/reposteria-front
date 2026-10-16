@@ -57,7 +57,11 @@ export function ProductTicket({
     >
       <SectionArt
         art={art}
-        className={cn("w-1/2 opacity-90", theme.ink)}
+        className={cn(
+          featured ? "w-20 sm:w-32" : "w-16 sm:w-20",
+          "opacity-90",
+          theme.ink,
+        )}
       />
     </span>
   );
@@ -112,8 +116,8 @@ export function ProductTicket({
           {product.category ? <Tag>{product.category}</Tag> : null}
           <h3
             className={cn(
-              "font-serif font-bold text-vino",
-              featured ? "text-3xl" : "text-xl",
+              "hyphens-auto break-words font-serif font-bold text-vino",
+              featured ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl",
             )}
           >
             {product.name}

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -10,6 +9,7 @@ import { Tag } from "@/components/ui/tag";
 import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { ButtonLink } from "@/components/ui/button-link";
+import { SafeImage } from "@/components/ui/safe-image";
 import { Skeleton } from "@/components/states/skeleton";
 import { orderLineForProduct } from "@/lib/encargo";
 import { useProvisionalData } from "@/lib/api";
@@ -126,12 +126,20 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
         <div className="relative overflow-hidden border border-borde bg-lienzo">
           {product.imageUrl ? (
             <div className="relative aspect-4/3">
-              <Image
+              <SafeImage
                 src={product.imageUrl}
                 alt={product.name}
                 fill
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 className="object-cover"
+                fallback={
+                  <PhotoPlaceholder
+                    name={product.name}
+                    ratio="4/3"
+                    seed={seedFrom(product.slug)}
+                    className="border-0"
+                  />
+                }
               />
             </div>
           ) : (

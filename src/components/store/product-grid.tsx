@@ -37,7 +37,7 @@ export function ProductGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
       {products.map((product) => {
         const line = product.available
           ? orderLineForProduct(product, comboItems)
@@ -67,7 +67,7 @@ export function ProductGrid({
         );
 
         return product.slug === featuredSlug ? (
-          <div key={product.slug} className="col-span-2">
+          <div key={product.slug} className="min-[420px]:col-span-2">
             {ticket}
           </div>
         ) : (

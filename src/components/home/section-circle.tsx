@@ -35,7 +35,7 @@ export function SectionCircle({
         href={`/tienda?seccion=${section.slug}`}
         className="group flex flex-col items-center gap-3 text-center"
       >
-        <span className="relative flex size-44 items-center justify-center sm:size-48 lg:size-52">
+        <span className="relative flex size-36 items-center justify-center sm:size-48 lg:size-52">
           <svg
             viewBox="0 0 100 100"
             className={cn(
@@ -69,7 +69,7 @@ export function SectionCircle({
                   <SectionArt
                     art={art}
                     className={cn(
-                      "w-1/2 transition-transform duration-300 ease-suave group-hover:-rotate-6",
+                      "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 sm:w-20 lg:w-24",
                       theme.ink,
                     )}
                   />
@@ -79,7 +79,7 @@ export function SectionCircle({
               <SectionArt
                 art={art}
                 className={cn(
-                  "w-1/2 transition-transform duration-300 ease-suave group-hover:-rotate-6",
+                  "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 sm:w-20 lg:w-24",
                   theme.ink,
                 )}
               />
@@ -88,16 +88,18 @@ export function SectionCircle({
 
           <span
             aria-label={`${productCount} productos`}
-            className="absolute -right-1 -top-1 flex size-10 items-center justify-center rounded-full border-2 border-lienzo bg-vino font-serif text-lg text-white"
+            className="absolute -right-1 -top-1 flex size-8 items-center justify-center rounded-full border-2 border-lienzo bg-vino font-serif text-base text-white sm:size-10 sm:text-lg"
           >
             {productCount}
           </span>
         </span>
 
-        <span className={cn("font-serif text-xl font-bold", theme.title)}>
+        <span className={cn("font-serif text-lg font-bold sm:text-xl", theme.title)}>
           {section.name}
         </span>
-        <span className={cn("max-w-[13rem] text-sm", theme.body)}>{blurb}</span>
+        <span className={cn("max-w-[11rem] text-xs sm:max-w-[13rem] sm:text-sm", theme.body)}>
+          {blurb}
+        </span>
         <span className={cn("font-sans text-sm font-semibold", theme.link)}>
           Ver todo →
         </span>

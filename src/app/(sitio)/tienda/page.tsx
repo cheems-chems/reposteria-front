@@ -23,7 +23,7 @@ function TiendaFallback() {
   return (
     <div className="flex flex-col gap-8">
       <Skeleton className="h-11 w-80" />
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
           <Skeleton key={index} className="aspect-4/5 w-full" />
         ))}

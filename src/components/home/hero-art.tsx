@@ -3,7 +3,7 @@ import { SectionArt } from "@/components/ui/section-art";
 // Sello circular con texto curvo que gira lento.
 function HeroSeal() {
   return (
-    <span className="absolute -bottom-2 right-2 flex size-24 items-center justify-center sm:right-6 sm:size-28">
+    <span className="absolute bottom-2 right-2 z-0 flex size-16 items-center justify-center sm:right-6 sm:size-28">
       <svg
         viewBox="0 0 100 100"
         className="animate-sello size-full"
@@ -37,7 +37,7 @@ function HeroSeal() {
           </textPath>
         </text>
       </svg>
-      <span className="absolute text-xl text-fucsia" aria-hidden="true">
+      <span className="absolute text-base text-fucsia sm:text-xl" aria-hidden="true">
         ♥
       </span>
     </span>
@@ -46,31 +46,33 @@ function HeroSeal() {
 
 // Héroe ilustrado: los dibujos del catálogo flotan sobre un círculo fucsia
 // grande. Sin fotos de stock; si hay foto real, la reemplaza la imagen.
+// Contenedor con alto/ancho acotado en móvil + overflow-hidden: ningún dibujo
+// puede salirse ni montarse sobre el texto y los botones del héroe.
 export function HeroArt() {
   return (
     <div
       aria-hidden="true"
-      className="relative flex aspect-3/2 w-full items-center justify-center"
+      className="pointer-events-none relative z-0 mx-auto flex h-64 w-full max-w-[340px] items-center justify-center overflow-hidden sm:h-80 sm:max-w-md lg:aspect-3/2 lg:h-auto lg:max-w-none"
     >
-      <span className="absolute size-48 rounded-full bg-fucsia sm:size-64 lg:size-80" />
-      <span className="absolute -left-2 top-4 size-20 animate-flotar rounded-full bg-rosa-medio sm:size-28" />
-      <span className="absolute bottom-6 left-0 size-14 animate-flotar-lento rounded-full bg-rosa-claro sm:size-20" />
+      <span className="size-44 rounded-full bg-fucsia sm:size-64 lg:size-80" />
+      <span className="absolute -left-3 top-3 z-0 size-16 animate-flotar rounded-full bg-rosa-medio sm:-left-2 sm:top-4 sm:size-28" />
+      <span className="absolute bottom-4 left-2 z-0 size-12 animate-flotar-lento rounded-full bg-rosa-claro sm:bottom-6 sm:left-0 sm:size-20" />
 
       <SectionArt
         art="dulces"
-        className="absolute left-[12%] top-[10%] w-20 text-white sm:w-28 animate-flotar"
+        className="absolute left-[6%] top-[6%] z-0 w-16 animate-flotar text-white sm:left-[12%] sm:top-[10%] sm:w-28"
       />
       <SectionArt
         art="salados"
-        className="absolute bottom-[12%] right-[10%] w-24 text-white sm:w-32 animate-flotar-lento"
+        className="absolute bottom-[8%] left-[5%] z-0 w-20 animate-flotar-lento text-white sm:bottom-[12%] sm:left-auto sm:right-[10%] sm:w-32"
       />
       <SectionArt
         art="congelados"
-        className="absolute right-[16%] top-[8%] w-14 text-white/90 sm:w-20 animate-flotar"
+        className="absolute right-[8%] top-[8%] z-0 w-12 animate-flotar text-white/90 sm:right-[16%] sm:w-20"
       />
       <SectionArt
         art="casero"
-        className="absolute bottom-[14%] left-[18%] w-12 text-white/90 sm:w-16 animate-flotar-lento"
+        className="absolute bottom-[6%] left-[42%] z-0 w-10 animate-flotar-lento text-white/90 sm:bottom-[14%] sm:left-[18%] sm:w-16"
       />
 
       <HeroSeal />

@@ -98,7 +98,7 @@ export default async function HomePage() {
 		>
 			<SectionArt
 				art={sectionArtKey(highlightCombo?.slug, highlightCombo?.name)}
-				className={`w-1/3 ${comboTheme.ink}`}
+				className={`w-28 sm:w-36 ${comboTheme.ink}`}
 			/>
 		</span>
 	);
@@ -117,7 +117,7 @@ export default async function HomePage() {
 				</div>
 
 				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-8 lg:py-20">
-					<div className="flex flex-col items-start gap-5">
+					<div className="relative z-10 flex flex-col items-start gap-5">
 						<h1 className="font-serif text-4xl leading-[1.05] text-vino sm:text-5xl lg:text-6xl">
 							Hecho en casa,
 							<br />
@@ -126,28 +126,29 @@ export default async function HomePage() {
 						<p className="max-w-md text-lg text-texto">
 							{store.description ?? brand.description}
 						</p>
-						<div className="mt-1 flex flex-col gap-3 sm:flex-row">
-							<ButtonLink href="/tienda" size="lg">
+						<div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+							<ButtonLink href="/tienda" size="lg" className="w-full sm:w-auto">
 								Ver la tienda
 							</ButtonLink>
 							<ButtonLink
 								href="/encargo?categoria=combos"
 								size="lg"
 								variant="secondary"
+								className="w-full sm:w-auto"
 							>
 								Arma tu combo
 							</ButtonLink>
 						</div>
 					</div>
 
-					<div className="relative mx-auto w-full max-w-xl lg:mx-0 lg:-mr-12 lg:max-w-none">
+					<div className="relative z-0 mx-auto w-full max-w-xl lg:mx-0 lg:-mr-12 lg:max-w-none">
 						<span
 							aria-hidden="true"
 							className="absolute -inset-4 rounded-[2.5rem] bg-rosa-claro/60"
 						/>
-						<div className="relative aspect-3/2 w-full">
-							{/* Para usar foto real: coloca el archivo en public/brand/hero.jpg y pon brand.hero.image = "/brand/hero.jpg" en src/lib/brand.ts */}
-							{brand.hero.image ? (
+						{/* Para usar foto real: coloca el archivo en public/brand/hero.jpg y pon brand.hero.image = "/brand/hero.jpg" en src/lib/brand.ts */}
+						{brand.hero.image ? (
+							<div className="relative h-64 w-full overflow-hidden sm:h-80 lg:aspect-3/2 lg:h-auto">
 								<SafeImage
 									src={brand.hero.image}
 									alt={brand.hero.alt}
@@ -157,21 +158,21 @@ export default async function HomePage() {
 									className="object-contain object-bottom drop-shadow-[0_24px_45px_rgba(90,18,51,0.22)]"
 									fallback={<HeroArt />}
 								/>
-							) : (
-								<HeroArt />
-							)}
-						</div>
+							</div>
+						) : (
+							<HeroArt />
+						)}
 					</div>
 				</div>
 			</section>
 
 			<section className="border-y border-borde bg-tarjeta">
-				<ul className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-x-6 gap-y-6 px-5 py-8 sm:px-8 lg:grid-cols-4">
+				<ul className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-x-4 gap-y-5 px-5 py-8 sm:gap-x-6 sm:gap-y-6 sm:px-8 lg:grid-cols-4">
 					{trust.map((item) => (
-						<li key={item.label} className="flex items-center gap-3">
+						<li key={item.label} className="flex items-start gap-3">
 							<svg
 								viewBox="0 0 24 24"
-								className="size-7 shrink-0 text-fucsia"
+								className="size-6 shrink-0 text-fucsia sm:size-7"
 								fill="none"
 								stroke="currentColor"
 								strokeWidth={1.6}
@@ -181,7 +182,7 @@ export default async function HomePage() {
 							>
 								<path d={item.path} />
 							</svg>
-							<span className="font-sans text-sm font-medium text-vino">
+							<span className="font-sans text-xs leading-snug font-medium text-vino sm:text-sm">
 								{item.label}
 							</span>
 						</li>
@@ -266,6 +267,7 @@ export default async function HomePage() {
 										<ButtonLink
 											href={`/encargo?producto=${highlightCombo.slug}`}
 											size="lg"
+											className="w-full sm:w-auto"
 										>
 											Encargar
 										</ButtonLink>
@@ -274,7 +276,7 @@ export default async function HomePage() {
 												line={highlightLine}
 												size="lg"
 												variant="secondary"
-												label="Agregar al encargo"
+												className="w-full sm:w-auto"
 											/>
 										) : null}
 									</div>
@@ -310,7 +312,7 @@ export default async function HomePage() {
 			<ReviewsBlock reviews={visibleReviews} />
 
 			<section className="relative overflow-x-clip bg-fucsia">
-				<WaveDivider className="text-lienzo" />
+				<WaveDivider className="text-tarjeta" />
 				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-16 sm:px-8 lg:grid-cols-2">
 					<div className="flex flex-col items-start gap-4">
 						<h2 className="font-serif text-3xl text-white sm:text-4xl">
@@ -331,11 +333,10 @@ export default async function HomePage() {
 						<span className="absolute bottom-0 right-40 size-24 rounded-full bg-white/10 animate-flotar-lento" />
 					</div>
 				</div>
-				<WaveDivider className="text-lienzo" flip />
+				<WaveDivider className="text-vino" flip />
 			</section>
 
 			<section className="relative overflow-x-clip bg-vino">
-				<WaveDivider className="text-lienzo" />
 				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
 					<header className="mx-auto max-w-2xl text-center">
 						<h2 className="font-serif text-3xl text-white sm:text-4xl">

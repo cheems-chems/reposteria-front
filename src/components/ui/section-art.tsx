@@ -1,5 +1,3 @@
-import { cn } from "@/lib/cn";
-
 /**
  * Dibujos SVG hechos a mano (sin imágenes, nada de stock); el emparejador por
  * slugs es solo estética y no decide datos ni filtrados.
@@ -85,21 +83,23 @@ export function sectionArtTheme(key: SectionArtKey): SectionArtTheme {
   }
 }
 
-/** Dibujo de la sección, a mano, en trazo (currentColor, sin relleno). */
+/** Dibujo de la sección, a mano, en trazo (currentColor, sin relleno).
+ *  `className` es obligatorio: todo svg necesita tamaño explícito (w-/size-);
+ *  sin eso el svg se estira al 100% del contenedor. */
 export function SectionArt({
   art,
   className,
 }: {
   art: SectionArtKey;
-  className?: string;
+  className: string;
 }) {
   return (
     <svg
       viewBox="0 0 120 120"
-      className={cn("w-full", className)}
+      className={className}
       fill="none"
       stroke="currentColor"
-      strokeWidth={3.4}
+      strokeWidth={2.4}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"

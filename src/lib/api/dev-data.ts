@@ -20,9 +20,15 @@ import type { Category, Product, Section, StoreInfo } from "./types";
 import { validateCatalog } from "./validate";
 
 export const DEV_SECTIONS: Section[] = [
-  { slug: "dulces", name: "Dulces", orden: 1 },
-  { slug: "salados", name: "Salados", orden: 2 },
-  { slug: "congelados", name: "Congelados", orden: 3 },
+  // `imageUrl`: ranura de foto del círculo de la sección. null = marcador rosa.
+  { slug: "dulces", name: "Dulces", orden: 1, imageUrl: null as string | null },
+  { slug: "salados", name: "Salados", orden: 2, imageUrl: null as string | null },
+  {
+    slug: "congelados",
+    name: "Congelados",
+    orden: 3,
+    imageUrl: null as string | null,
+  },
 ];
 
 export const DEV_CATEGORIES: Category[] = [
@@ -31,18 +37,21 @@ export const DEV_CATEGORIES: Category[] = [
     name: "Tortas",
     description: "Tortas por encargo para celebraciones.",
     sectionSlug: "dulces",
+    imageUrl: null as string | null,
   },
   {
     slug: "bizcochos",
     name: "Bizcochos",
     description: "Bizcochos y panadería dulce.",
     sectionSlug: "dulces",
+    imageUrl: null as string | null,
   },
   {
     slug: "postres",
     name: "Postres",
     description: "Postres individuales y para compartir.",
     sectionSlug: "dulces",
+    imageUrl: null as string | null,
   },
   {
     slug: "combos",
@@ -51,6 +60,7 @@ export const DEV_CATEGORIES: Category[] = [
     sectionSlug: "salados",
     // PROVISIONAL: mínimo de ejemplo del armador "desde cero".
     builderMinTotalUnits: 50,
+    imageUrl: null as string | null,
   },
   {
     slug: "bandejas",
@@ -58,6 +68,7 @@ export const DEV_CATEGORIES: Category[] = [
     description:
       "Bandejas congeladas (crudas, para freír en casa) de 10 unidades.",
     sectionSlug: "congelados",
+    imageUrl: null as string | null,
   },
 ];
 

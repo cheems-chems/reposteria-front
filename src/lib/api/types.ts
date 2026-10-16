@@ -16,6 +16,8 @@ export interface Section {
   slug: string;
   name: string;
   orden: number;
+  /** URL de foto del círculo de la sección (ranura por datos). */
+  imageUrl?: string | null;
 }
 
 /** Categoría de producto (tortas, bizcochos, postres, combos, bandejas…). */
@@ -25,6 +27,8 @@ export interface Category {
   /** Una línea de descripción, opcional. */
   description?: string | null;
   sectionSlug?: string | null;
+  /** URL de foto de la categoría/círculo (ranura por datos). */
+  imageUrl?: string | null;
   /**
    * Mínimo total de unidades del armador "Arma el tuyo desde cero" de esta
    * categoría. Solo aplica a categorías con ítems de armador (`saleMode`

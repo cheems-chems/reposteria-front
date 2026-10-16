@@ -36,13 +36,16 @@ Las secciones son la agrupación superior de la tienda (p. ej. **Dulces**,
 
 ```json
 [
-  { "slug": "dulces", "name": "Dulces", "orden": 1 },
-  { "slug": "salados", "name": "Salados", "orden": 2 },
-  { "slug": "congelados", "name": "Congelados", "orden": 3 }
+  { "slug": "dulces", "name": "Dulces", "orden": 1, "imageUrl": null },
+  { "slug": "salados", "name": "Salados", "orden": 2, "imageUrl": null },
+  { "slug": "congelados", "name": "Congelados", "orden": 3, "imageUrl": null }
 ]
 ```
 
 - `orden` es un entero; el frontend ordena por él.
+- `imageUrl` es la URL de la foto del círculo de la sección ("Compra por
+  sección" en la portada); `null` si el negocio aún no la sube (el frontend
+  muestra un marcador rosa, nunca stock).
 - Secciones y categorías las administra el negocio (panel/admin). El frontend
   no inventa secciones: si un producto o categoría queda sin `sectionSlug`,
   simplemente no aparece bajo ningún filtro de sección.

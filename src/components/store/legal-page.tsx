@@ -38,8 +38,8 @@ export function LegalSection({
 }) {
   return (
     <section className="flex flex-col gap-2">
-      <h2 className="font-serif text-2xl text-brown-text">{title}</h2>
-      <div className="flex flex-col gap-2 text-sm leading-relaxed text-brown-text/90">
+      <h2 className="font-serif text-2xl text-vino">{title}</h2>
+      <div className="flex flex-col gap-2 text-sm leading-relaxed text-vino/90">
         {children}
       </div>
     </section>

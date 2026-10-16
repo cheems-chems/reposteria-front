@@ -18,17 +18,17 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <header className={cn("border-b border-linea pb-8", className)}>
+    <header className={cn("border-b border-borde pb-8", className)}>
       {eyebrow ? (
-        <p className="font-sans text-xs uppercase tracking-[0.2em] text-fuchsia-ink">
+        <p className="font-sans text-xs uppercase tracking-[0.2em] text-fucsia-hover">
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="mt-2 font-serif text-4xl text-brown-text sm:text-5xl">
+      <h1 className="mt-2 font-serif text-4xl text-vino sm:text-5xl">
         {title}
       </h1>
       {description ? (
-        <p className="mt-3 max-w-2xl text-brown-soft">{description}</p>
+        <p className="mt-3 max-w-2xl text-texto-suave">{description}</p>
       ) : null}
       {children}
     </header>

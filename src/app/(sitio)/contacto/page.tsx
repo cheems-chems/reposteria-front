@@ -46,18 +46,18 @@ export default async function ContactoPage() {
       <div className="mt-8 grid gap-10 lg:grid-cols-[380px_1fr]">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <h2 className="font-serif text-2xl text-brown-text">Dónde y cómo</h2>
+            <h2 className="font-serif text-2xl text-vino">Dónde y cómo</h2>
             {rows.length > 0 ? (
               <dl className="flex flex-col gap-3">
                 {rows.map((row) => (
                   <div key={row.label} className="flex flex-col">
-                    <dt className="font-sans text-xs uppercase tracking-[0.14em] text-brown-soft">
+                    <dt className="font-sans text-xs uppercase tracking-[0.14em] text-texto-suave">
                       {row.label}
                     </dt>
-                    <dd className="text-brown-text">
+                    <dd className="text-vino">
                       {row.href ? (
                         <a
-                          className="text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
+                          className="text-fucsia-hover underline decoration-rosa-medio underline-offset-4 hover:text-vino"
                           href={row.href}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -72,7 +72,7 @@ export default async function ContactoPage() {
                 ))}
               </dl>
             ) : (
-              <p className="text-sm text-brown-soft">
+              <p className="text-sm text-texto-suave">
                 Los datos de contacto aún no están confirmados. Por ahora
                 déjanos tu mensaje en el formulario.
               </p>
@@ -81,8 +81,8 @@ export default async function ContactoPage() {
 
           {store.hours.length > 0 ? (
             <div className="flex flex-col gap-2">
-              <h2 className="font-serif text-2xl text-brown-text">Horarios</h2>
-              <ul className="flex flex-col gap-1 text-sm text-brown-text/90">
+              <h2 className="font-serif text-2xl text-vino">Horarios</h2>
+              <ul className="flex flex-col gap-1 text-sm text-vino/90">
                 {store.hours.map((hour) => (
                   <li key={hour}>{hour}</li>
                 ))}

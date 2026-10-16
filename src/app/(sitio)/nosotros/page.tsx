@@ -21,7 +21,7 @@ export default async function NosotrosPage() {
 				description={store.description ?? undefined}
 			/>
 
-			<div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-brown-text/90">
+			<div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-vino/90">
 				<p>
 					Elvi&apos;s nace de cocinar en casa, para la gente que queremos. Cada
 					pedido se prepara en tandas pequeñas, cerca de la fecha en que lo
@@ -52,10 +52,10 @@ export default async function NosotrosPage() {
 				].map((item) => (
 					<div
 						key={item.title}
-						className="flex flex-col gap-2 border-t-2 border-kraft pt-3"
+						className="flex flex-col gap-2 border-t-2 border-rosa-medio pt-3"
 					>
-						<h2 className="font-serif text-xl text-brown-text">{item.title}</h2>
-						<p className="text-sm text-brown-soft">{item.text}</p>
+						<h2 className="font-serif text-xl text-vino">{item.title}</h2>
+						<p className="text-sm text-texto-suave">{item.text}</p>
 					</div>
 				))}
 			</div>
@@ -74,11 +74,11 @@ export default async function NosotrosPage() {
 				</ButtonLink>
 			</div>
 
-			<p className="mt-8 text-sm text-brown-soft">
+			<p className="mt-8 text-sm text-texto-suave">
 				¿Buscas algo puntual?{' '}
 				<Link
 					href="/contacto"
-					className="text-fuchsia-ink underline decoration-kraft underline-offset-4 hover:text-brown-text"
+					className="text-fucsia-hover underline decoration-rosa-medio underline-offset-4 hover:text-vino"
 				>
 					Escríbenos
 				</Link>

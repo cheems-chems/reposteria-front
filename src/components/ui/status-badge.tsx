@@ -5,15 +5,15 @@ import { cn } from "@/lib/cn";
  * contrato del backend. Aquí solo definimos la presentación (color + texto).
  * Nunca comunicar el estado con color solo: siempre acompaña el texto.
  */
-type Tone = "neutro" | "kraft" | "pistacho" | "guayaba" | "cacao" | "apagado";
+type Tone = "neutro" | "rosa-medio" | "pistacho" | "guayaba" | "cacao" | "apagado";
 
 const tones: Record<Tone, string> = {
-  neutro: "border-linea text-brown-soft",
-  kraft: "border-kraft bg-kraft/15 text-brown-text",
-  pistacho: "border-soft-pink bg-soft-pink/20 text-brown-text",
-  guayaba: "border-fuchsia bg-soft-pink/30 text-fuchsia-ink",
-  cacao: "border-brown-text bg-brown-text text-white",
-  apagado: "border-brown-soft/40 text-brown-soft",
+  neutro: "border-borde text-texto-suave",
+  "rosa-medio": "border-rosa-medio bg-rosa-medio/15 text-vino",
+  pistacho: "border-rosa-claro bg-rosa-claro/20 text-vino",
+  guayaba: "border-fucsia bg-rosa-claro/30 text-fucsia-hover",
+  cacao: "border-vino bg-vino text-white",
+  apagado: "border-texto-suave/40 text-texto-suave",
 };
 
 interface StatusBadgeProps {

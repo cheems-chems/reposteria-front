@@ -30,8 +30,8 @@ export function Logo({
   showImage = true,
 }: LogoProps) {
   const s = sizes[size];
-  const color = variant === "inverse" ? "text-white" : "text-brown-text";
-  const tagColor = variant === "inverse" ? "text-white/80" : "text-brown-soft";
+  const color = variant === "inverse" ? "text-white" : "text-vino";
+  const tagColor = variant === "inverse" ? "text-white/80" : "text-texto-suave";
 
   const content = (
     <span className={cn("inline-flex flex-col items-center leading-none", className)}>
@@ -42,7 +42,7 @@ export function Logo({
           width={s.logo}
           height={s.logo}
           className="h-auto w-auto"
-          priority={size === "lg"}
+          preload={size === "lg"}
         />
       ) : null}
       <span

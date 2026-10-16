@@ -15,7 +15,7 @@ function FlowSkeleton() {
   return (
     <div className="flex flex-col gap-6">
       <Skeleton className="h-4 w-32" />
-      <div className="flex flex-col gap-4 rounded-soft border border-linea bg-papel p-6">
+      <div className="flex flex-col gap-4 rounded-soft border border-borde bg-tarjeta p-6">
         <Skeleton className="h-8 w-2/3" />
         <Skeleton className="h-24 w-full" />
         <Skeleton className="h-11 w-32 self-end" />

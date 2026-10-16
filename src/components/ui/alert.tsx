@@ -4,10 +4,10 @@ import { cn } from "@/lib/cn";
 type AlertTone = "info" | "success" | "error" | "warning";
 
 const tones: Record<AlertTone, { box: string; title: string }> = {
-  info: { box: "border-kraft bg-papel", title: "text-brown-text" },
-  success: { box: "border-soft-pink bg-soft-pink/20", title: "text-brown-text" },
-  error: { box: "border-fuchsia bg-soft-pink/30", title: "text-fuchsia-ink" },
-  warning: { box: "border-kraft bg-kraft/20", title: "text-brown-text" },
+  info: { box: "border-rosa-medio bg-tarjeta", title: "text-vino" },
+  success: { box: "border-rosa-claro bg-rosa-claro/20", title: "text-vino" },
+  error: { box: "border-fucsia bg-rosa-claro/30", title: "text-fucsia-hover" },
+  warning: { box: "border-rosa-medio bg-rosa-medio/20", title: "text-vino" },
 };
 
 interface AlertProps {
@@ -31,7 +31,7 @@ export function Alert({ tone = "info", title, children, className }: AlertProps)
       {title ? (
         <p className={cn("font-sans font-semibold", t.title)}>{title}</p>
       ) : null}
-      <div className="text-brown-text/90">{children}</div>
+      <div className="text-vino/90">{children}</div>
     </div>
   );
 }

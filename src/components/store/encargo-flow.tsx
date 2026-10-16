@@ -448,7 +448,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
     <div className="flex flex-col gap-6">
       {/* Progreso */}
       <div className="flex items-center justify-between gap-4">
-        <p className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
+        <p className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
           {isSummary ? "Resumen" : `Paso ${step + 1} de ${STEP_TITLES.length}`}
         </p>
         <div className="flex flex-1 items-center gap-1.5">
@@ -457,29 +457,29 @@ export function EncargoFlow(props: EncargoFlowProps) {
               key={index}
               className={cn(
                 "h-1.5 flex-1 rounded-full",
-                index <= step ? "bg-fuchsia" : "bg-soft-pink/40",
+                index <= step ? "bg-fucsia" : "bg-rosa-claro/40",
               )}
             />
           ))}
         </div>
       </div>
 
-      <div className="rounded-soft border border-linea bg-papel p-5 sm:p-6">
+      <div className="rounded-soft border border-borde bg-tarjeta p-5 sm:p-6">
         {!isSummary ? (
           <div className="flex flex-col gap-5">
-            <h2 className="font-serif text-2xl text-brown-text">
+            <h2 className="font-serif text-2xl text-vino">
               {stepHeading}
             </h2>
 
             {step === 0 && categorySlug !== null && kind === "pack" ? (
-              <p className="text-sm text-brown-soft">
+              <p className="text-sm text-texto-suave">
                 Elige cuántas bandejas quieres de cada tipo; el total se estima
                 en vivo. Son congeladas (crudas, para freír en casa).
               </p>
             ) : null}
 
             {step === 0 && categorySlug !== null && kind === "combo" ? (
-              <p className="text-sm text-brown-soft">
+              <p className="text-sm text-texto-suave">
                 Elige un combo o arma el tuyo desde cero. Puedes ajustar la
                 distribución de un combo sin cambiar su precio.
               </p>
@@ -493,12 +493,12 @@ export function EncargoFlow(props: EncargoFlowProps) {
                       <button
                         type="button"
                         onClick={() => openCategory(item.slug)}
-                        className="w-full border border-linea px-4 py-3 text-left transition-colors hover:bg-soft-pink/40/60"
+                        className="w-full border border-borde px-4 py-3 text-left transition-colors hover:bg-rosa-claro/40"
                       >
-                        <span className="block font-serif text-lg text-brown-text">
+                        <span className="block font-serif text-lg text-vino">
                           {item.name}
                         </span>
-                        <span className="block text-sm text-brown-soft">
+                        <span className="block text-sm text-texto-suave">
                           {item.description ?? "Ver productos"}
                         </span>
                       </button>
@@ -512,14 +512,14 @@ export function EncargoFlow(props: EncargoFlowProps) {
                       className={cn(
                         "w-full border px-4 py-3 text-left transition-colors",
                         isCustom
-                          ? "border-brown-text bg-soft-pink/40"
-                          : "border-linea hover:bg-soft-pink/40/60",
+                          ? "border-vino bg-rosa-claro/40"
+                          : "border-borde hover:bg-rosa-claro/40",
                       )}
                     >
-                      <span className="block font-serif text-lg text-brown-text">
+                      <span className="block font-serif text-lg text-vino">
                         Otra idea
                       </span>
-                      <span className="block text-sm text-brown-soft">
+                      <span className="block text-sm text-texto-suave">
                         Cuéntanos qué tienes en mente
                       </span>
                     </button>
@@ -554,14 +554,14 @@ export function EncargoFlow(props: EncargoFlowProps) {
                       className={cn(
                         "w-full border px-4 py-3 text-left transition-colors",
                         choice === product.slug
-                          ? "border-brown-text bg-soft-pink/40"
-                          : "border-linea hover:bg-soft-pink/40/60",
+                          ? "border-vino bg-rosa-claro/40"
+                          : "border-borde hover:bg-rosa-claro/40",
                       )}
                     >
-                      <span className="block font-serif text-lg text-brown-text">
+                      <span className="block font-serif text-lg text-vino">
                         {product.name}
                       </span>
-                      <span className="block text-sm text-brown-soft tabular">
+                      <span className="block text-sm text-texto-suave tabular">
                         {formatCOP(product.price)}
                       </span>
                     </button>
@@ -582,14 +582,14 @@ export function EncargoFlow(props: EncargoFlowProps) {
                         className={cn(
                           "w-full border px-4 py-3 text-left transition-colors",
                           choice === combo.slug
-                            ? "border-brown-text bg-soft-pink/40"
-                            : "border-linea hover:bg-soft-pink/40/60",
+                            ? "border-vino bg-rosa-claro/40"
+                            : "border-borde hover:bg-rosa-claro/40",
                         )}
                       >
-                        <span className="block font-serif text-lg text-brown-text">
+                        <span className="block font-serif text-lg text-vino">
                           {combo.name}
                         </span>
-                        <span className="block text-sm text-brown-soft tabular">
+                        <span className="block text-sm text-texto-suave tabular">
                           {formatCOP(combo.price)} · {combo.totalUnits} unidades
                         </span>
                       </button>
@@ -603,14 +603,14 @@ export function EncargoFlow(props: EncargoFlowProps) {
                       className={cn(
                         "w-full border px-4 py-3 text-left transition-colors",
                         isBuilderChoice
-                          ? "border-brown-text bg-soft-pink/40"
-                          : "border-linea hover:bg-soft-pink/40/60",
+                          ? "border-vino bg-rosa-claro/40"
+                          : "border-borde hover:bg-rosa-claro/40",
                       )}
                     >
-                      <span className="block font-serif text-lg text-brown-text">
+                      <span className="block font-serif text-lg text-vino">
                         Arma el tuyo desde cero
                       </span>
-                      <span className="block text-sm text-brown-soft">
+                      <span className="block text-sm text-texto-suave">
                         Elige pasabocas y cantidades
                       </span>
                     </button>
@@ -638,7 +638,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
 
                 <Link
                   href="/encargo"
-                  className="self-start font-sans text-sm text-fuchsia-ink underline decoration-kraft underline-offset-4 transition-colors hover:text-brown-text"
+                  className="self-start font-sans text-sm text-fucsia-hover underline decoration-rosa-medio underline-offset-4 transition-colors hover:text-vino"
                 >
                   ¿Quieres encargar otra cosa?
                 </Link>
@@ -654,7 +654,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
                 />
                 <Link
                   href="/encargo"
-                  className="self-start font-sans text-sm text-fuchsia-ink underline decoration-kraft underline-offset-4 transition-colors hover:text-brown-text"
+                  className="self-start font-sans text-sm text-fucsia-hover underline decoration-rosa-medio underline-offset-4 transition-colors hover:text-vino"
                 >
                   ¿Quieres encargar otra cosa?
                 </Link>
@@ -721,8 +721,8 @@ export function EncargoFlow(props: EncargoFlowProps) {
                       className={cn(
                         "border px-4 py-3 text-left font-sans text-sm transition-colors",
                         fulfillment === value
-                          ? "border-brown-text bg-soft-pink/40 text-brown-text"
-                          : "border-linea text-brown-text/80 hover:bg-soft-pink/40/60",
+                          ? "border-vino bg-rosa-claro/40 text-vino"
+                          : "border-borde text-vino/80 hover:bg-rosa-claro/40",
                       )}
                     >
                       {label}
@@ -769,35 +769,35 @@ export function EncargoFlow(props: EncargoFlowProps) {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <h2 className="font-serif text-2xl text-brown-text">
+            <h2 className="font-serif text-2xl text-vino">
               Revisa tu encargo
             </h2>
 
             {/* Ticket de resumen */}
-            <div className="texture-paper border border-brown-text bg-bg">
-              <div className="flex items-center justify-between border-b border-dashed border-brown-text/40 px-4 py-2">
-                <span className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
+            <div className="texture-paper border border-vino bg-lienzo">
+              <div className="flex items-center justify-between border-b border-dashed border-vino/40 px-4 py-2">
+                <span className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
                   Mi encargo
                 </span>
-                <span className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
+                <span className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
                   Borrador
                 </span>
               </div>
-              <dl className="flex flex-col divide-y divide-dashed divide-brown-text/30 px-4 py-3 text-sm">
+              <dl className="flex flex-col divide-y divide-dashed divide-vino/30 px-4 py-3 text-sm">
                 <div className="flex flex-col gap-2 py-2">
-                  <dt className="text-brown-soft">
+                  <dt className="text-texto-suave">
                     {isCustom ? "Pedido especial" : (category?.name ?? "Encargo")}
                   </dt>
                   <dd className="flex flex-col gap-1.5">
                     {isCustom ? (
-                      <span className="text-brown-text">
+                      <span className="text-vino">
                         {customProduct.trim() || "—"}
                       </span>
                     ) : (
                       orderLines.map((line) => (
                         <span
                           key={`${line.kind}-${line.productSlug}`}
-                          className="flex justify-between gap-4 text-brown-text"
+                          className="flex justify-between gap-4 text-vino"
                         >
                           <span>
                             {line.kind === "combo"
@@ -828,13 +828,13 @@ export function EncargoFlow(props: EncargoFlowProps) {
                       ))
                     )}
                     {!isCustom && orderLines.length === 0 ? (
-                      <span className="text-brown-text">—</span>
+                      <span className="text-vino">—</span>
                     ) : null}
                   </dd>
                   {!isCustom && totals.units > 0 ? (
-                    <span className="mt-1 flex justify-between gap-4 border-t border-dashed border-brown-text/30 pt-1.5 text-brown-soft">
+                    <span className="mt-1 flex justify-between gap-4 border-t border-dashed border-vino/30 pt-1.5 text-texto-suave">
                       <span>Unidades totales</span>
-                      <span className="tabular text-brown-text">
+                      <span className="tabular text-vino">
                         {totals.units}
                       </span>
                     </span>
@@ -846,8 +846,8 @@ export function EncargoFlow(props: EncargoFlowProps) {
                       key={`comp-${line.productSlug}`}
                       className="flex flex-col gap-1 py-2"
                     >
-                      <dt className="text-brown-soft">Contenido del combo</dt>
-                      <dd className="flex flex-col gap-0.5 text-brown-text/90">
+                      <dt className="text-texto-suave">Contenido del combo</dt>
+                      <dd className="flex flex-col gap-0.5 text-vino/90">
                         {line.composition.map((item) => (
                           <span key={item.name} className="tabular">
                             {item.name} ×{item.quantity}
@@ -858,51 +858,51 @@ export function EncargoFlow(props: EncargoFlowProps) {
                   ) : null,
                 )}
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-brown-soft">Para</dt>
-                  <dd className="tabular text-right text-brown-text">
+                  <dt className="text-texto-suave">Para</dt>
+                  <dd className="tabular text-right text-vino">
                     {date ? formatDate(date) : "—"}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-brown-soft">Personas</dt>
-                  <dd className="tabular text-right text-brown-text">
+                  <dt className="text-texto-suave">Personas</dt>
+                  <dd className="tabular text-right text-vino">
                     {people || "—"}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-brown-soft">Entrega</dt>
-                  <dd className="text-right text-brown-text">
+                  <dt className="text-texto-suave">Entrega</dt>
+                  <dd className="text-right text-vino">
                     {fulfillment === "domicilio" ? "A domicilio" : "Recogida"}
                   </dd>
                 </div>
                 {fulfillment === "domicilio" && address.trim() ? (
                   <div className="flex justify-between gap-4 py-2">
-                    <dt className="text-brown-soft">Dirección</dt>
-                    <dd className="text-right text-brown-text">
+                    <dt className="text-texto-suave">Dirección</dt>
+                    <dd className="text-right text-vino">
                       {address.trim()}
                     </dd>
                   </div>
                 ) : null}
                 {details.trim() ? (
                   <div className="flex flex-col gap-1 py-2">
-                    <dt className="text-brown-soft">Personalización</dt>
-                    <dd className="text-brown-text">{details.trim()}</dd>
+                    <dt className="text-texto-suave">Personalización</dt>
+                    <dd className="text-vino">{details.trim()}</dd>
                   </div>
                 ) : null}
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-brown-soft">Precio estimado</dt>
-                  <dd className="tabular text-right font-medium text-fuchsia-ink">
+                  <dt className="text-texto-suave">Precio estimado</dt>
+                  <dd className="tabular text-right font-medium text-fucsia-hover">
                     {totals.total > 0 ? formatCOP(totals.total) : "—"}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-brown-soft">Nombre</dt>
-                  <dd className="text-right text-brown-text">{name.trim()}</dd>
+                  <dt className="text-texto-suave">Nombre</dt>
+                  <dd className="text-right text-vino">{name.trim()}</dd>
                 </div>
               </dl>
             </div>
 
-            <p className="font-sans text-xs text-brown-soft">
+            <p className="font-sans text-xs text-texto-suave">
               El precio mostrado es una estimación: confirmamos el valor final
               por WhatsApp.
             </p>

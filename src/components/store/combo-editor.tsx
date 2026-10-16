@@ -33,7 +33,7 @@ export function ComboEditor({
 
   return (
     <div className="flex flex-col">
-      <ul className="flex flex-col divide-y divide-linea border-y border-linea">
+      <ul className="flex flex-col divide-y divide-borde border-y border-borde">
         {allowedItems.map((item) => {
           const quantity = selection[item.slug] ?? 0;
           return (
@@ -42,10 +42,10 @@ export function ComboEditor({
               className="flex items-start justify-between gap-3 py-4"
             >
               <div className="flex flex-col gap-0.5">
-                <p className="font-serif text-lg text-brown-text">
+                <p className="font-serif text-lg text-vino">
                   {item.name}
                 </p>
-                <p className="text-xs text-brown-soft">
+                <p className="text-xs text-texto-suave">
                   De a {combo.stepQty}.
                 </p>
               </div>
@@ -60,16 +60,16 @@ export function ComboEditor({
         })}
       </ul>
 
-      <div className="sticky bottom-0 z-10 mt-1 flex items-center justify-between gap-4 border-t border-brown-text bg-papel/95 px-1 py-3 backdrop-blur">
+      <div className="sticky bottom-0 z-10 mt-1 flex items-center justify-between gap-4 border-t border-vino bg-tarjeta/95 px-1 py-3 backdrop-blur">
         <div>
-          <p className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
+          <p className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
             Unidades
           </p>
-          <p aria-live="polite" className="tabular font-serif text-lg text-brown-text">
+          <p aria-live="polite" className="tabular font-serif text-lg text-vino">
             {fill.units} de {fill.totalUnits}
           </p>
           {!fill.matches ? (
-            <p className="text-xs font-medium text-fuchsia-ink">
+            <p className="text-xs font-medium text-fucsia-hover">
               {fill.missing > 0
                 ? `Faltan ${fill.missing} ${
                     fill.missing === 1 ? "unidad" : "unidades"
@@ -79,14 +79,14 @@ export function ComboEditor({
                   }`}
             </p>
           ) : (
-            <p className="text-xs text-brown-soft">Total exacto</p>
+            <p className="text-xs text-texto-suave">Total exacto</p>
           )}
         </div>
         <div className="text-right">
-          <p className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
+          <p className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
             Precio del combo
           </p>
-          <p className="tabular font-serif text-xl font-semibold text-fuchsia-ink">
+          <p className="tabular font-serif text-xl font-semibold text-fucsia-hover">
             {formatCOP(combo.price)}
           </p>
         </div>

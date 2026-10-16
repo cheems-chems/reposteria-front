@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/field";
 
 const stepButton =
-  "inline-flex size-11 shrink-0 items-center justify-center rounded-soft border border-linea font-sans text-xl leading-none text-brown-text transition-colors duration-200 hover:bg-soft-pink/40 disabled:cursor-not-allowed disabled:opacity-45";
+  "inline-flex size-11 shrink-0 items-center justify-center rounded-soft border border-borde font-sans text-xl leading-none text-vino transition-colors duration-200 hover:bg-rosa-claro/40 disabled:cursor-not-allowed disabled:opacity-45";
 
 interface QuantityStepperProps {
   value: number;

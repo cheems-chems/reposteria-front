@@ -18,7 +18,7 @@ const nunito = Nunito_Sans({
 
 const dancing = Dancing_Script({
   subsets: ["latin"],
-  variable: "--font-cursive",
+  variable: "--font-script",
   display: "swap",
 });
 

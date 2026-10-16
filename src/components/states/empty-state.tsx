@@ -18,13 +18,13 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "texture-paper flex flex-col items-center justify-center gap-3 border border-dashed border-linea bg-papel/60 px-6 py-14 text-center",
+        "texture-paper flex flex-col items-center justify-center gap-3 border border-dashed border-borde bg-tarjeta/60 px-6 py-14 text-center",
         className,
       )}
     >
       <svg
         viewBox="0 0 120 60"
-        className="w-20 text-brown-text/30"
+        className="w-20 text-vino/30"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}
@@ -35,9 +35,9 @@ export function EmptyState({
         <path d="M30 46V30h60v16" />
         <path d="M30 30c0-8 13-14 30-14s30 6 30 14" />
       </svg>
-      <h3 className="font-serif text-2xl text-brown-text">{title}</h3>
+      <h3 className="font-serif text-2xl text-vino">{title}</h3>
       {description ? (
-        <p className="max-w-md text-sm text-brown-soft">{description}</p>
+        <p className="max-w-md text-sm text-texto-suave">{description}</p>
       ) : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>

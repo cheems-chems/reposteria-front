@@ -35,13 +35,13 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24 border-t border-linea py-12">
+    <section id={id} className="scroll-mt-24 border-t border-borde py-12">
       <div className="mb-8 flex flex-col gap-1">
-        <span className="font-sans text-xs uppercase tracking-[0.2em] text-fuchsia-ink">
+        <span className="font-sans text-xs uppercase tracking-[0.2em] text-fucsia-hover">
           {tag}
         </span>
-        <h2 className="font-serif text-4xl text-brown-text">{title}</h2>
-        {note ? <p className="mt-2 max-w-xl text-sm text-brown-soft">{note}</p> : null}
+        <h2 className="font-serif text-4xl text-vino">{title}</h2>
+        {note ? <p className="mt-2 max-w-xl text-sm text-texto-suave">{note}</p> : null}
       </div>
       {children}
     </section>
@@ -69,21 +69,21 @@ function TokenSwatch({
         className={cn(
           "borde-ticket flex h-24 items-end p-3",
           bg,
-          ring && "ring-1 ring-brown-text/20",
+          ring && "ring-1 ring-vino/20",
         )}
       >
         <span className={cn("font-sans text-xs font-medium", text)}>{hex}</span>
       </div>
       <div>
-        <p className="font-sans text-sm font-semibold text-brown-text">{name}</p>
-        <p className="font-sans text-xs text-brown-soft">{note}</p>
+        <p className="font-sans text-sm font-semibold text-vino">{name}</p>
+        <p className="font-sans text-xs text-texto-suave">{note}</p>
       </div>
     </div>
   );
 }
 
-const orderStatuses: Array<{ label: string; tone: "kraft" | "pistacho" | "cacao" | "guayaba" | "apagado" | "neutro" }> = [
-  { label: "Pendiente", tone: "kraft" },
+const orderStatuses: Array<{ label: string; tone: "rosa-medio" | "pistacho" | "cacao" | "guayaba" | "apagado" | "neutro" }> = [
+  { label: "Pendiente", tone: "rosa-medio" },
   { label: "Confirmado", tone: "pistacho" },
   { label: "En preparación", tone: "cacao" },
   { label: "Listo para recoger", tone: "guayaba" },
@@ -112,9 +112,9 @@ function DemoForm() {
     <form
       onSubmit={submit}
       noValidate
-      className="flex w-full max-w-lg flex-col gap-4 rounded-soft border border-linea bg-papel p-5"
+      className="flex w-full max-w-lg flex-col gap-4 rounded-soft border border-borde bg-tarjeta p-5"
     >
-      <h3 className="font-serif text-2xl text-brown-text">Formulario demo</h3>
+      <h3 className="font-serif text-2xl text-vino">Formulario demo</h3>
       <Field label="Nombre" htmlFor="demo-nombre" required error={errors.nombre}>
         <Input
           id="demo-nombre"
@@ -197,9 +197,9 @@ export default function MuestraPage() {
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-10 sm:px-8">
       {/* Encabezado */}
-      <header className="flex flex-col gap-6 border-b-2 border-brown-text pb-10 pt-4 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex flex-col gap-6 border-b-2 border-vino pb-10 pt-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-2 font-sans text-xs uppercase tracking-[0.24em] text-fuchsia-ink">
+          <p className="mb-2 font-sans text-xs uppercase tracking-[0.24em] text-fucsia-hover">
             Elvi&apos;s — Sistema de diseño
           </p>
           <Logo size="lg" withTagline />
@@ -207,15 +207,15 @@ export default function MuestraPage() {
         <Alert tone="warning" className="max-w-sm" title="Marca provisional">
           Nombre, tagline y datos son{" "}
           <strong>marcadores de posición</strong>. Todo se reemplaza desde{" "}
-          <code className="rounded bg-soft-pink/40 px-1 py-0.5 text-xs">src/lib/brand.ts</code>{" "}
+          <code className="rounded bg-rosa-claro/40 px-1 py-0.5 text-xs">src/lib/brand.ts</code>{" "}
           y{" "}
-          <code className="rounded bg-soft-pink/40 px-1 py-0.5 text-xs">src/app/globals.css</code>.
+          <code className="rounded bg-rosa-claro/40 px-1 py-0.5 text-xs">src/app/globals.css</code>.
         </Alert>
       </header>
 
       {/* Índice */}
-      <nav aria-label="Secciones de la muestra" className="border-b border-linea py-4">
-        <ul className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-brown-soft">
+      <nav aria-label="Secciones de la muestra" className="border-b border-borde py-4">
+        <ul className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-texto-suave">
           {[
             ["marca", "Marca"],
             ["color", "Color"],
@@ -228,7 +228,7 @@ export default function MuestraPage() {
             ["etiquetas", "Etiquetas y avisos"],
           ].map(([id, label]) => (
             <li key={id}>
-              <a href={`#${id}`} className="underline decoration-kraft underline-offset-4 hover:text-brown-text">
+              <a href={`#${id}`} className="underline decoration-rosa-medio underline-offset-4 hover:text-vino">
                 {label}
               </a>
             </li>
@@ -245,11 +245,11 @@ export default function MuestraPage() {
               <Logo size="md" />
               <Logo size="sm" />
             </div>
-            <div className="max-w-md text-sm text-brown-soft">
+            <div className="max-w-md text-sm text-texto-suave">
               <p>
                 Wordmark tipográfico en <em>Playfair Display</em> con la tagline
                 en cursiva y el logo real. Se reemplaza por completo desde{" "}
-                <code className="rounded bg-soft-pink/40 px-1.5 py-0.5 text-xs">src/components/brand/logo.tsx</code>.
+                <code className="rounded bg-rosa-claro/40 px-1.5 py-0.5 text-xs">src/components/brand/logo.tsx</code>.
               </p>
               <p className="mt-3">
                 Si el negocio ya tiene un logo, entra aquí y se refleja en toda
@@ -258,11 +258,11 @@ export default function MuestraPage() {
             </div>
           </div>
 
-          <div className="border-2 border-dashed border-kraft bg-papel/60 p-5">
-            <p className="font-sans text-xs uppercase tracking-[0.18em] text-brown-soft">
+          <div className="border-2 border-dashed border-rosa-medio bg-tarjeta/60 p-5">
+            <p className="font-sans text-xs uppercase tracking-[0.18em] text-texto-suave">
               Datos del negocio (pendientes)
             </p>
-            <p className="mt-2 max-w-2xl text-sm text-brown-text/80">
+            <p className="mt-2 max-w-2xl text-sm text-vino/80">
               Ciudad, WhatsApp, horarios, dirección y redes se editan en el panel
               (Configuración) y viajan desde el backend. Aquí no hay constantes
               repetidas: mientras no existan, no se muestran.
@@ -276,19 +276,19 @@ export default function MuestraPage() {
         id="color"
         tag="02"
         title="Color"
-        note="Paleta rosa/fucsia: fondo suave, texto café, una acción (fucsia) y acentos rosados. Contrastes AA verificados para texto."
+        note="Paleta rosa-fucsia: lienzo rosa muy claro, títulos en vino oscuro y una sola acción (fucsia fuerte). Contrastes AA verificados para texto."
       >
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
-          <TokenSwatch name="bg" hex="#FFF7F6" text="text-brown-text" bg="bg-bg" note="Fondo principal" />
-          <TokenSwatch name="papel" hex="#FFFBFB" text="text-brown-text" bg="bg-papel" note="Fichas y paneles" ring />
-          <TokenSwatch name="soft-pink" hex="#F6C6DA" text="text-brown-text" bg="bg-soft-pink" note="Acento suave, esqueletos" />
-          <TokenSwatch name="brown-text" hex="#5B3A2E" text="text-bg" bg="bg-brown-text" note="Texto principal · AA" />
-          <TokenSwatch name="brown-soft" hex="#7C5A4D" text="text-bg" bg="bg-brown-soft" note="Texto secundario · AA" />
-          <TokenSwatch name="fuchsia" hex="#DC2A67" text="text-white" bg="bg-fuchsia" note="Acción (texto blanco) · AA" />
-          <TokenSwatch name="fuchsia-ink" hex="#B71F53" text="text-bg" bg="bg-fuchsia-ink" note="Fucsia para texto · AA" />
-          <TokenSwatch name="label-pink" hex="#D45B7E" text="text-bg" bg="bg-label-pink" note="Etiquetas y detalles" />
-          <TokenSwatch name="kraft" hex="#E7B9C7" text="text-brown-text" bg="bg-kraft" note="Detalles decorativos" />
-          <TokenSwatch name="linea" hex="#F0C9D2" text="text-brown-text" bg="bg-linea" note="Bordes finos" />
+          <TokenSwatch name="lienzo" hex="#FFF1F4" text="text-vino" bg="bg-lienzo" note="Fondo de página" ring />
+          <TokenSwatch name="tarjeta" hex="#FFFFFF" text="text-vino" bg="bg-tarjeta" note="Tarjetas y paneles" ring />
+          <TokenSwatch name="rosa-claro" hex="#FFD6E2" text="text-vino" bg="bg-rosa-claro" note="Fondos suaves, franjas" />
+          <TokenSwatch name="rosa-medio" hex="#F9A8C0" text="text-vino" bg="bg-rosa-medio" note="Círculos de producto" />
+          <TokenSwatch name="borde" hex="#F5C2D2" text="text-vino" bg="bg-borde" note="Bordes finos" />
+          <TokenSwatch name="vino" hex="#5A1233" text="text-lienzo" bg="bg-vino" note="Títulos · AA 11.7:1" />
+          <TokenSwatch name="texto" hex="#3B2A30" text="text-lienzo" bg="bg-texto" note="Texto principal · AA" />
+          <TokenSwatch name="texto-suave" hex="#7A5A63" text="text-lienzo" bg="bg-texto-suave" note="Texto secundario · AA 5.2:1" />
+          <TokenSwatch name="fucsia" hex="#D6195F" text="text-white" bg="bg-fucsia" note="Acción (texto blanco) · AA" />
+          <TokenSwatch name="fucsia-hover" hex="#B8124F" text="text-white" bg="bg-fucsia-hover" note="Hover · texto fucsia AA" />
         </div>
       </Section>
 
@@ -306,15 +306,15 @@ export default function MuestraPage() {
               ["text-4xl", "El sabor que une, lo hacemos con amor"],
               ["text-2xl", "Hecho en casa, en tandas pequeñas"],
             ].map(([cls, txt]) => (
-              <p key={cls} className={cn("font-serif italic text-brown-text", cls)}>
+              <p key={cls} className={cn("font-serif italic text-vino", cls)}>
                 {txt}
               </p>
             ))}
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2">
-            <div className="flex flex-col gap-3 text-base leading-relaxed text-brown-text/90">
-              <h3 className="font-serif text-2xl text-brown-text">Cuerpo (DM Sans)</h3>
+            <div className="flex flex-col gap-3 text-base leading-relaxed text-vino/90">
+              <h3 className="font-serif text-2xl text-vino">Cuerpo (DM Sans)</h3>
               <p>
                 Texto, formularios, menús y datos van en DM Sans. Voz concreta y
                 cálida, sin palabras de relleno.
@@ -325,15 +325,15 @@ export default function MuestraPage() {
                 su columna.
               </p>
             </div>
-            <div className="flex flex-col gap-2 rounded-soft border border-linea bg-papel p-5">
-              <span className="font-sans text-xs uppercase tracking-[0.18em] text-brown-soft">
+            <div className="flex flex-col gap-2 rounded-soft border border-borde bg-tarjeta p-5">
+              <span className="font-sans text-xs uppercase tracking-[0.18em] text-texto-suave">
                 Escala de ejemplo
               </span>
               <PriceSeal amount={45000} size="lg" compareAt={58000} />
-              <p className="font-sans text-sm text-brown-soft mt-2">
+              <p className="font-sans text-sm text-texto-suave mt-2">
                 Peso cargado: solo los que usamos (Playfair Display normal +
                 itálica, Nunito Sans regular).{" "}
-                <span className="text-fuchsia-ink">Sin bold variante de más.</span>
+                <span className="text-fucsia-hover">Sin bold variante de más.</span>
               </p>
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function MuestraPage() {
           <div className="w-full max-w-xs">
             <PhotoPlaceholder name="Foto pendiente" ratio="1/1" seed={3} />
           </div>
-          <p className="max-w-sm text-sm text-brown-soft">
+          <p className="max-w-sm text-sm text-texto-suave">
             Estado vacío de diseño intencional: mientras el negocio no suba
             fotos reales desde el panel, no mostramos bloques grises ni stock.
           </p>
@@ -429,8 +429,8 @@ export default function MuestraPage() {
             }}
           />
           <div className="flex flex-col gap-3">
-            <h3 className="font-serif text-2xl text-brown-text">Cómo se lee</h3>
-            <ul className="list-disc space-y-2 pl-5 text-sm text-brown-soft">
+            <h3 className="font-serif text-2xl text-vino">Cómo se lee</h3>
+            <ul className="list-disc space-y-2 pl-5 text-sm text-texto-suave">
               <li>El tiempo de anticipación viene del backend, no es fijo.</li>
               <li>Si el backend no trae un campo, la sección se omite.</li>
               <li>
@@ -451,15 +451,15 @@ export default function MuestraPage() {
       >
         <div className="grid gap-8 lg:grid-cols-3">
           <div>
-            <h3 className="mb-3 font-serif text-xl text-brown-text">Esqueleto de ficha</h3>
+            <h3 className="mb-3 font-serif text-xl text-vino">Esqueleto de ficha</h3>
             <ProductTicketSkeleton />
           </div>
           <div>
-            <h3 className="mb-3 font-serif text-xl text-brown-text">Error + reintento</h3>
+            <h3 className="mb-3 font-serif text-xl text-vino">Error + reintento</h3>
             <DemoRetry />
           </div>
           <div>
-            <h3 className="mb-3 font-serif text-xl text-brown-text">Lista vacía</h3>
+            <h3 className="mb-3 font-serif text-xl text-vino">Lista vacía</h3>
             <EmptyState
               title="Aún no hay encargos"
               description="Cuando alguien haga un pedido, su encargo aparecerá acá en la agenda."
@@ -468,12 +468,12 @@ export default function MuestraPage() {
         </div>
         <div className="mt-6 flex flex-col gap-4">
           <div>
-            <h3 className="mb-3 font-serif text-xl text-brown-text">Filas de tabla (admin)</h3>
-            <div className="border border-linea bg-papel px-4">
+            <h3 className="mb-3 font-serif text-xl text-vino">Filas de tabla (admin)</h3>
+            <div className="border border-borde bg-tarjeta px-4">
               <Skeleton className="mt-4 h-4 w-32" />
               <div className="py-2">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="flex items-center gap-4 border-b border-linea py-3 last:border-0">
+                  <div key={i} className="flex items-center gap-4 border-b border-borde py-3 last:border-0">
                     <Skeleton className="h-4 w-40" />
                     <Skeleton className="h-4 flex-1" />
                     <Skeleton className="h-4 w-24" />
@@ -522,8 +522,8 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      <footer className="border-t-2 border-brown-text py-8 text-center">
-        <p className="font-sans text-sm text-brown-soft">
+      <footer className="border-t-2 border-vino py-8 text-center">
+        <p className="font-sans text-sm text-texto-suave">
           Muestra lista para tu revisión en móvil (360–430 px) y escritorio.
           Desaprobala o pedí cambios y ajustamos antes de la etapa 3.
         </p>

@@ -27,8 +27,8 @@ export function SectionNav({
         className={cn(
           base,
           !current
-            ? "border-fuchsia bg-fuchsia text-white"
-            : "border-linea text-brown-text/80 hover:bg-soft-pink/40",
+            ? "border-fucsia bg-fucsia text-white"
+            : "border-borde text-vino/80 hover:bg-rosa-claro/40",
         )}
       >
         Todo
@@ -41,8 +41,8 @@ export function SectionNav({
           className={cn(
             base,
             current === section.slug
-              ? "border-fuchsia bg-fuchsia text-white"
-              : "border-linea text-brown-text/80 hover:bg-soft-pink/40",
+              ? "border-fucsia bg-fucsia text-white"
+              : "border-borde text-vino/80 hover:bg-rosa-claro/40",
           )}
         >
           {section.name}

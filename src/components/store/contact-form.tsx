@@ -71,10 +71,10 @@ export function ContactForm({ whatsapp }: ContactFormProps) {
     <form
       onSubmit={submit}
       noValidate
-      className="flex w-full flex-col gap-4 rounded-soft border border-linea bg-papel p-5 sm:p-6"
+      className="flex w-full flex-col gap-4 rounded-soft border border-borde bg-tarjeta p-5 sm:p-6"
     >
-      <h2 className="font-serif text-2xl text-brown-text">Cuéntanos qué necesitas</h2>
-      <p className="text-sm text-brown-soft">
+      <h2 className="font-serif text-2xl text-vino">Cuéntanos qué necesitas</h2>
+      <p className="text-sm text-texto-suave">
         Al enviar, se abre WhatsApp con tu mensaje listo. Los encargos se
         confirman por ahí.
       </p>

@@ -5,7 +5,7 @@ export function Skeleton({ className }: { className?: string }) {
   return (
     <div
       aria-hidden="true"
-      className={cn("animate-pulse rounded-ticket bg-soft-pink/40", className)}
+      className={cn("animate-pulse rounded-ticket bg-rosa-claro/40", className)}
     />
   );
 }
@@ -25,7 +25,7 @@ export function ProductTicketSkeleton() {
 /** Esqueleto de fila de tabla (panel admin). */
 export function TableRowSkeleton({ cols = 4 }: { cols?: number }) {
   return (
-    <div className="flex items-center gap-4 border-b border-linea py-3">
+    <div className="flex items-center gap-4 border-b border-borde py-3">
       {Array.from({ length: cols }).map((_, i) => (
         <Skeleton
           key={i}

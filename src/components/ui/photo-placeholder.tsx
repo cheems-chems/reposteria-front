@@ -10,10 +10,10 @@ const ratios: Record<Ratio, string> = {
 };
 
 const tints = [
-  "bg-soft-pink/30",
-  "bg-soft-pink/20",
-  "bg-kraft/20",
-  "bg-pale-pink-border/30",
+  "bg-rosa-claro/30",
+  "bg-rosa-claro/20",
+  "bg-rosa-medio/20",
+  "bg-borde/30",
 ];
 
 interface PhotoPlaceholderProps {
@@ -41,7 +41,7 @@ export function PhotoPlaceholder({
   return (
     <div
       className={cn(
-        "texture-paper relative flex flex-col items-center justify-center overflow-hidden border border-linea p-4 text-center",
+        "texture-paper relative flex flex-col items-center justify-center overflow-hidden border border-borde p-4 text-center",
         ratios[ratio],
         tints[Math.abs(seed) % tints.length],
         className,
@@ -51,7 +51,7 @@ export function PhotoPlaceholder({
     >
       <svg
         viewBox="0 0 120 120"
-        className="mb-3 w-16 text-brown-soft/40"
+        className="mb-3 w-16 text-texto-suave/40"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}
@@ -64,9 +64,9 @@ export function PhotoPlaceholder({
         <path d="M60 38v24" />
         <path d="M60 38c2-4 6-4 7 0-1 2-4 3-7 3s-6-1-7-3c1-4 5-4 7 0z" />
       </svg>
-      <p className="font-serif text-xl text-brown-text/80">{name}</p>
+      <p className="font-serif text-xl text-vino/80">{name}</p>
       {!hideLabel ? (
-        <span className="mt-2 rounded-ticket border border-pale-pink-border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.18em] text-brown-soft/70">
+        <span className="mt-2 rounded-ticket border border-borde px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.18em] text-texto-suave/70">
           foto pendiente
         </span>
       ) : null}

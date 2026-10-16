@@ -41,7 +41,7 @@ export function PasabocaBuilder({
 
   return (
     <div className="flex flex-col">
-      <ul className="flex flex-col divide-y divide-linea border-y border-linea">
+      <ul className="flex flex-col divide-y divide-borde border-y border-borde">
         {items.map((item) => {
           const quantity = selection[item.slug]?.quantity ?? 0;
           const preparations = item.preparations ?? [];
@@ -56,13 +56,13 @@ export function PasabocaBuilder({
             <li key={item.slug} className="flex flex-col gap-3 py-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex flex-col gap-0.5">
-                  <p className="font-serif text-lg text-brown-text">
+                  <p className="font-serif text-lg text-vino">
                     {item.name}
                   </p>
-                  <p className="tabular text-sm text-brown-soft">
+                  <p className="tabular text-sm text-texto-suave">
                     {formatCOP(unitPrice)} por unidad
                   </p>
-                  <p className="text-xs text-brown-soft">
+                  <p className="text-xs text-texto-suave">
                     De a {item.stepQty}.
                   </p>
                 </div>
@@ -77,7 +77,7 @@ export function PasabocaBuilder({
 
               {preparations.length > 0 ? (
                 <fieldset className="flex flex-col gap-1.5">
-                  <legend className="font-sans text-xs uppercase tracking-[0.14em] text-brown-soft">
+                  <legend className="font-sans text-xs uppercase tracking-[0.14em] text-texto-suave">
                     Preparación
                   </legend>
                   <div className="flex flex-wrap gap-2">
@@ -94,8 +94,8 @@ export function PasabocaBuilder({
                           className={cn(
                             "rounded-soft border px-3 py-1.5 font-sans text-sm transition-colors duration-200",
                             active
-                              ? "border-brown-text bg-soft-pink/40 text-brown-text"
-                              : "border-linea text-brown-text/80 hover:bg-soft-pink/40/60",
+                              ? "border-vino bg-rosa-claro/40 text-vino"
+                              : "border-borde text-vino/80 hover:bg-rosa-claro/40",
                           )}
                         >
                           {option.label}
@@ -107,7 +107,7 @@ export function PasabocaBuilder({
               ) : null}
 
               {quantity > 0 ? (
-                <p className="tabular text-sm text-brown-soft">
+                <p className="tabular text-sm text-texto-suave">
                   Subtotal: {formatCOP(subtotal)}
                 </p>
               ) : null}
@@ -117,28 +117,28 @@ export function PasabocaBuilder({
       </ul>
 
       {problems.length > 0 ? (
-        <p className="pt-2 text-xs font-medium text-fuchsia-ink">
+        <p className="pt-2 text-xs font-medium text-fucsia-hover">
           {problems[0]}
         </p>
       ) : null}
 
-      <div className="sticky bottom-0 z-10 mt-1 flex items-center justify-between gap-4 border-t border-brown-text bg-papel/95 px-1 py-3 backdrop-blur">
+      <div className="sticky bottom-0 z-10 mt-1 flex items-center justify-between gap-4 border-t border-vino bg-tarjeta/95 px-1 py-3 backdrop-blur">
         <div>
-          <p className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
+          <p className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
             Tu armado
           </p>
           <p
             aria-live="polite"
-            className="tabular font-serif text-lg text-brown-text"
+            className="tabular font-serif text-lg text-vino"
           >
             {units} {units === 1 ? "unidad" : "unidades"}
           </p>
         </div>
         <div className="text-right">
-          <p className="font-sans text-xs uppercase tracking-[0.2em] text-brown-soft">
+          <p className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
             Total estimado
           </p>
-          <p className="tabular font-serif text-xl font-semibold text-fuchsia-ink">
+          <p className="tabular font-serif text-xl font-semibold text-fucsia-hover">
             {formatCOP(totals.total)}
           </p>
         </div>

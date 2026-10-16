@@ -4,35 +4,41 @@
   ============================================================================
   ELVI'S — TOKENS DE DISEÑO (ÚNICA FUENTE DE VERDAD)
   ----------------------------------------------------------------------------
-  Paleta rosa/fucsia inspirada en "Hecho en casa".
+  Paleta rosa-fucsia: lienzo rosa muy claro, títulos en vino oscuro y acción
+  en fucsia fuerte. Cualquier color nuevo debe salir de aquí, no del código.
+
+  Contraste (WCAG AA) verificado:
+    - Blanco sobre fucsia #D6195F .......... 5.0:1  (texto normal ✓)
+    - Blanco sobre fucsia-hover #B8124F .... 6.5:1  (texto normal ✓)
+    - Fucsia #D6195F sobre lienzo .......... 4.6:1  (texto normal ✓)
+    - Vino #5A1233 sobre lienzo ............ 11.7:1 (texto normal ✓)
   ============================================================================
 */
 
 @theme inline {
-  /* --- Paleta rosa/fucsia --------------------------------------------------- */
-  --color-bg: #FFF7F6; /* fondo principal */
-  --color-papel: #FFFBFB; /* fondo de fichas/tarjetas */
-  --color-soft-pink: #F6C6DA; /* acento suave */
-  --color-fuchsia: #DC2A67; /* acción principal */
-  --color-fuchsia-ink: #B71F53; /* para texto/sobre fucsia (AA) */
-  --color-label-pink: #D45B7E; /* etiquetas y detalles */
-  --color-pale-pink-border: #F0C9D2; /* bordes finos */
-  --color-brown-text: #5B3A2E; /* texto principal */
-  --color-brown-soft: #7C5A4D; /* texto secundario */
-  --color-kraft: #E7B9C7; /* detalles decorativos */
-  --color-linea: #F0C9D2; /* bordes */
+  /* --- Paleta --------------------------------------------------------------- */
+  --color-fucsia: #D6195F; /* acción: botones, precios, círculos */
+  --color-fucsia-hover: #B8124F; /* hover y texto fucsia accesible */
+  --color-rosa-medio: #F9A8C0; /* círculos de producto, decoración */
+  --color-rosa-claro: #FFD6E2; /* fondos suaves, franjas */
+  --color-lienzo: #FFF1F4; /* fondo de página */
+  --color-tarjeta: #FFFFFF; /* tarjetas y paneles */
+  --color-borde: #F5C2D2; /* bordes finos */
+  --color-vino: #5A1233; /* títulos */
+  --color-texto: #3B2A30; /* texto principal */
+  --color-texto-suave: #7A5A63; /* texto secundario (AA) */
 
   /* --- Tipografía ---------------------------------------------------------- */
   --font-serif: var(--font-playfair), "Georgia", "Times New Roman", serif;
   --font-sans: var(--font-nunito), system-ui, -apple-system, sans-serif;
-  --font-cursive: var(--font-cursive), cursive;
+  --font-cursive: var(--font-script), cursive;
 
   /* --- Radios (esquinas suavemente redondeadas) ----------------------------- */
   --radius-ticket: 6px;
   --radius-soft: 10px;
 
-  /* --- Movimiento ---------------------------------------------------------- */
-  --ease-papel: cubic-bezier(0.2, 0, 0, 1);
+  /* --- Movimiento (discreto: 150–250 ms) ------------------------------------ */
+  --ease-suave: cubic-bezier(0.2, 0, 0, 1);
 }
 
 @layer base {
@@ -42,8 +48,8 @@
   }
 
   body {
-    background-color: var(--color-bg);
-    color: var(--color-brown-text);
+    background-color: var(--color-lienzo);
+    color: var(--color-texto);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
@@ -60,12 +66,12 @@
   }
 
   ::selection {
-    background-color: var(--color-soft-pink);
-    color: var(--color-brown-text);
+    background-color: var(--color-rosa-claro);
+    color: var(--color-vino);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-fuchsia-ink);
+    outline: 2px solid var(--color-fucsia);
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -85,7 +91,7 @@
 
   /* Borde tipo etiqueta */
   .borde-ticket {
-    border: 1px solid var(--color-pale-pink-border);
+    border: 1px solid var(--color-borde);
   }
 
   /* Ornaments: small heart/circle dots */
@@ -112,7 +118,88 @@
 
   /* Reveal discreto al entrar */
   .reveal {
-    animation: reveal-ficha 220ms var(--ease-papel) both;
+    animation: reveal-ficha 200ms var(--ease-suave) both;
+  }
+
+  /* Círculos decorativos: flotación lenta (CSS, sin imágenes) */
+  .animate-flotar {
+    animation: flotar 8s ease-in-out infinite;
+  }
+
+  .animate-flotar-lento {
+    animation: flotar 12s ease-in-out infinite;
+  }
+
+  /* Franja de frases: deslizamiento continuo (contenido duplicado) */
+  .animate-desfile {
+    animation: desfile 32s linear infinite;
+  }
+
+  /* Puntitos decorativos (como patrón de fondo tipo confeti) */
+  .puntos {
+    background-image: radial-gradient(
+      currentColor 1.4px,
+      transparent 1.5px
+    );
+    background-size: 18px 18px;
+  }
+
+  /* Entrada del panel lateral y su fondo */
+  .animate-entrar-derecha {
+    animation: entrar-derecha 220ms var(--ease-suave) both;
+  }
+
+  .animate-aparecer {
+    animation: aparecer 180ms var(--ease-suave) both;
+  }
+
+  /* Levante suave de tarjetas al pasar el mouse */
+  .levante {
+    transition:
+      transform 200ms var(--ease-suave),
+      box-shadow 200ms var(--ease-suave);
+  }
+
+  .levante:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(90, 18, 51, 0.12);
+  }
+}
+
+@keyframes flotar {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes desfile {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes entrar-derecha {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

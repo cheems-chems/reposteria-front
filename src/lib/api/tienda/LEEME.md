@@ -32,6 +32,19 @@ deja de venderse hasta que lo actives de nuevo.
 2. En `index.ts`: importa sus listas y agrégalas a `SECTIONS`, `CATEGORIES`
    y `PRODUCTS`.
 
+## Fotos de productos
+
+Sin foto se ve el dibujo SVG de su sección sobre fondo de color. Para poner
+foto real:
+
+1. Copia el archivo a `public/products/<slug>.jpg` (p. ej.
+   `public/products/tarta-de-limon.jpg`).
+2. En el producto, pon `imageUrl: "/products/tarta-de-limon.jpg"`.
+
+Si `imageUrl` no está definido o la ruta falla, se sigue viendo el dibujo;
+una foto rota no rompe la página. La foto de la sección funciona igual
+(`imageUrl` en la sección, archivo en `public/sections/<slug>.jpg`).
+
 ## Validación
 
 Al cargar, `index.ts` valida el catálogo completo (slugs de secciones,

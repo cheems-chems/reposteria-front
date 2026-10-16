@@ -162,6 +162,14 @@ export interface StoreInfo {
   hours: string[];
 }
 
+// true = ejemplo de desarrollo (se muestra con etiqueta EJEMPLO; en producción se oculta).
+export interface Review {
+  author: string;
+  rating: number;
+  text: string;
+  example?: boolean;
+}
+
 export class ApiError extends Error {
   readonly status: number;
   readonly path: string;

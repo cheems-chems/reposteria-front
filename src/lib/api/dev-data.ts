@@ -5,13 +5,35 @@
 */
 
 import { brand } from "@/lib/brand";
-import type { StoreInfo } from "./types";
+import type { Review, StoreInfo } from "./types";
 
 export {
   SECTIONS as DEV_SECTIONS,
   CATEGORIES as DEV_CATEGORIES,
   PRODUCTS as DEV_PRODUCTS,
 } from "./tienda";
+
+// Ejemplos visibles con la etiqueta EJEMPLO; no son reseñas del negocio.
+export const DEV_REVIEWS: Review[] = [
+  {
+    author: "Laura M.",
+    rating: 5,
+    text: "Pedido precioso y a tiempo. Los pasabocas desaparecieron en minutos.",
+    example: true,
+  },
+  {
+    author: "Andrés P.",
+    rating: 5,
+    text: "Armar el combo por WhatsApp fue facilísimo. Todo confirmado rápido.",
+    example: true,
+  },
+  {
+    author: "Carolina R.",
+    rating: 4,
+    text: "La torta de guayaba llegó perfecta. Muy buen sabor de casa.",
+    example: true,
+  },
+];
 
 export const DEV_STORE_INFO: StoreInfo = {
   name: brand.name,

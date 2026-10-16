@@ -5,6 +5,7 @@ import { fetchJson } from "./client";
 import {
   DEV_CATEGORIES,
   DEV_PRODUCTS,
+  DEV_REVIEWS,
   DEV_SECTIONS,
   DEV_STORE_INFO,
 } from "./dev-data";
@@ -13,6 +14,7 @@ import type {
   Category,
   Product,
   ProductListItem,
+  Review,
   Section,
   StoreInfo,
 } from "./types";
@@ -142,4 +144,14 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getStoreInfo(): Promise<StoreInfo> {
   if (useProvisionalData) return DEV_STORE_INFO;
   return fetchJson<StoreInfo>("/store");
+}
+
+// Reseñas: sin backend aún; en producción devuelve [] si el endpoint no existe.
+export async function getReviews(): Promise<Review[]> {
+  if (useProvisionalData) return DEV_REVIEWS;
+  try {
+    return await fetchJson<Review[]>("/reviews");
+  } catch {
+    return [];
+  }
 }

@@ -8,6 +8,9 @@ const legalLinks = [
   { href: "/devoluciones", label: "Envíos y devoluciones" },
 ];
 
+const linkClass =
+  "-mx-2 flex min-h-11 items-center rounded-soft px-2 transition-colors hover:bg-rosa-claro/40 hover:text-fucsia-hover";
+
 function Column({
   title,
   children,
@@ -44,7 +47,7 @@ export async function SiteFooter() {
     <footer className="mt-16 border-t border-borde bg-tarjeta">
       <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
         <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
-          <Logo size="sm" />
+          <Logo size="footer" showText={false} />
           <p className="max-w-xs text-sm text-texto-suave">
             {store.description}
           </p>
@@ -56,13 +59,13 @@ export async function SiteFooter() {
         </div>
 
         <Column title="Tienda">
-          <Link className="hover:text-fucsia-hover" href="/tienda">
+          <Link className={linkClass} href="/tienda">
             Todo el catálogo
           </Link>
           {categories.map((category) => (
             <Link
               key={category.slug}
-              className="hover:text-fucsia-hover"
+              className={linkClass}
               href={`/tienda/${category.slug}`}
             >
               {category.name}
@@ -72,7 +75,7 @@ export async function SiteFooter() {
 
         <Column title="Legal">
           {legalLinks.map((link) => (
-            <Link key={link.href} className="hover:text-fucsia-hover" href={link.href}>
+            <Link key={link.href} className={linkClass} href={link.href}>
               {link.label}
             </Link>
           ))}
@@ -86,7 +89,7 @@ export async function SiteFooter() {
               Datos de contacto pendientes de confirmar.
             </p>
           )}
-          <Link className="text-fucsia-hover hover:text-vino" href="/contacto">
+          <Link className={linkClass} href="/contacto">
             Escríbenos
           </Link>
         </Column>

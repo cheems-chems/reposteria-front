@@ -1,5 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import { AddToCartButton } from '@/components/cart/add-to-cart-button';
 import { ProductGrid } from '@/components/store/product-grid';
 import {
@@ -9,117 +7,50 @@ import {
 	SectionHeading,
 	WaveDivider,
 } from '@/components/home/decor';
+import { HeroArt } from '@/components/home/hero-art';
+import { ReviewsBlock } from '@/components/home/reviews-block';
+import { SectionCircle } from '@/components/home/section-circle';
 import { Reveal } from '@/components/home/reveal';
 import { ButtonLink } from '@/components/ui/button-link';
-import { PhotoPlaceholder } from '@/components/ui/photo-placeholder';
 import { PriceSeal } from '@/components/ui/price-seal';
+import { SafeImage } from '@/components/ui/safe-image';
+import {
+	SectionArt,
+	sectionArtKey,
+	sectionArtTheme,
+} from '@/components/ui/section-art';
 import { orderLineForProduct } from '@/lib/encargo';
 import {
+	getCategories,
 	getComboItems,
 	getFeaturedProducts,
+	getProducts,
+	getReviews,
 	getSections,
 	getStoreInfo,
 	type ComboProduct,
-	type Section,
 } from '@/lib/api';
 import { brand } from '@/lib/brand';
-
-const trust: { label: string; path: string }[] = [
-	{
-		label: 'Hechos en casa',
-		path: 'M3 10.5 12 3l9 7.5M5.5 9.5V21h13V9.5M10 21v-6h4v6',
-	},
-	{
-		label: 'Ingredientes seleccionados',
-		path: 'M5 19c8 0 14-6 14-14-8 0-14 6-14 14Zm0 0c2-5 6-9 11-11',
-	},
-	{
-		label: 'Perfectos para cualquier ocasión',
-		path: 'M12 4v3M12 17v3M4 12h3M17 12h3M6.5 6.5 8.6 8.6M15.4 15.4l2.1 2.1M17.5 6.5 15.4 8.6M8.6 15.4 6.5 17.5',
-	},
-	{
-		label: 'Pedidos por encargo vía WhatsApp',
-		path: 'M4 5h16v11H9l-5 4V5Z',
-	},
-];
-
-const marqueePhrases = [
-	'Hecho en casa',
-	'Ingredientes seleccionados',
-	'Perfectos para cualquier ocasión',
-	'Pedidos por encargo vía WhatsApp',
-	'El sabor que une, lo hacemos con amor',
-];
-
-const faqs: { question: string; answer: string }[] = [
-	{
-		question: '¿Cómo hago un pedido?',
-		answer:
-			'Eliges lo que quieras en la tienda, agregas al encargo o escribes por WhatsApp y te confirmamos la fecha y el valor.',
-	},
-	{
-		question: '¿Con cuánta anticipación debo pedir?',
-		answer:
-			'Los pedidos son por encargo. Cuando armas tu combo te indicamos la anticipación según el producto antes de confirmar.',
-	},
-	{
-		question: '¿Puedo personalizar mi combo?',
-		answer:
-			'Sí. En “Arma tu combo” eliges los pasabocas por unidades y ajustas la mezcla a tu gusto.',
-	},
-	{
-		question: '¿Hacen domicilios?',
-		answer:
-			'Coordinamos entrega o recogida por WhatsApp según la zona. Escríbenos y lo confirmamos contigo.',
-	},
-];
-
-function SectionCircle({ section }: { section: Section }) {
-	return (
-		<Link
-			href={`/tienda?seccion=${section.slug}`}
-			className="group flex flex-col items-center gap-3 rounded-soft p-2 text-center transition-transform duration-200 ease-suave hover:-translate-y-1"
-		>
-			<span className="relative flex size-28 items-center justify-center overflow-hidden rounded-full bg-rosa-medio ring-2 ring-transparent transition-shadow duration-200 ease-suave group-hover:ring-fucsia sm:size-36">
-				{section.imageUrl ? (
-					<Image
-						src={section.imageUrl}
-						alt={section.name}
-						fill
-						sizes="(max-width: 640px) 7rem, 9rem"
-						className="object-cover"
-					/>
-				) : (
-					<svg
-						viewBox="0 0 120 120"
-						className="w-12 text-vino/70 sm:w-14"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth={3}
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						aria-hidden="true"
-					>
-						<path d="M28 76c0-7 14-11 32-11s32 4 32 11v16c0 4-14 7-32 7s-32-3-32-7z" />
-						<path d="M28 76c9 5 19 7 32 7s23-2 32-7" />
-						<path d="M60 38v24" />
-					</svg>
-				)}
-			</span>
-			<span className="font-serif text-lg font-semibold text-vino">
-				{section.name}
-			</span>
-		</Link>
-	);
-}
+import {
+	bannerCombo,
+	comoFuncionaSteps,
+	faqs,
+	marqueePhrases,
+	sectionBlurb,
+	trust,
+} from '@/content/home';
 
 export default async function HomePage() {
-	const [sections, store, featured, comboItems] = await Promise.all([
-		getSections(),
-		getStoreInfo(),
-		getFeaturedProducts(),
-		getComboItems(),
-	]);
+	const [sections, store, featured, comboItems, products, categories, reviews] =
+		await Promise.all([
+			getSections(),
+			getStoreInfo(),
+			getFeaturedProducts(),
+			getComboItems(),
+			getProducts(),
+			getCategories(),
+			getReviews(),
+		]);
 
 	const highlightCombo =
 		featured.find((p): p is ComboProduct => p.saleMode === 'combo') ?? null;
@@ -137,6 +68,40 @@ export default async function HomePage() {
 
 	const withoutCombo = featured.filter((p) => p.slug !== highlightCombo?.slug);
 	const moreProducts = withoutCombo.length > 0 ? withoutCombo : featured;
+
+	const sectionByCategory = new Map(
+		categories
+			.filter((category) => category.sectionSlug)
+			.map((category) => [category.slug, category.sectionSlug as string]),
+	);
+	const countBySection = new Map<string, number>();
+	for (const product of products) {
+		const sectionSlug = sectionByCategory.get(product.categorySlug);
+		if (sectionSlug) {
+			countBySection.set(
+				sectionSlug,
+				(countBySection.get(sectionSlug) ?? 0) + 1,
+			);
+		}
+	}
+
+	// En desarrollo se muestran ejemplos con etiqueta EJEMPLO; en producción solo reseñas reales.
+	const visibleReviews = reviews.filter((review) => !review.example);
+
+	const comboTheme = sectionArtTheme(
+		sectionArtKey(highlightCombo?.slug, highlightCombo?.name),
+	);
+	const comboArtPanel = (
+		<span
+			aria-hidden="true"
+			className={`absolute inset-0 flex items-center justify-center ${comboTheme.tile}`}
+		>
+			<SectionArt
+				art={sectionArtKey(highlightCombo?.slug, highlightCombo?.name)}
+				className={`w-1/3 ${comboTheme.ink}`}
+			/>
+		</span>
+	);
 
 	return (
 		<main className="flex flex-1 flex-col">
@@ -181,36 +146,19 @@ export default async function HomePage() {
 							className="absolute -inset-4 rounded-[2.5rem] bg-rosa-claro/60"
 						/>
 						<div className="relative aspect-3/2 w-full">
+							{/* Para usar foto real: coloca el archivo en public/brand/hero.jpg y pon brand.hero.image = "/brand/hero.jpg" en src/lib/brand.ts */}
 							{brand.hero.image ? (
-								<Image
+								<SafeImage
 									src={brand.hero.image}
 									alt={brand.hero.alt}
 									fill
-									preload
+									priority
 									sizes="(max-width: 1024px) 92vw, 560px"
 									className="object-contain object-bottom drop-shadow-[0_24px_45px_rgba(90,18,51,0.22)]"
+									fallback={<HeroArt />}
 								/>
 							) : (
-								<div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-2rem border-2 border-dashed border-fucsia/40 bg-rosa-claro/70 p-6 text-center">
-									<svg
-										viewBox="0 0 120 120"
-										className="w-14 text-fucsia/70"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth={3}
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										aria-hidden="true"
-									>
-										<path d="M28 76c0-7 14-11 32-11s32 4 32 11v16c0 4-14 7-32 7s-32-3-32-7z" />
-										<path d="M28 76c9 5 19 7 32 7s23-2 32-7" />
-										<path d="M60 38v24" />
-									</svg>
-									<p className="font-serif text-xl text-vino">Foto pendiente</p>
-									<p className="font-sans text-[11px] uppercase tracking-[0.18em] text-texto-suave">
-										Coloca public/brand/hero.jpg y actualiza brand.ts
-									</p>
-								</div>
+								<HeroArt />
 							)}
 						</div>
 					</div>
@@ -241,58 +189,67 @@ export default async function HomePage() {
 				</ul>
 			</section>
 
-			<section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-				<header className="text-center">
-					<h2 className="font-serif text-3xl text-vino sm:text-4xl">
-						Compra por sección
-					</h2>
-					<span
-						aria-hidden="true"
-						className="mx-auto mt-3 block h-1 w-12 rounded-full bg-fucsia"
-					/>
-				</header>
+			<section className="relative overflow-x-clip border-b border-borde bg-rosa-claro/40">
+				<FloatingDots className="left-6 top-10 hidden text-fucsia/40 sm:block" />
+				<span
+					aria-hidden="true"
+					className="absolute -right-28 top-1/2 hidden size-80 -translate-y-1/2 rounded-full bg-rosa-medio/70 lg:block"
+				/>
+				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
+					<header className="text-center">
+						<h2 className="font-serif text-3xl text-vino sm:text-4xl">
+							Compra por sección
+						</h2>
+						<span
+							aria-hidden="true"
+							className="mx-auto mt-3 block h-1 w-12 rounded-full bg-fucsia"
+						/>
+					</header>
 
-				{sections.length > 0 ? (
-					<div className="mt-10 grid grid-cols-2 justify-items-center gap-6 sm:grid-cols-3 sm:gap-8">
-						{sections.map((section) => (
-							<SectionCircle key={section.slug} section={section} />
-						))}
-					</div>
-				) : (
-					<p className="mt-8 text-center text-texto-suave">
-						Estamos organizando el catálogo. Vuelve pronto.
-					</p>
-				)}
+					{sections.length > 0 ? (
+						<div className="mt-12 grid grid-cols-2 justify-items-center gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-8">
+							{sections.map((section, index) => (
+								<SectionCircle
+									key={section.slug}
+									section={section}
+									art={sectionArtKey(section.slug, section.name)}
+									blurb={sectionBlurb(section.slug)}
+									productCount={countBySection.get(section.slug) ?? 0}
+									index={index}
+								/>
+							))}
+						</div>
+					) : (
+						<p className="mt-8 text-center text-texto-suave">
+							Estamos organizando el catálogo. Vuelve pronto.
+						</p>
+					)}
+				</div>
 			</section>
 
 			{highlightCombo ? (
-				<section className="relative overflow-x-clip bg-rosa-claro/40">
-					<WaveDivider className="text-lienzo" />
-					<FloatingDots className="right-6 top-24 hidden sm:block" />
+				<section className="relative overflow-x-clip bg-lienzo">
+					<FloatingDots className="right-6 top-24 hidden text-rosa-medio sm:block" />
 					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 						<Reveal>
 							<div className="grid items-center gap-10 lg:grid-cols-2">
 								<div className="relative">
 									<span
 										aria-hidden="true"
-										className="absolute -inset-3 rounded-2rem bg-white/60"
+										className="absolute -inset-3 rounded-2rem bg-white/70"
 									/>
 									<div className="relative aspect-4/3 w-full overflow-hidden rounded-soft border border-borde bg-tarjeta">
 										{highlightCombo.imageUrl ? (
-											<Image
+											<SafeImage
 												src={highlightCombo.imageUrl}
 												alt={highlightCombo.name}
 												fill
 												sizes="(max-width: 1024px) 92vw, 520px"
 												className="object-cover"
+												fallback={comboArtPanel}
 											/>
 										) : (
-											<PhotoPlaceholder
-												name={highlightCombo.name}
-												ratio="4/3"
-												seed={highlightCombo.name.length * 7}
-												className="border-0"
-											/>
+											comboArtPanel
 										)}
 									</div>
 								</div>
@@ -329,39 +286,44 @@ export default async function HomePage() {
 			) : null}
 
 			{moreProducts.length > 0 ? (
-				<section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-					<Reveal>
-						<SectionHeading
-							title="Los más pedidos"
-							description="Una muestra de lo que más nos encargan."
-						/>
-					</Reveal>
-					<Reveal delay={80} className="mt-10">
-						<ProductGrid products={moreProducts} comboItems={comboItems} />
-					</Reveal>
+				<section className="relative overflow-x-clip border-t border-borde bg-tarjeta">
+					<span
+						aria-hidden="true"
+						className="absolute -bottom-24 -left-20 hidden size-64 rounded-full bg-rosa-claro lg:block"
+					/>
+					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
+						<Reveal>
+							<SectionHeading
+								title="Los más pedidos"
+								description="Una muestra de lo que más nos encargan."
+							/>
+						</Reveal>
+						<Reveal delay={80} className="mt-10">
+							<ProductGrid products={moreProducts} comboItems={comboItems} />
+						</Reveal>
+					</div>
 				</section>
 			) : null}
 
 			<Marquee phrases={marqueePhrases} />
+
+			<ReviewsBlock reviews={visibleReviews} />
 
 			<section className="relative overflow-x-clip bg-fucsia">
 				<WaveDivider className="text-lienzo" />
 				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-16 sm:px-8 lg:grid-cols-2">
 					<div className="flex flex-col items-start gap-4">
 						<h2 className="font-serif text-3xl text-white sm:text-4xl">
-							Arma tu combo
+							{bannerCombo.title}
 						</h2>
-						<p className="max-w-md text-lg text-white">
-							Elige tus pasabocas favoritos por unidades y armamos contigo el
-							combo perfecto para tu ocasión.
-						</p>
+						<p className="max-w-md text-lg text-white">{bannerCombo.text}</p>
 						<ButtonLink
 							href="/encargo?categoria=combos"
 							size="lg"
 							variant="inverse"
 							className="mt-1"
 						>
-							Arma tu combo
+							{bannerCombo.cta}
 						</ButtonLink>
 					</div>
 					<div aria-hidden="true" className="relative hidden h-40 lg:block">
@@ -372,7 +334,7 @@ export default async function HomePage() {
 				<WaveDivider className="text-lienzo" flip />
 			</section>
 
-			<section className="relative overflow-x-clip bg-fucsia">
+			<section className="relative overflow-x-clip bg-vino">
 				<WaveDivider className="text-lienzo" />
 				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
 					<header className="mx-auto max-w-2xl text-center">
@@ -385,20 +347,7 @@ export default async function HomePage() {
 						/>
 					</header>
 					<ol className="mt-12 grid gap-10 sm:grid-cols-3">
-						{[
-							{
-								title: 'Elige lo que quieras',
-								text: 'Explora la tienda o arma tu combo a tu gusto.',
-							},
-							{
-								title: 'Cuéntanos los detalles',
-								text: 'Dinos fecha, ocasión y cualquier personalización.',
-							},
-							{
-								title: 'Envía por WhatsApp',
-								text: 'Te dejamos el mensaje listo y confirmamos el valor.',
-							},
-						].map((step, index) => (
+						{comoFuncionaSteps.map((step, index) => (
 							<li
 								key={step.title}
 								className="flex flex-col items-center gap-3 text-center"

@@ -1,13 +1,17 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Tag } from "@/components/ui/tag";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
+import {
+  SectionArt,
+  sectionArtTheme,
+  type SectionArtKey,
+} from "@/components/ui/section-art";
+import { SafeImage } from "@/components/ui/safe-image";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { cn } from "@/lib/cn";
 
-/** PROVISIONAL: forma mínima; los tipos definitivos vendrán del contrato del backend (etapa 3). */
+// PROVISIONAL: forma mínima; los tipos definitivos vendrán del contrato del backend (etapa 3).
 export interface ProductTicketData {
   slug: string;
   name: string;
@@ -21,14 +25,10 @@ export interface ProductTicketData {
   typeLabel?: string | null;
 }
 
-function seedFrom(text: string): number {
-  let h = 0;
-  for (let i = 0; i < text.length; i++) h = (h * 31 + text.charCodeAt(i)) | 0;
-  return h;
-}
-
 interface ProductTicketProps {
   product: ProductTicketData;
+  /** Dibujo de la sección/categoría para cuando no hay foto. */
+  art?: SectionArtKey;
   /** Variante destacada: más grande y con otro ritmo en la rejilla. */
   featured?: boolean;
   /** Acción opcional (p. ej. "Agregar al encargo"), fuera del enlace. */
@@ -36,18 +36,31 @@ interface ProductTicketProps {
   className?: string;
 }
 
-/**
- * Ficha de caja, no tarjeta redondeada con sombra; la acción va debajo del
- * enlace para no anidar botones dentro de un enlace.
- */
+// Ficha de caja, no tarjeta redondeada con sombra; sin foto se ve el dibujo
+// de su sección sobre fondo de color (nunca caja vacía ni fotos de stock).
 export function ProductTicket({
   product,
+  art = "casero",
   featured = false,
   action,
   className,
 }: ProductTicketProps) {
   const available = product.available !== false;
-  const ratio = featured ? "4/3" : "4/5";
+  const theme = sectionArtTheme(art);
+
+  const artPanel = (
+    <span
+      className={cn(
+        "absolute inset-0 flex items-center justify-center",
+        theme.tile,
+      )}
+    >
+      <SectionArt
+        art={art}
+        className={cn("w-1/2 opacity-90", theme.ink)}
+      />
+    </span>
+  );
 
   return (
     <div
@@ -63,9 +76,14 @@ export function ProductTicket({
         className="flex flex-1 flex-col"
         aria-label={`Ver ${product.name}`}
       >
-        <div className="relative m-2 overflow-hidden border border-borde bg-lienzo">
+        <div
+          className={cn(
+            "relative m-2 overflow-hidden border border-borde bg-lienzo",
+            featured ? "aspect-4/3" : "aspect-4/5",
+          )}
+        >
           {product.imageUrl ? (
-            <Image
+            <SafeImage
               src={product.imageUrl}
               alt={product.name}
               fill
@@ -78,14 +96,10 @@ export function ProductTicket({
                 "object-cover transition-transform duration-200 ease-suave group-hover:scale-[1.02]",
                 !available && "grayscale",
               )}
+              fallback={artPanel}
             />
           ) : (
-            <PhotoPlaceholder
-              name={product.name}
-              ratio={ratio}
-              seed={seedFrom(product.slug)}
-              className="border-0"
-            />
+            artPanel
           )}
           {!available ? (
             <span className="absolute left-0 top-0 m-2">

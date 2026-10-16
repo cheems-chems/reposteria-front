@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { ProductTicket } from "@/components/product/product-ticket";
 import { EmptyState } from "@/components/states/empty-state";
+import { sectionArtKey } from "@/components/ui/section-art";
 import { orderLineForProduct, productPrice, productTypeLabel } from "@/lib/encargo";
 import type { BuilderItemProduct, ProductListItem } from "@/lib/api";
 
@@ -44,6 +45,7 @@ export function ProductGrid({
         const ticket = (
           <ProductTicket
             featured={product.slug === featuredSlug}
+            art={sectionArtKey(product.categorySlug, product.categoryName)}
             product={{
               slug: product.slug,
               name: product.name,

@@ -24,7 +24,6 @@ import {
 } from '@/lib/api';
 import { brand } from '@/lib/brand';
 
-/* Iconos de línea para la barra de confianza (trazo, sin relleno). */
 const trust: { label: string; path: string }[] = [
 	{
 		label: 'Hechos en casa',
@@ -44,7 +43,6 @@ const trust: { label: string; path: string }[] = [
 	},
 ];
 
-/** Frases verdaderas que se deslizan en la franja de la portada. */
 const marqueePhrases = [
 	'Hecho en casa',
 	'Ingredientes seleccionados',
@@ -76,7 +74,6 @@ const faqs: { question: string; answer: string }[] = [
 	},
 ];
 
-/** Círculo de sección con foto por dato o marcador rosa honesto. */
 function SectionCircle({ section }: { section: Section }) {
 	return (
 		<Link
@@ -143,9 +140,7 @@ export default async function HomePage() {
 
 	return (
 		<main className="flex flex-1 flex-col">
-			{/* Héroe */}
 			<section className="relative overflow-x-clip bg-lienzo">
-				{/* Adorno: círculos grandes del color fuerte que sobresalen por los bordes */}
 				<div
 					aria-hidden="true"
 					className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -180,7 +175,6 @@ export default async function HomePage() {
 						</div>
 					</div>
 
-					{/* Foto principal: se solapa un poco con el borde del contenedor */}
 					<div className="relative mx-auto w-full max-w-xl lg:mx-0 lg:-mr-12 lg:max-w-none">
 						<span
 							aria-hidden="true"
@@ -223,7 +217,6 @@ export default async function HomePage() {
 				</div>
 			</section>
 
-			{/* Barra de confianza */}
 			<section className="border-y border-borde bg-tarjeta">
 				<ul className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-x-6 gap-y-6 px-5 py-8 sm:px-8 lg:grid-cols-4">
 					{trust.map((item) => (
@@ -248,7 +241,6 @@ export default async function HomePage() {
 				</ul>
 			</section>
 
-			{/* Compra por sección */}
 			<section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 				<header className="text-center">
 					<h2 className="font-serif text-3xl text-vino sm:text-4xl">
@@ -273,7 +265,6 @@ export default async function HomePage() {
 				)}
 			</section>
 
-			{/* Combo destacado */}
 			{highlightCombo ? (
 				<section className="relative overflow-x-clip bg-rosa-claro/40">
 					<WaveDivider className="text-lienzo" />
@@ -307,9 +298,6 @@ export default async function HomePage() {
 								</div>
 
 								<div className="flex flex-col items-start gap-5">
-									<p className="font-sans text-xs uppercase tracking-[0.22em] text-fucsia-hover">
-										Combo destacado
-									</p>
 									<h2 className="font-serif text-3xl text-vino sm:text-4xl">
 										{highlightCombo.name}
 									</h2>
@@ -340,12 +328,10 @@ export default async function HomePage() {
 				</section>
 			) : null}
 
-			{/* Más pedidos */}
 			{moreProducts.length > 0 ? (
 				<section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 					<Reveal>
 						<SectionHeading
-							eyebrow="Favoritos"
 							title="Los más pedidos"
 							description="Una muestra de lo que más nos encargan."
 						/>
@@ -356,17 +342,12 @@ export default async function HomePage() {
 				</section>
 			) : null}
 
-			{/* Franja deslizante */}
 			<Marquee phrases={marqueePhrases} />
 
-			{/* Banner: arma tu combo */}
 			<section className="relative overflow-x-clip bg-fucsia">
 				<WaveDivider className="text-lienzo" />
 				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-16 sm:px-8 lg:grid-cols-2">
 					<div className="flex flex-col items-start gap-4">
-						<p className="font-sans text-xs uppercase tracking-[0.22em] text-white/90">
-							Combos a tu medida
-						</p>
 						<h2 className="font-serif text-3xl text-white sm:text-4xl">
 							Arma tu combo
 						</h2>
@@ -391,7 +372,6 @@ export default async function HomePage() {
 				<WaveDivider className="text-lienzo" flip />
 			</section>
 
-			{/* Cómo funciona */}
 			<section className="relative overflow-x-clip bg-fucsia">
 				<WaveDivider className="text-lienzo" />
 				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
@@ -437,7 +417,6 @@ export default async function HomePage() {
 				<WaveDivider className="text-lienzo" flip />
 			</section>
 
-			{/* Preguntas frecuentes */}
 			<section className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-8">
 				<Reveal>
 					<SectionHeading title="Preguntas frecuentes" />

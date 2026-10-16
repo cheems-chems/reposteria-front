@@ -1,9 +1,4 @@
-/*
-  Almacén del carrito "Mi encargo" para useSyncExternalStore.
-  Persiste en localStorage y notifica a los suscriptores. La lectura se hace de
-  forma perezosa y el snapshot del servidor es siempre vacío para que la
-  hidratación no se desajuste.
-*/
+// Almacén del carrito para useSyncExternalStore: persiste en localStorage y notifica a los suscriptores.
 
 import type { OrderLine } from "@/lib/api";
 import {

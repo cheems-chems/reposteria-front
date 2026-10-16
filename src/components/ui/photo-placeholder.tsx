@@ -17,20 +17,15 @@ const tints = [
 ];
 
 interface PhotoPlaceholderProps {
-  /** Nombre del producto que ocupa el vacío. */
   name: string;
   ratio?: Ratio;
   /** Variación determinista de color de fondo (p. ej. el id del producto). */
   seed?: number;
-  /** Oculta la etiqueta "foto pendiente" (rara vez necesaria). */
   hideLabel?: boolean;
   className?: string;
 }
 
-/**
- * Estado vacío de diseño intencional: cuando el negocio aún no ha subido foto.
- * Nunca usar bloques grises ni fotos de stock presentadas como propias.
- */
+/** Foto pendiente intencional; nunca usar bloques grises ni fotos de stock propias. */
 export function PhotoPlaceholder({
   name,
   ratio = "4/5",

@@ -1,9 +1,8 @@
 import { cn } from "@/lib/cn";
 
 /**
- * PROVISIONAL: los estados y sus transiciones definitivos vendrán del
- * contrato del backend. Aquí solo definimos la presentación (color + texto).
- * Nunca comunicar el estado con color solo: siempre acompaña el texto.
+ * PROVISIONAL: los estados definitivos vendrán del contrato del backend; aquí
+ * solo presentación (color + texto). Nunca comunicar el estado con color solo.
  */
 type Tone = "neutro" | "rosa-medio" | "pistacho" | "guayaba" | "cacao" | "apagado";
 

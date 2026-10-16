@@ -27,7 +27,6 @@ function priceAmount(product: Product): number {
   return product.saleMode === "builder" ? product.unitPrice : product.price;
 }
 
-/** Rótulo del tipo de venta para la ficha. */
 function fichaTypeLabel(product: Product): string | null {
   switch (product.saleMode) {
     case "combo":
@@ -124,7 +123,6 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-        {/* Media */}
         <div className="relative overflow-hidden border border-borde bg-lienzo">
           {product.imageUrl ? (
             <div className="relative aspect-4/3">
@@ -146,7 +144,6 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           )}
         </div>
 
-        {/* Resumen */}
         <div className="flex flex-col gap-4">
           <Tag accent="guayaba">{product.categoryName}</Tag>
           <h1 className="font-serif text-4xl text-vino sm:text-5xl">
@@ -208,7 +205,6 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
         </div>
       </div>
 
-      {/* Detalle de receta */}
       <div className="mt-12 max-w-2xl">
         <RecipeDetail
           recipe={{

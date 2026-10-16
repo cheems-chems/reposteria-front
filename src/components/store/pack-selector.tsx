@@ -15,10 +15,7 @@ interface PackSelectorProps {
   onChangePacks: (slug: string, count: number) => void;
 }
 
-/**
- * Selector de bandejas: una fila por bandeja con su número de bandejas,
- * unidades y subtotal. El total se estima en vivo.
- */
+/** Selector de bandejas; el total se estima en vivo. */
 export function PackSelector({
   packs,
   selection,

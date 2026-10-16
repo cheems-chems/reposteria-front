@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** Título de sección centrado con una línea corta de acento debajo. */
 export function SectionHeading({
   eyebrow,
   title,
@@ -39,7 +38,6 @@ export function SectionHeading({
   );
 }
 
-/** División en ola entre secciones (CSS/SVG, sin imágenes). */
 export function WaveDivider({
   className,
   flip = false,
@@ -104,7 +102,6 @@ export function Marquee({
   );
 }
 
-/** Manchas/puntitos decorativos flotantes (puros CSS). */
 export function FloatingDots({ className }: { className?: string }) {
   return (
     <span
@@ -117,7 +114,6 @@ export function FloatingDots({ className }: { className?: string }) {
   );
 }
 
-/** Lista con marca de verificación (composición de un combo). */
 export function CheckList({
   items,
   className,

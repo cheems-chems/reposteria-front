@@ -1,19 +1,4 @@
-/*
-  ============================================================================
-  "MI ENCARGO" — CARRITO SIN PAGO (FUNCIÓN PURA + PERSISTENCIA EN NAVEGADOR)
-  ----------------------------------------------------------------------------
-  El encargo se guarda SOLO en el navegador (localStorage) y se envía por
-  WhatsApp. No hay cuenta, ni pago, ni pasarela. Reutiliza el cálculo de
-  ./encargo.ts y el mensaje sigue el mismo tono que el flujo de /encargo.
-
-  Una línea del catálogo se agrega como UNA línea del encargo:
-    - single  -> una pieza (cantidad editable en el panel).
-    - combo   -> un combo de precio fijo.
-    - pack    -> una bandeja (respeta el mínimo de bandejas).
-  Los ítems de armador (saleMode "builder") no se agregan solos: se arman en
-  /encargo.
-  ============================================================================
-*/
+// Carrito solo en navegador (localStorage), sin cuenta ni pago: se envía por WhatsApp.
 
 import type { OrderLine } from "@/lib/api";
 import { lineTotal, lineUnits } from "@/lib/encargo";
@@ -24,25 +9,20 @@ export const CART_STORAGE_KEY = "elvis-encargo-v1";
 /** Cantidad máxima por línea, para evitar entradas absurdas. */
 export const CART_MAX_QUANTITY = 99;
 
-/** Una línea del carrito: la línea de encargo + cuántas veces se repite. */
 export interface CartItem {
-  /** Identidad estable: `kind:productSlug`. */
   id: string;
   line: OrderLine;
   quantity: number;
 }
 
-/** Identidad de una línea de encargo (una por producto y tipo de venta). */
 export function lineId(line: OrderLine): string {
   return `${line.kind}:${line.productSlug}`;
 }
 
-/** Total estimado (COP) de un ítem del carrito. */
 export function itemTotal(item: CartItem): number {
   return lineTotal(item.line) * item.quantity;
 }
 
-/** Unidades y total estimado de todo el carrito. */
 export function cartTotals(items: CartItem[]): {
   units: number;
   total: number;
@@ -56,12 +36,10 @@ export function cartTotals(items: CartItem[]): {
   return { units, total };
 }
 
-/** Número total de ítems (para el contador de la bolsa). */
 export function cartCount(items: CartItem[]): number {
   return items.reduce((acc, item) => acc + item.quantity, 0);
 }
 
-/** Detalle corto de la línea, sin la cantidad: "60 unidades", "10 u. c/u". */
 export function itemDescription(item: CartItem): string | null {
   switch (item.line.kind) {
     case "combo":
@@ -73,7 +51,6 @@ export function itemDescription(item: CartItem): string | null {
   }
 }
 
-/** Etiqueta de cantidad del ítem: "2 combos", "3 bandejas", "×2". */
 export function itemQuantityLabel(item: CartItem): string {
   const n = item.quantity;
   if (item.line.kind === "combo") return `${n} ${n === 1 ? "combo" : "combos"}`;
@@ -81,7 +58,7 @@ export function itemQuantityLabel(item: CartItem): string {
   return `×${n}`;
 }
 
-/** Mensaje de WhatsApp con el encargo listo (mismo tono que /encargo). */
+// Mismo tono que el flujo de /encargo.
 export function buildCartMessage(items: CartItem[]): string {
   const lines = ["¡Hola! Quiero hacer un encargo:", ""];
   for (const item of items) {
@@ -123,9 +100,6 @@ export function buildCartMessage(items: CartItem[]): string {
   return lines.join("\n");
 }
 
-/* --- Persistencia (tolerante a fallos) ------------------------------------- */
-
-/** Parsea el JSON guardado y descarta entradas que no tengan forma válida. */
 export function parseCart(raw: string | null): CartItem[] {
   if (!raw) return [];
   try {
@@ -156,12 +130,11 @@ export function parseCart(raw: string | null): CartItem[] {
   }
 }
 
-/** Serializa el carrito para guardarlo (nunca lanza). */
+// Nunca lanza.
 export function serializeCart(items: CartItem[]): string {
   return JSON.stringify(items);
 }
 
-/** Validación mínima de que un valor es una línea de encargo. */
 function isOrderLine(value: unknown): value is OrderLine {
   if (!value || typeof value !== "object") return false;
   const line = value as Partial<OrderLine> & { kind?: unknown };

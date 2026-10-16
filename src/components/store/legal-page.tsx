@@ -8,11 +8,7 @@ interface LegalPageProps {
   children: ReactNode;
 }
 
-/**
- * Envoltorio para las páginas legales. Deja claro que el contenido es un
- * BORRADOR sin revisar y que los datos entre corchetes se completan con
- * información real del negocio.
- */
+/** Borrador sin revisar; los datos entre corchetes se completan con información real del negocio. */
 export function LegalPage({ title, description, children }: LegalPageProps) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-10 sm:px-8">

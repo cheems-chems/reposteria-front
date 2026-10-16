@@ -7,10 +7,7 @@ import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { cn } from "@/lib/cn";
 
-/**
- * PROVISIONAL: forma mínima que consumirá la ficha pública. Los tipos
- * definitivos se derivarán del contrato del backend (etapa 3).
- */
+/** PROVISIONAL: forma mínima; los tipos definitivos vendrán del contrato del backend (etapa 3). */
 export interface ProductTicketData {
   slug: string;
   name: string;
@@ -40,9 +37,8 @@ interface ProductTicketProps {
 }
 
 /**
- * Ficha/etiqueta de caja: foto con borde de tarjeta, nombre en serif y precio
- * en sello. No es una tarjeta redondeada con sombra. La acción opcional va
- * debajo del enlace para no anidar botones dentro de un enlace.
+ * Ficha de caja, no tarjeta redondeada con sombra; la acción va debajo del
+ * enlace para no anidar botones dentro de un enlace.
  */
 export function ProductTicket({
   product,

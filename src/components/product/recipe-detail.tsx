@@ -1,8 +1,8 @@
 import { cn } from '@/lib/cn';
 
 /**
- * PROVISIONAL: estos datos deben venir del backend. No inventar ingredientes
- * ni alérgenos. Si un campo llega vacío, se omite (nunca rellenar con lorem).
+ * PROVISIONAL: datos del backend; no inventar ingredientes ni alérgenos y
+ * nunca rellenar campos vacíos con lorem.
  */
 export interface RecipeCompositionItem {
 	name: string;
@@ -41,7 +41,7 @@ function Check() {
 	);
 }
 
-/** Detalle como ficha de recetario: composición, ingredientes, alérgenos y tiempo. */
+/** Detalle con aspecto de ficha de recetario. */
 export function RecipeDetail({ recipe, className }: RecipeDetailProps) {
 	const {
 		description,

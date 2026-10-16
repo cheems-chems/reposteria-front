@@ -7,7 +7,6 @@ import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { normalizeWhatsApp, whatsappUrl } from "@/lib/whatsapp";
 
 interface ContactFormProps {
-  /** WhatsApp del negocio (desde la configuración de la tienda). */
   whatsapp: string | null;
 }
 
@@ -18,10 +17,7 @@ const TIPO_LABEL: Record<string, string> = {
   otro: "Otra cosa",
 };
 
-/**
- * Formulario de contacto. Mientras no exista POST /contact, el envío abre
- * WhatsApp con el mensaje ya armado. Validación local, sin backend.
- */
+/** Sin POST /contact aún: el envío abre WhatsApp con el mensaje armado; validación local. */
 export function ContactForm({ whatsapp }: ContactFormProps) {
   const [values, setValues] = useState({
     nombre: "",

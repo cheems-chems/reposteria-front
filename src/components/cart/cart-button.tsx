@@ -3,7 +3,6 @@
 import { useCart } from "@/components/cart/cart-provider";
 import { cn } from "@/lib/cn";
 
-/** Icono de bolsa de la compra (trazo). */
 function BagIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -22,7 +21,6 @@ function BagIcon({ className }: { className?: string }) {
   );
 }
 
-/** Bolsa con contador que abre el panel "Mi encargo". */
 export function CartButton({ className }: { className?: string }) {
   const { count, open } = useCart();
   const showCount = count > 0;

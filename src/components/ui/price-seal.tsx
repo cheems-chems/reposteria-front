@@ -15,10 +15,7 @@ const sizes = {
   lg: "text-3xl",
 };
 
-/**
- * Sello de precio: etiqueta de tinta guayaba con cifras tabulares.
- * El total/precio siempre es el que devuelve el servidor.
- */
+/** Sello de precio con cifras tabulares; el precio siempre es el del servidor. */
 export function PriceSeal({
   amount,
   size = "md",

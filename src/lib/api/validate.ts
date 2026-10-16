@@ -1,12 +1,4 @@
-/*
-  ============================================================================
-  VALIDACIÓN DE COHERENCIA DEL CATÁLOGO (CAPA DE DATOS)
-  ----------------------------------------------------------------------------
-  Se ejecuta sobre los datos (de desarrollo o del backend) para atajar errores
-  de modelado antes de que lleguen a la interfaz. Lanza Error con un mensaje
-  claro; no "arregla" datos en silencio.
-  ============================================================================
-*/
+// Valida la coherencia del catálogo y falla con Error; nunca corrige datos en silencio.
 
 import type { Category, Product } from "./types";
 
@@ -14,7 +6,6 @@ function fail(message: string): never {
   throw new Error(`Catálogo incoherente: ${message}`);
 }
 
-/** Valida un producto según su `saleMode`. */
 function validateProduct(
   product: Product,
   builderSlugs: ReadonlySet<string>,
@@ -99,7 +90,6 @@ function validateProduct(
   }
 }
 
-/** Valida la coherencia global del catálogo (productos y categorías). */
 export function validateCatalog(
   products: Product[],
   categories: Category[] = [],

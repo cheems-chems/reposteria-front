@@ -232,7 +232,6 @@ export function EncargoFlow(props: EncargoFlowProps) {
     setPackSelection((prev) => ({ ...prev, [slug]: count }));
   }
 
-  /** Entra a una categoría: arranca la selección vacía. */
   function openCategory(slug: string) {
     setError(null);
     setCategorySlug(slug);
@@ -264,7 +263,6 @@ export function EncargoFlow(props: EncargoFlowProps) {
     setPackSelection({});
   }
 
-  /** Sale de /encargo: a la página anterior o a la tienda. */
   function leaveEncargo() {
     setError(null);
     if (typeof window !== "undefined" && window.history.length > 1) {
@@ -446,7 +444,6 @@ export function EncargoFlow(props: EncargoFlowProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Progreso */}
       <div className="flex items-center justify-between gap-4">
         <p className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
           {isSummary ? "Resumen" : `Paso ${step + 1} de ${STEP_TITLES.length}`}
@@ -773,7 +770,6 @@ export function EncargoFlow(props: EncargoFlowProps) {
               Revisa tu encargo
             </h2>
 
-            {/* Ticket de resumen */}
             <div className="texture-paper border border-vino bg-lienzo">
               <div className="flex items-center justify-between border-b border-dashed border-vino/40 px-4 py-2">
                 <span className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">

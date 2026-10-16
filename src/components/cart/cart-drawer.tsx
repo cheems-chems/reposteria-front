@@ -9,7 +9,6 @@ import { formatCOP } from "@/lib/format";
 import { normalizeWhatsApp, whatsappUrl } from "@/lib/whatsapp";
 import { useCart } from "./cart-provider";
 
-/** Panel lateral "Mi encargo": lista, cantidades y envío por WhatsApp. */
 export function CartDrawer() {
   const { items, totals, whatsapp, isOpen, close, remove, setQuantity, clear } =
     useCart();

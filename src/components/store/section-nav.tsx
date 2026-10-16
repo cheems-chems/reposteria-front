@@ -5,10 +5,7 @@ import type { Section } from "@/lib/api";
 const base =
   "flex min-h-11 items-center whitespace-nowrap rounded-soft border px-4 font-sans text-sm transition-colors";
 
-/**
- * Fila superior de secciones (Todo · Dulces · Salados). Se refleja en la URL
- * con ?seccion=<slug>. No hay slugs ni nombres fijos: vienen de los datos.
- */
+/** Se refleja en la URL con ?seccion=<slug>; los slugs y nombres vienen de los datos. */
 export function SectionNav({
   sections,
   current,

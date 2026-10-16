@@ -9,16 +9,11 @@ interface ComboEditorProps {
   combo: ComboProduct;
   /** Todos los ítems de armador (para resolver nombres). */
   items: BuilderItemProduct[];
-  /** Cantidades por slug de ítem de armador. */
   selection: PackSelection;
   onChangeQuantity: (slug: string, quantity: number) => void;
 }
 
-/**
- * Editor de un combo editable: redistribuye unidades entre los ítems
- * permitidos manteniendo el total. Mientras el total coincida, el precio no
- * cambia. Si no coincide, indica cuántas unidades faltan o sobran.
- */
+/** Redistribuye entre ítems permitidos; el precio no cambia mientras el total coincida. */
 export function ComboEditor({
   combo,
   items,

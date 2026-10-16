@@ -25,7 +25,6 @@ interface CartContextValue {
   items: CartItem[];
   count: number;
   totals: { units: number; total: number };
-  /** Número WhatsApp configurado (null si aún no hay). */
   whatsapp: string | null;
   isOpen: boolean;
   lastAddedId: string | null;
@@ -101,7 +100,7 @@ export function CartProvider({
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
-/** Acceso al carrito. Debe usarse dentro de <CartProvider>. */
+/** Debe usarse dentro de <CartProvider>. */
 export function useCart(): CartContextValue {
   const ctx = useContext(CartContext);
   if (!ctx) {

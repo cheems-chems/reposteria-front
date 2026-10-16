@@ -10,7 +10,6 @@ export function Skeleton({ className }: { className?: string }) {
   );
 }
 
-/** Esqueleto con la forma de una ficha de producto. */
 export function ProductTicketSkeleton() {
   return (
     <div className="flex flex-col gap-3">

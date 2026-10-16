@@ -16,10 +16,7 @@ interface ProductGridProps {
   emptyAction?: ReactNode;
 }
 
-/**
- * Rejilla de productos reutilizable. No muestra nada inventado: si no hay
- * productos, cae en un estado vacío con mensaje útil.
- */
+/** Rejilla reutilizable; sin productos cae en un estado vacío con mensaje útil. */
 export function ProductGrid({
   products,
   comboItems = [],

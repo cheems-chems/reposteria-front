@@ -1,24 +1,11 @@
-/*
-  ============================================================================
-  CLIENTE HTTP DEL BACKEND (CAPA AISLADA)
-  ----------------------------------------------------------------------------
-  Único punto de contacto con la API real. Hoy no se usa porque los datos de
-  desarrollo están activos (ver ./config.ts). Cuando el backend exista, esta
-  función centraliza base URL, credenciales y manejo de errores.
-
-  El `'use cache'` + `cacheLife` mantiene la respuesta cacheada (necesario con
-  Cache Components de Next 16). Ajusta el perfil cuando exista el contrato.
-  ============================================================================
-*/
+// 'use cache' + cacheLife es necesario con Cache Components de Next 16.
 
 import { cacheLife } from "next/cache";
 import { apiBaseUrl } from "./config";
 import { ApiError } from "./types";
 
 interface FetchOptions {
-  /** Método HTTP. Solo GET por ahora (la tienda es de lectura). */
   method?: "GET";
-  /** Señal de cancelación opcional. */
   signal?: AbortSignal;
 }
 

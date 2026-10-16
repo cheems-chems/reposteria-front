@@ -6,8 +6,6 @@ import type {
 } from "react";
 import { cn } from "@/lib/cn";
 
-/* --- Field: etiqueta + control + error por campo --------------------------- */
-
 interface FieldProps {
   label: string;
   htmlFor: string;
@@ -57,8 +55,6 @@ export function Field({
     </div>
   );
 }
-
-/* --- Controles base -------------------------------------------------------- */
 
 const control =
   "w-full rounded-soft border border-borde bg-tarjeta px-3.5 py-2.5 font-sans text-base text-vino placeholder:text-texto-suave/60 transition-colors duration-150 focus:border-fucsia-hover focus:outline-none aria-invalid:border-fucsia-hover";

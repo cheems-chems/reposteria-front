@@ -1,65 +1,32 @@
-/*
-  ============================================================================
-  CAPA DE DATOS — DTOs TIPADOS (CONTRATO PROVISIONAL)
-  ----------------------------------------------------------------------------
-  Estos tipos describen lo que el frontend necesita. El backend debe
-  implementarlos (ver docs/ENDPOINTS-NECESARIOS.md). Mientras no exista,
-  se usan los datos de desarrollo de ./dev-data.ts.
+// Contrato DTO provisional: no inventar campos sin anotarlos en docs/ENDPOINTS-NECESARIOS.md; precios enteros en COP.
 
-  Regla: NO inventar campos que no estén aquí sin anotarlos en el documento
-  de endpoints. Los precios son enteros en pesos colombianos (COP).
-  ============================================================================
-*/
-
-/** Sección de tienda (Dulces/Salados/Congelados). */
 export interface Section {
   slug: string;
   name: string;
   orden: number;
-  /** URL de foto del círculo de la sección (ranura por datos). */
   imageUrl?: string | null;
 }
 
-/** Categoría de producto (tortas, bizcochos, postres, combos, bandejas…). */
 export interface Category {
   slug: string;
   name: string;
-  /** Una línea de descripción, opcional. */
   description?: string | null;
   sectionSlug?: string | null;
-  /** URL de foto de la categoría/círculo (ranura por datos). */
   imageUrl?: string | null;
-  /**
-   * Mínimo total de unidades del armador "Arma el tuyo desde cero" de esta
-   * categoría. Solo aplica a categorías con ítems de armador (`saleMode`
-   * "builder"). `null`/ausente si la categoría no tiene armador.
-   */
+  // Mínimo de unidades del armador de esta categoría; null/ausente = sin armador.
   builderMinTotalUnits?: number | null;
 }
 
-/**
- * Cómo se vende un producto. Discrimina la unión de productos:
- *   - "single"  -> precio fijo y cantidad de unidades (tortas, postres…).
- *   - "combo"   -> combo predefinido, editable o no.
- *   - "builder" -> ítem de armador ("arma el tuyo"): no se vende solo, se
- *                  elige por unidades dentro del armador. No se lista en la
- *                  tienda (se filtra por `saleMode === "builder"`).
- *   - "pack"    -> bandeja: se vende por bandeja de N unidades.
- */
+// single = precio fijo · combo = predefinido · builder = ítem de armador (no se lista en la tienda) · pack = bandeja.
 export type SaleMode = "single" | "combo" | "builder" | "pack";
 
-/** Componente de un combo: pasaboca (por slug) y unidades. */
 export interface CompositionItem {
   /** Slug de un producto con `saleMode` "builder" (ítem de armador). */
   productSlug: string;
   quantity: number;
 }
 
-/**
- * Opción de preparación de un producto (crudo/frito…). `priceDelta` es el
- * ajuste por unidad en COP; 0 si el precio no cambia. Soporte conservado; hoy
- * ningún producto lo usa (las bandejas son congeladas).
- */
+// priceDelta = ajuste por unidad en COP; hoy ningún producto usa preparaciones.
 export interface PreparationOption {
   id: string;
   label: string;
@@ -67,7 +34,6 @@ export interface PreparationOption {
   description?: string | null;
 }
 
-/** Campos comunes a todos los productos, sin importar cómo se venden. */
 export interface ProductBase {
   slug: string;
   name: string;
@@ -75,89 +41,60 @@ export interface ProductBase {
   categoryName: string;
   available: boolean;
   featured?: boolean;
-  /** URL de la foto real; null si el negocio aún no la sube. */
+  // null si el negocio aún no la sube.
   imageUrl?: string | null;
   /** Precio anterior tachado, si el backend envía descuento. */
   compareAt?: number | null;
-  /** Descripción corta para la ficha. */
   shortDescription?: string | null;
-  /** Preparaciones disponibles (crudo/frito…). Vacío si no aplica. */
   preparations?: PreparationOption[] | null;
 }
 
-/** Precio fijo y unidades del producto (tortas, bizcochos, postres). */
 export interface SingleProduct extends ProductBase {
   saleMode: "single";
-  /** Entero en COP. */
   price: number;
 }
 
-/**
- * Combo predefinido. `price` es el total fijo del combo y `totalUnits` sus
- * unidades. Si `editable` es true, el cliente redistribuye cantidades entre
- * `allowedItems` (por defecto, los de su composición) manteniendo el mismo
- * total de unidades; mientras el total coincida, el precio no cambia.
- */
+// Precio fijo: redistribuir cantidades no cambia el precio mientras totalUnits coincida.
 export interface ComboProduct extends ProductBase {
   saleMode: "combo";
-  /** Precio total fijo del combo, entero en COP. */
   price: number;
   totalUnits: number;
   composition: CompositionItem[];
   editable: boolean;
-  /**
-   * Slugs de ítems de armador que se pueden redistribuir. Si falta o está
-   * vacío, se usan los de `composition`.
-   */
+  // Si falta o está vacío, se usan los de `composition`.
   allowedItems?: string[];
-  /** Incremento por ítem en el editor (por defecto 5). */
   stepQty: number;
 }
 
-/**
- * Ítem de armador. No es un producto de venta directa: el cliente elige
- * cantidades dentro del armador de su categoría. `unitPrice` es un estimado
- * por unidad.
- */
+// No se vende solo: se elige por unidades dentro del armador; unitPrice es un estimado por unidad.
 export interface BuilderItemProduct extends ProductBase {
   saleMode: "builder";
-  /** Marca de ítem de armador (explícita en los datos). */
   comboItem: true;
-  /** Precio estimado por unidad, entero en COP. */
   unitPrice: number;
-  /** Incremento permitido en el selector (por defecto 5). */
   stepQty: number;
 }
 
-/** Bandeja: se vende por caja de `unitsPerPack` unidades (congelada). */
 export interface PackProduct extends ProductBase {
   saleMode: "pack";
-  /** Precio por bandeja, entero en COP. */
   price: number;
-  /** Unidades incluidas por bandeja (p. ej. 10). */
   unitsPerPack: number;
   minPacks: number;
   stepPacks: number;
 }
 
-/**
- * Producto para listados (rejilla de tienda y flujo de encargo). Unión
- * discriminada por `saleMode`: cada variante lleva SOLO sus campos.
- */
 export type ProductListItem =
   | SingleProduct
   | ComboProduct
   | BuilderItemProduct
   | PackProduct;
 
-/** Producto completo para la ficha (/producto/[slug]). */
 export type Product = ProductListItem & {
   description?: string | null;
-  /** Ingredientes declarados por el negocio. Vacío si no los declara. */
+  // Declarados por el negocio; vacío = no declarados.
   ingredients: string[];
-  /** Alérgenos declarados. null = no declarados (no significa "sin"). */
+  // null = no declarados (no significa "sin alérgenos").
   allergens?: string[] | null;
-  /** Días de anticipación para el encargo. null si no aplica. */
+  // Días de anticipación para el encargo; null si no aplica.
   prepDays?: number | null;
 };
 
@@ -167,19 +104,12 @@ export interface CompositionDisplay {
   quantity: number;
 }
 
-/**
- * Línea de un encargo (unión discriminada por `kind`). El frontend la usa
- * para el resumen y el mensaje de WhatsApp; el backend recalcula siempre los
- * precios (no confiar en el total del cliente). Todos los valores son
- * estimados.
- */
+// El backend recalcula siempre los precios: no confiar en el total del cliente (todos los valores son estimados).
 export interface SingleOrderLine {
   kind: "single";
   productSlug: string;
   name: string;
-  /** Unidades (normalmente 1). */
   quantity: number;
-  /** Precio estimado por unidad. */
   unitPrice: number;
 }
 
@@ -188,7 +118,6 @@ export interface ComboOrderLine {
   productSlug: string;
   name: string;
   totalUnits: number;
-  /** Precio total estimado del combo (fijo). */
   total: number;
   /** Contenido final del combo (aunque se haya editado). */
   composition: CompositionDisplay[];
@@ -206,10 +135,8 @@ export interface PackOrderLine {
   kind: "pack";
   productSlug: string;
   name: string;
-  /** Número de bandejas. */
   packCount: number;
   unitsPerPack: number;
-  /** Precio estimado por bandeja. */
   unitPrice: number;
 }
 
@@ -219,7 +146,7 @@ export type OrderLine =
   | BuilderOrderLine
   | PackOrderLine;
 
-/** Datos del negocio (Configuración). Hoy son marcadores de posición. */
+// Hoy son marcadores de posición.
 export interface StoreInfo {
   name: string;
   tagline: string;
@@ -235,7 +162,6 @@ export interface StoreInfo {
   hours: string[];
 }
 
-/** Error uniforme de la capa de datos. */
 export class ApiError extends Error {
   readonly status: number;
   readonly path: string;

@@ -7,9 +7,7 @@ const stepButton =
 
 interface QuantityStepperProps {
   value: number;
-  /** Valor mínimo alcanzable con los botones (por defecto 0). */
   min?: number;
-  /** Incremento de los botones (por defecto 1). */
   step?: number;
   /** Nombre del ítem, para las etiquetas accesibles. */
   label: string;
@@ -17,10 +15,7 @@ interface QuantityStepperProps {
   onChange: (value: number) => void;
 }
 
-/**
- * Selector de cantidad (−, campo, +) con paso y mínimo. El campo acepta
- * cualquier entero; los botones respetan el paso.
- */
+/** El campo acepta cualquier entero; los botones respetan el paso y el mínimo. */
 export function QuantityStepper({
   value,
   min = 0,

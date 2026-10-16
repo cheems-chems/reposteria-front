@@ -10,11 +10,7 @@ interface RevealProps {
   className?: string;
 }
 
-/**
- * Aparición suave al entrar en el viewport (IntersectionObserver sobre el
- * DOM, sin estado de React). Respeta `prefers-reduced-motion`: en ese caso el
- * contenido aparece de inmediato.
- */
+/** IntersectionObserver sin estado de React; con prefers-reduced-motion el contenido aparece de inmediato. */
 export function Reveal({ children, delay = 0, className }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 

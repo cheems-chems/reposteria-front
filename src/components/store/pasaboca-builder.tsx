@@ -22,11 +22,7 @@ interface PasabocaBuilderProps {
   onChangePreparation: (slug: string, preparationId: string) => void;
 }
 
-/**
- * Armador "arma el tuyo desde cero": una fila por pasaboca con selector de
- * cantidad (y preparación, si la hubiera). Empieza todo en 0; el total se
- * estima en vivo. No decide precios finales.
- */
+/** Empieza todo en 0, el total se estima en vivo; no decide precios finales. */
 export function PasabocaBuilder({
   items,
   selection,

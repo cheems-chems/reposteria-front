@@ -1,13 +1,6 @@
 import type { ProductTicketData } from "@/components/product/product-ticket";
 
-/* ============================================================================
-   DATOS DE DESARROLLO PARA /muestra — NO SON DATOS DEL NEGOCIO.
-   ----------------------------------------------------------------------------
-   Solo existen para validar la dirección visual (etapa 2) y se ELIMINAN en la
-   etapa 3, cuando llegue el contrato del backend. Ninguno se muestra en la
-   tienda pública real. Nunca usar estos nombres/precios como si fueran reales.
-   ============================================================================
-*/
+// Datos de desarrollo para /muestra: NO son datos del negocio; nunca usar estos nombres/precios como reales.
 
 export const MOCK_MUESTRA: { productos: ProductTicketData[] } = {
   productos: [

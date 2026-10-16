@@ -17,9 +17,7 @@ import { ErrorState } from "@/components/states/error-state";
 import { MOCK_MUESTRA } from "@/lib/dev/muestra";
 import { cn } from "@/lib/cn";
 
-/* ------------------------------------------------------------------ */
-/* Piezas internas de la muestra (solo visuales, no reutilizables)     */
-/* ------------------------------------------------------------------ */
+/* Piezas internas de la muestra: solo visuales, no reutilizables */
 
 function Section({
   id,
@@ -186,17 +184,12 @@ function DemoRetry() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Página                                                              */
-/* ------------------------------------------------------------------ */
-
 export default function MuestraPage() {
   const featured = MOCK_MUESTRA.productos.find((p) => p.featured);
   const rest = MOCK_MUESTRA.productos.filter((p) => !p.featured);
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-10 sm:px-8">
-      {/* Encabezado */}
       <header className="flex flex-col gap-6 border-b-2 border-vino pb-10 pt-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="mb-2 font-sans text-xs uppercase tracking-[0.24em] text-fucsia-hover">
@@ -213,7 +206,6 @@ export default function MuestraPage() {
         </Alert>
       </header>
 
-      {/* Índice */}
       <nav aria-label="Secciones de la muestra" className="border-b border-borde py-4">
         <ul className="flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-texto-suave">
           {[
@@ -236,7 +228,6 @@ export default function MuestraPage() {
         </ul>
       </nav>
 
-      {/* Marca */}
       <Section id="marca" tag="01" title="Marca">
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-12">
@@ -271,7 +262,6 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      {/* Color */}
       <Section
         id="color"
         tag="02"
@@ -292,7 +282,6 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      {/* Tipografía */}
       <Section
         id="tipografia"
         tag="03"
@@ -340,7 +329,6 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      {/* Botones */}
       <Section
         id="botones"
         tag="04"
@@ -366,7 +354,6 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      {/* Formularios */}
       <Section
         id="formularios"
         tag="05"
@@ -376,7 +363,6 @@ export default function MuestraPage() {
         <DemoForm />
       </Section>
 
-      {/* Producto */}
       <Section
         id="producto"
         tag="06"
@@ -386,7 +372,6 @@ export default function MuestraPage() {
         }
       >
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {/* Destacada ocupa 2x2 en escritorio */}
           <div className="col-span-2">
             {featured ? <ProductTicket featured product={featured} className="h-full" /> : null}
           </div>
@@ -406,7 +391,6 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      {/* Receta */}
       <Section
         id="receta"
         tag="07"
@@ -442,7 +426,6 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      {/* Estados */}
       <Section
         id="estados"
         tag="08"
@@ -485,7 +468,6 @@ export default function MuestraPage() {
         </div>
       </Section>
 
-      {/* Etiquetas y avisos */}
       <Section
         id="etiquetas"
         tag="09"

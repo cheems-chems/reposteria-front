@@ -24,62 +24,28 @@ export function sectionArtKey(
   return "casero";
 }
 
-/** Capas de color por sección, siempre salidas de los tokens de globals.css. */
+/**
+ * Identidad de color por sección: SOLO el círculo y su dibujo cambian. Los
+ * textos (título, descripción y enlace) son fijos y no dependen del círculo,
+ * así que viven en el componente, no aquí.
+ */
 export interface SectionArtTheme {
-  /** Fondo de la tarjeta/círculo. */
+  /** Fondo del círculo/panel. */
   tile: string;
-  edge: string;
-  /** Trazo del anillo discontinuo. */
-  ring: string;
-  /** Color del dibujo. */
+  /** Color del dibujo (trazo con currentColor). */
   ink: string;
-  title: string;
-  body: string;
-  link: string;
 }
 
 export function sectionArtTheme(key: SectionArtKey): SectionArtTheme {
   switch (key) {
     case "dulces":
-      return {
-        tile: "bg-fucsia",
-        edge: "border-white/40",
-        ring: "text-white/75",
-        ink: "text-white",
-        title: "text-white",
-        body: "text-white/90",
-        link: "text-white",
-      };
+      return { tile: "bg-fucsia", ink: "text-white" };
     case "salados":
-      return {
-        tile: "bg-rosa-medio",
-        edge: "border-white/70",
-        ring: "text-fucsia/70",
-        ink: "text-vino",
-        title: "text-vino",
-        body: "text-vino/80",
-        link: "text-vino",
-      };
+      return { tile: "bg-mantequilla", ink: "text-vino" };
     case "congelados":
-      return {
-        tile: "bg-lienzo",
-        edge: "border-white",
-        ring: "text-fucsia/60",
-        ink: "text-fucsia",
-        title: "text-vino",
-        body: "text-texto-suave",
-        link: "text-fucsia-hover",
-      };
+      return { tile: "bg-hielo", ink: "text-azul-oscuro" };
     default:
-      return {
-        tile: "bg-tarjeta",
-        edge: "border-borde",
-        ring: "text-fucsia/50",
-        ink: "text-fucsia",
-        title: "text-vino",
-        body: "text-texto-suave",
-        link: "text-fucsia-hover",
-      };
+      return { tile: "bg-tarjeta", ink: "text-fucsia" };
   }
 }
 

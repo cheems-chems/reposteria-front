@@ -18,8 +18,9 @@ interface SectionCircleProps {
   index: number;
 }
 
-// Círculo grande con identidad propia: fondo y dibujo por sección, anillo
-// discontinuo girando lento detrás y el dibujo se inclina al pasar el mouse.
+// Círculo grande con identidad propia: SOLO el fondo y el dibujo cambian por
+// sección. Anillo discontinuo uniforme detrás, ficha del mismo tamaño y el
+// dibujo se inclina al pasar el mouse (con prefers-reduced-motion respetado).
 export function SectionCircle({
   section,
   art,
@@ -33,15 +34,16 @@ export function SectionCircle({
     <Reveal delay={index * 90}>
       <Link
         href={`/tienda?seccion=${section.slug}`}
-        className="group flex flex-col items-center gap-3 text-center"
+        className={cn(
+          "group flex w-full max-w-52 flex-col items-center gap-3 text-center",
+          "transition-transform duration-300 ease-suave hover:-translate-y-1",
+          "motion-reduce:hover:translate-y-0",
+        )}
       >
-        <span className="relative flex size-36 items-center justify-center sm:size-48 lg:size-52">
+        <span className="relative flex size-36 shrink-0 items-center justify-center sm:size-40 lg:size-52">
           <svg
             viewBox="0 0 100 100"
-            className={cn(
-              "animate-anillo pointer-events-none absolute -inset-2",
-              theme.ring,
-            )}
+            className="animate-anillo pointer-events-none absolute -inset-2 text-fucsia/30"
             fill="none"
             stroke="currentColor"
             strokeWidth={1.4}
@@ -53,9 +55,8 @@ export function SectionCircle({
 
           <span
             className={cn(
-              "relative flex size-full items-center justify-center overflow-hidden rounded-full border-4",
+              "relative flex size-full items-center justify-center overflow-hidden rounded-full border-4 border-white/70",
               theme.tile,
-              theme.edge,
             )}
           >
             {section.imageUrl ? (
@@ -63,13 +64,13 @@ export function SectionCircle({
                 src={section.imageUrl}
                 alt={section.name}
                 fill
-                sizes="(max-width: 640px) 11rem, (max-width: 1024px) 12rem, 13rem"
+                sizes="(max-width: 640px) 9rem, (max-width: 1024px) 10rem, 13rem"
                 className="object-cover"
                 fallback={
                   <SectionArt
                     art={art}
                     className={cn(
-                      "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 sm:w-20 lg:w-24",
+                      "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 motion-reduce:group-hover:rotate-0 sm:w-20 lg:w-24",
                       theme.ink,
                     )}
                   />
@@ -79,7 +80,7 @@ export function SectionCircle({
               <SectionArt
                 art={art}
                 className={cn(
-                  "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 sm:w-20 lg:w-24",
+                  "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 motion-reduce:group-hover:rotate-0 sm:w-20 lg:w-24",
                   theme.ink,
                 )}
               />
@@ -94,13 +95,15 @@ export function SectionCircle({
           </span>
         </span>
 
-        <span className={cn("font-serif text-lg font-bold sm:text-xl", theme.title)}>
-          {section.name}
+        <span className="flex min-h-24 flex-col items-center gap-2">
+          <span className="font-serif text-lg font-bold text-vino sm:text-xl">
+            {section.name}
+          </span>
+          <span className="max-w-44 text-xs text-texto-suave sm:max-w-52 sm:text-sm">
+            {blurb}
+          </span>
         </span>
-        <span className={cn("max-w-[11rem] text-xs sm:max-w-[13rem] sm:text-sm", theme.body)}>
-          {blurb}
-        </span>
-        <span className={cn("font-sans text-sm font-semibold", theme.link)}>
+        <span className="font-sans text-sm font-semibold text-fucsia-hover">
           Ver todo →
         </span>
       </Link>

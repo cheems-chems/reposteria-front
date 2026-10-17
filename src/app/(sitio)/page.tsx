@@ -208,7 +208,7 @@ export default async function HomePage() {
 					</header>
 
 					{sections.length > 0 ? (
-						<div className="mt-12 grid grid-cols-2 justify-items-center gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-8">
+						<div className="mt-12 grid w-full grid-cols-1 items-start justify-items-center gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-8">
 							{sections.map((section, index) => (
 								<SectionCircle
 									key={section.slug}

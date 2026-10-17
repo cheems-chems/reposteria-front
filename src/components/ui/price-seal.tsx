@@ -24,9 +24,6 @@ export function PriceSeal({
 }: PriceSealProps) {
   return (
     <span className={cn("inline-flex flex-col items-start", className)}>
-      <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-fucsia-hover">
-        Valor
-      </span>
       <span className="mt-1 flex items-baseline gap-2 rounded-ticket border border-fucsia/60 bg-rosa-claro/20 px-2.5 py-1">
         <span
           className={cn(

@@ -137,6 +137,21 @@
     animation: flotar 12s ease-in-out infinite;
   }
 
+  /* Torta del héroe: flotación muy discreta (±4 px) */
+  .animate-torta {
+    animation: torta-flota 6s ease-in-out infinite;
+  }
+
+  /* Destellos rosados que parpadean despacio alrededor de la torta */
+  .animate-destello {
+    animation: destello 4.5s ease-in-out infinite;
+  }
+
+  /* Entrada del texto del héroe (una sola vez): fade + subida de 16 px */
+  .animate-entrada {
+    animation: entrada 600ms ease-out both;
+  }
+
   /* Franja de frases: deslizamiento continuo (contenido duplicado) */
   .animate-desfile {
     animation: desfile 32s linear infinite;
@@ -147,9 +162,9 @@
     animation: girar 28s linear infinite;
   }
 
-  /* Sello giratorio "Hecho en casa" */
+  /* Sello giratorio "Hecho en casa" (una vuelta cada 28 s) */
   .animate-sello {
-    animation: girar 18s linear infinite;
+    animation: girar 28s linear infinite;
   }
 
   /* Puntitos decorativos (como patrón de fondo tipo confeti) */
@@ -190,6 +205,39 @@
   }
   50% {
     transform: translateY(-14px);
+  }
+}
+
+@keyframes torta-flota {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes destello {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -244,7 +292,11 @@
   html {
     scroll-behavior: auto;
   }
-  .reveal {
+  .reveal,
+  .animate-torta,
+  .animate-destello,
+  .animate-entrada,
+  .animate-sello {
     animation: none;
   }
   *,

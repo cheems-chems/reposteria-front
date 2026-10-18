@@ -1,9 +1,10 @@
-import { SectionArt } from "@/components/ui/section-art";
-
 // Sello circular con texto curvo que gira lento.
-function HeroSeal() {
+export function HeroSeal() {
   return (
-    <span className="absolute bottom-2 right-2 z-0 flex size-16 items-center justify-center sm:right-6 sm:size-28">
+    <span
+      aria-hidden="true"
+      className="absolute bottom-2 right-2 z-20 flex size-16 items-center justify-center sm:right-6 sm:size-28"
+    >
       <svg
         viewBox="0 0 100 100"
         className="animate-sello size-full"
@@ -44,10 +45,8 @@ function HeroSeal() {
   );
 }
 
-// Héroe ilustrado: los dibujos del catálogo flotan sobre un círculo fucsia
-// grande. Sin fotos de stock; si hay foto real, la reemplaza la imagen.
-// Contenedor con alto/ancho acotado en móvil + overflow-hidden: ningún dibujo
-// puede salirse ni montarse sobre el texto y los botones del héroe.
+// Héroe ilustrado: círculo fucsia grande como marco.
+// Contenedor con alto/ancho acotado en móvil + overflow-hidden.
 export function HeroArt() {
   return (
     <div
@@ -57,24 +56,6 @@ export function HeroArt() {
       <span className="size-44 rounded-full bg-fucsia sm:size-64 lg:size-80" />
       <span className="absolute -left-3 top-3 z-0 size-16 animate-flotar rounded-full bg-rosa-medio sm:-left-2 sm:top-4 sm:size-28" />
       <span className="absolute bottom-4 left-2 z-0 size-12 animate-flotar-lento rounded-full bg-rosa-claro sm:bottom-6 sm:left-0 sm:size-20" />
-
-      <SectionArt
-        art="dulces"
-        className="absolute left-[6%] top-[6%] z-0 w-16 animate-flotar text-white sm:left-[12%] sm:top-[10%] sm:w-28"
-      />
-      <SectionArt
-        art="salados"
-        className="absolute bottom-[8%] left-[5%] z-0 w-20 animate-flotar-lento text-white sm:bottom-[12%] sm:left-auto sm:right-[10%] sm:w-32"
-      />
-      <SectionArt
-        art="congelados"
-        className="absolute right-[8%] top-[8%] z-0 w-12 animate-flotar text-white/90 sm:right-[16%] sm:w-20"
-      />
-      <SectionArt
-        art="casero"
-        className="absolute bottom-[6%] left-[42%] z-0 w-10 animate-flotar-lento text-white/90 sm:bottom-[14%] sm:left-[18%] sm:w-16"
-      />
-
       <HeroSeal />
     </div>
   );

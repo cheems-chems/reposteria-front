@@ -7,8 +7,9 @@ import {
 	SectionHeading,
 	WaveDivider,
 } from '@/components/home/decor';
-import { HeroArt } from '@/components/home/hero-art';
+import Image from 'next/image';
 import { ReviewsBlock } from '@/components/home/reviews-block';
+import { HeroSeal } from '@/components/home/hero-art';
 import { SectionCircle } from '@/components/home/section-circle';
 import { Reveal } from '@/components/home/reveal';
 import { ButtonLink } from '@/components/ui/button-link';
@@ -19,6 +20,19 @@ import {
 	sectionArtKey,
 	sectionArtTheme,
 } from '@/components/ui/section-art';
+
+const HERO_IMAGE = '/img/hero.png';
+const HERO_ALT = 'Torta rosada de tres pisos';
+const HERO_TEXTO =
+	'Tortas, postres y pasabocas hechos por Elvi, a tu gusto. Arma tu pedido y lo confirmamos por WhatsApp.';
+
+// Destellos rosados alrededor de la torta (posición relativa al círculo fucsia).
+const HERO_SPARKLES: { className: string; delay: string }[] = [
+	{ className: '-top-5 -left-7', delay: '0s' },
+	{ className: '-top-3 -right-6', delay: '1.5s' },
+	{ className: '-bottom-4 -left-5', delay: '3s' },
+	{ className: 'bottom-24 -right-4', delay: '0.75s' },
+];
 import { orderLineForProduct } from '@/lib/encargo';
 import {
 	getCategories,
@@ -27,10 +41,8 @@ import {
 	getProducts,
 	getReviews,
 	getSections,
-	getStoreInfo,
 	type ComboProduct,
 } from '@/lib/api';
-import { brand } from '@/lib/brand';
 import {
 	bannerCombo,
 	comoFuncionaSteps,
@@ -41,10 +53,9 @@ import {
 } from '@/content/home';
 
 export default async function HomePage() {
-	const [sections, store, featured, comboItems, products, categories, reviews] =
+	const [sections, featured, comboItems, products, categories, reviews] =
 		await Promise.all([
 			getSections(),
-			getStoreInfo(),
 			getFeaturedProducts(),
 			getComboItems(),
 			getProducts(),
@@ -111,22 +122,28 @@ export default async function HomePage() {
 					className="pointer-events-none absolute inset-0 overflow-hidden"
 				>
 					<span className="absolute -bottom-28 -left-16 size-64 rounded-full bg-rosa-medio sm:size-80" />
-					<span className="absolute -top-10 right-1/4 size-40 rounded-full bg-rosa-claro animate-flotar-lento sm:size-56" />
+					<span className="absolute -top-16 -right-16 size-40 rounded-full bg-rosa-claro/40 animate-flotar-lento sm:size-56 lg:-top-10 lg:right-1/4 lg:bg-rosa-claro" />
 					<span className="absolute -right-24 -top-24 hidden size-96 rounded-full bg-fucsia lg:block" />
 					<span className="absolute -bottom-20 -right-10 hidden size-56 rounded-full bg-fucsia lg:block" />
 				</div>
 
 				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-8 lg:py-20">
 					<div className="relative z-10 flex flex-col items-start gap-5">
-						<h1 className="font-serif text-4xl leading-[1.05] text-vino sm:text-5xl lg:text-6xl">
+						<h1 className="animate-entrada font-serif text-4xl leading-[1.05] text-vino sm:text-5xl lg:text-6xl">
 							Hecho en casa,
 							<br />
 							pensado para <span className="text-fucsia">compartir.</span>
 						</h1>
-						<p className="max-w-md text-lg text-texto">
-							{store.description ?? brand.description}
+						<p
+							className="animate-entrada max-w-md text-lg text-texto"
+							style={{ animationDelay: '120ms' }}
+						>
+							{HERO_TEXTO}
 						</p>
-						<div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+						<div
+							className="animate-entrada mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
+							style={{ animationDelay: '240ms' }}
+						>
 							<ButtonLink href="/tienda" size="lg" className="w-full sm:w-auto">
 								Ver la tienda
 							</ButtonLink>
@@ -142,52 +159,77 @@ export default async function HomePage() {
 					</div>
 
 					<div className="relative z-0 mx-auto w-full max-w-xl lg:mx-0 lg:-mr-12 lg:max-w-none">
-						<span
-							aria-hidden="true"
-							className="absolute -inset-4 rounded-[2.5rem] bg-rosa-claro/60"
-						/>
-						{/* Para usar foto real: coloca el archivo en public/brand/hero.jpg y pon brand.hero.image = "/brand/hero.jpg" en src/lib/brand.ts */}
-						{brand.hero.image ? (
-							<div className="relative h-64 w-full overflow-hidden sm:h-80 lg:aspect-3/2 lg:h-auto">
-								<SafeImage
-									src={brand.hero.image}
-									alt={brand.hero.alt}
-									fill
-									priority
-									sizes="(max-width: 1024px) 92vw, 560px"
-									className="object-contain object-bottom drop-shadow-[0_24px_45px_rgba(90,18,51,0.22)]"
-									fallback={<HeroArt />}
-								/>
-							</div>
-						) : (
-							<HeroArt />
-						)}
+						<div className="relative mx-auto flex w-full max-w-[340px] justify-center sm:max-w-md lg:max-w-none">
+							<span
+								aria-hidden="true"
+								className="absolute left-1/2 top-1/2 size-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fucsia sm:size-64 lg:size-80"
+							>
+								<span className="absolute -top-4 right-2 size-14 animate-flotar rounded-full bg-rosa-medio sm:size-20 lg:size-24" />
+								<span className="absolute -bottom-4 left-1 size-12 animate-flotar-lento rounded-full bg-rosa-claro sm:size-16 lg:size-20" />
+								{HERO_SPARKLES.map((sparkle) => (
+									<span
+										key={sparkle.className}
+										className={`absolute size-3 animate-destello text-fucsia/60 sm:size-4 ${sparkle.className}`}
+										style={{ animationDelay: sparkle.delay }}
+									>
+										<svg
+											viewBox="0 0 24 24"
+											className="size-full"
+											fill="currentColor"
+											aria-hidden="true"
+										>
+											<path d="M12 0c.9 6.6 5.5 11.1 12 12-6.5.9-11.1 5.4-12 12-.9-6.6-5.5-11.1-12-12C6.5 11.1 11.1 6.6 12 0Z" />
+										</svg>
+									</span>
+								))}
+							</span>
+							<Image
+								src={HERO_IMAGE}
+								alt={HERO_ALT}
+								priority
+								width={1537}
+								height={1023}
+								sizes="(max-width: 640px) 435px, (max-width: 1024px) 530px, 660px"
+								className="pointer-events-none relative z-10 h-72 w-auto max-w-none shrink-0 animate-torta object-contain drop-shadow-[0_24px_45px_rgba(90,18,51,0.22)] sm:h-[352px] lg:h-[436px]"
+							/>
+							<HeroSeal />
+						</div>
 					</div>
 				</div>
 			</section>
 
-			<section className="border-y border-borde bg-tarjeta">
-				<ul className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-x-4 gap-y-5 px-5 py-8 sm:gap-x-6 sm:gap-y-6 sm:px-8 lg:grid-cols-4">
-					{trust.map((item) => (
-						<li key={item.label} className="flex items-start gap-3">
-							<svg
-								viewBox="0 0 24 24"
-								className="size-6 shrink-0 text-fucsia sm:size-7"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth={1.6}
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								aria-hidden="true"
+			<section className="relative z-10 mx-auto -mt-8 w-full max-w-6xl px-5 sm:-mt-10 sm:px-8">
+				<div className="rounded-2xl border border-borde bg-white shadow-[0_20px_60px_rgba(90,18,51,0.08)]">
+					<ul className="mx-auto grid w-full grid-cols-2 gap-x-5 gap-y-6 px-5 py-6 sm:gap-x-6 sm:px-6 sm:py-7 lg:grid-cols-4 lg:gap-x-8">
+						{trust.map((item, idx) => (
+							<li
+								key={item.label}
+								className={`flex flex-col items-start gap-2 ${
+									idx > 0 ? 'lg:border-l lg:border-borde/60 lg:pl-6' : 'lg:pr-4'
+								}`}
 							>
-								<path d={item.path} />
-							</svg>
-							<span className="font-sans text-xs leading-snug font-medium text-vino sm:text-sm">
-								{item.label}
-							</span>
-						</li>
-					))}
-				</ul>
+								<svg
+									viewBox="0 0 24 24"
+									className="size-10 shrink-0 text-fucsia sm:size-11"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth={1.6}
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									aria-hidden="true"
+								>
+									<path d={item.path} />
+								</svg>
+								<span className="font-sans text-sm font-bold text-vino sm:text-base">
+									{item.label}
+								</span>
+								<span className="font-sans text-xs text-texto-suave sm:text-sm">
+									{item.description}
+								</span>
+							</li>
+						))}
+					</ul>
+				</div>
 			</section>
 
 			<section className="relative overflow-x-clip border-b border-borde bg-rosa-claro/40">

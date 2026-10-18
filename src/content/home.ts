@@ -2,6 +2,7 @@
 
 export interface TrustItem {
   label: string;
+  description?: string;
   path: string;
 }
 
@@ -17,19 +18,23 @@ export interface PasoItem {
 
 export const trust: TrustItem[] = [
   {
-    label: "Hechos en casa",
+    label: "Hecho en casa",
+    description: "Preparado fresco por Elvi",
     path: "M3 10.5 12 3l9 7.5M5.5 9.5V21h13V9.5M10 21v-6h4v6",
   },
   {
     label: "Ingredientes seleccionados",
+    description: "Calidad en cada receta",
     path: "M5 19c8 0 14-6 14-14-8 0-14 6-14 14Zm0 0c2-5 6-9 11-11",
   },
   {
-    label: "Perfectos para cualquier ocasión",
+    label: "Para cada ocasión",
+    description: "Cumpleaños, reuniones y eventos",
     path: "M12 4v3M12 17v3M4 12h3M17 12h3M6.5 6.5 8.6 8.6M15.4 15.4l2.1 2.1M17.5 6.5 15.4 8.6M8.6 15.4 6.5 17.5",
   },
   {
-    label: "Pedidos por encargo vía WhatsApp",
+    label: "Pedidos por WhatsApp",
+    description: "Atención directa y personalizada",
     path: "M4 5h16v11H9l-5 4V5Z",
   },
 ];

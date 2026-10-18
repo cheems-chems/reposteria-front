@@ -2,7 +2,6 @@ import { AddToCartButton } from '@/components/cart/add-to-cart-button';
 import { ProductGrid } from '@/components/store/product-grid';
 import {
 	CheckList,
-	FloatingDots,
 	Marquee,
 	SectionHeading,
 	WaveDivider,
@@ -116,17 +115,7 @@ export default async function HomePage() {
 
 	return (
 		<main className="flex flex-1 flex-col">
-			<section className="relative overflow-x-clip bg-lienzo">
-				<div
-					aria-hidden="true"
-					className="pointer-events-none absolute inset-0 overflow-hidden"
-				>
-					<span className="absolute -bottom-28 -left-16 size-64 rounded-full bg-rosa-medio sm:size-80" />
-					<span className="absolute -top-16 -right-16 size-40 rounded-full bg-rosa-claro/40 animate-flotar-lento sm:size-56 lg:-top-10 lg:right-1/4 lg:bg-rosa-claro" />
-					<span className="absolute -right-24 -top-24 hidden size-96 rounded-full bg-fucsia lg:block" />
-					<span className="absolute -bottom-20 -right-10 hidden size-56 rounded-full bg-fucsia lg:block" />
-				</div>
-
+			<section className="relative overflow-x-clip">
 				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-8 lg:py-20">
 					<div className="relative z-10 flex flex-col items-start gap-5">
 						<h1 className="animate-entrada font-serif text-4xl leading-[1.05] text-vino sm:text-5xl lg:text-6xl">
@@ -159,7 +148,7 @@ export default async function HomePage() {
 					</div>
 
 					<div className="relative z-0 mx-auto w-full max-w-xl lg:mx-0 lg:-mr-12 lg:max-w-none">
-						<div className="relative mx-auto flex w-full max-w-[340px] justify-center sm:max-w-md lg:max-w-none">
+						<div className="relative mx-auto flex w-full max-w-85 justify-center sm:max-w-md lg:max-w-none">
 							<span
 								aria-hidden="true"
 								className="absolute left-1/2 top-1/2 size-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fucsia sm:size-64 lg:size-80"
@@ -232,12 +221,7 @@ export default async function HomePage() {
 				</div>
 			</section>
 
-			<section className="relative overflow-x-clip border-b border-borde bg-rosa-claro/40">
-				<FloatingDots className="left-6 top-10 hidden text-fucsia/40 sm:block" />
-				<span
-					aria-hidden="true"
-					className="absolute -right-28 top-1/2 hidden size-80 -translate-y-1/2 rounded-full bg-rosa-medio/70 lg:block"
-				/>
+			<section className="relative border-b border-borde bg-rosa-claro/40">
 				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
 					<header className="text-center">
 						<h2 className="font-serif text-3xl text-vino sm:text-4xl">
@@ -271,8 +255,7 @@ export default async function HomePage() {
 			</section>
 
 			{highlightCombo ? (
-				<section className="relative overflow-x-clip bg-lienzo">
-					<FloatingDots className="right-6 top-24 hidden text-rosa-medio sm:block" />
+				<section className="relative">
 					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 						<Reveal>
 							<div className="grid items-center gap-10 lg:grid-cols-2">
@@ -330,11 +313,7 @@ export default async function HomePage() {
 			) : null}
 
 			{moreProducts.length > 0 ? (
-				<section className="relative overflow-x-clip border-t border-borde bg-tarjeta">
-					<span
-						aria-hidden="true"
-						className="absolute -bottom-24 -left-20 hidden size-64 rounded-full bg-rosa-claro lg:block"
-					/>
+				<section className="relative border-t border-borde bg-tarjeta">
 					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 						<Reveal>
 							<SectionHeading

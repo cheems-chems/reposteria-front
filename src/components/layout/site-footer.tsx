@@ -3,7 +3,6 @@ import { Logo } from "@/components/brand/logo";
 import { CopyrightYear } from "@/components/layout/copyright-year";
 import { InstagramIcon } from "@/components/ui/instagram-icon";
 import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
-import { DecorativeBubbles } from "@/components/ui/decorative-bubbles";
 import { buttonClasses } from "@/components/ui/button";
 import { getStoreInfo } from "@/lib/api";
 import { brand } from "@/lib/brand";
@@ -81,9 +80,7 @@ export async function SiteFooter() {
   const instagramHref = footerContent.social.instagram || null;
 
   return (
-    <footer className="relative isolate mt-16 overflow-hidden border-t border-rosa-medio/60 bg-gradient-to-b from-rosa-palido/80 via-rosa-palido/30 to-rosa-palido/20">
-      <DecorativeBubbles preset="b" />
-
+    <footer className="relative mt-16">
       <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-8 gap-y-6 px-5 py-8 sm:px-8 md:grid-cols-[1.3fr_1fr_1.2fr] md:gap-x-6 md:py-10 md:gap-y-8">
         <div className="flex flex-col items-start gap-2">
           <Logo size="footer" showText={false} className="self-start" />

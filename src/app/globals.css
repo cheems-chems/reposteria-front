@@ -25,15 +25,12 @@
   --color-bg: #FFF1F4; /* rosa pastel original */
 
   /* Degradado de la franja "Arma tu combo": inicio oscuro (lado del texto)
-     hacia coral rosado. Las ondas usan las variables de la paleta. */
+     hacia coral rosado. Las secciones vecinas son transparentes, así que las
+     ondas empalman con el fondo del body (--color-bg). */
   --color-combo-from: #D6195F;
   --color-combo-to: #F06292;
-  --color-combo-wave-top: color-mix(
-    in srgb,
-    var(--color-rosa-palido) 60%,
-    var(--color-bg)
-  );
-  --color-combo-wave-bottom: var(--color-rosa-palido);
+  --color-combo-wave-top: var(--color-bg);
+  --color-combo-wave-bottom: var(--color-bg);
 }
 
 @theme inline {

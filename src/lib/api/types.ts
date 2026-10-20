@@ -113,6 +113,15 @@ export interface SingleOrderLine {
   unitPrice: number;
 }
 
+/** Unidades por encima del combo, con su precio unitario. */
+export interface ComboExtra {
+  productSlug: string;
+  name: string;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
+}
+
 export interface ComboOrderLine {
   kind: "combo";
   productSlug: string;
@@ -121,6 +130,13 @@ export interface ComboOrderLine {
   total: number;
   /** Contenido final del combo (aunque se haya editado). */
   composition: CompositionDisplay[];
+  /** Precio base del combo sin extras. */
+  basePrice?: number;
+  /** Unidades por encima del total base del combo. */
+  extraUnits?: number;
+  extras?: ComboExtra[];
+  /** La distribución o el total difieren del combo original. */
+  customized?: boolean;
 }
 
 export interface BuilderOrderLine {

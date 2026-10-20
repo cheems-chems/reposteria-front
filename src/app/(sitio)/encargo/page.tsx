@@ -27,7 +27,7 @@ function FlowSkeleton() {
 async function EncargoLoader({
   searchParams,
 }: {
-  searchParams: Promise<{ producto?: string; categoria?: string }>;
+  searchParams: Promise<{ producto?: string; categoria?: string; modo?: string }>;
 }) {
   const [products, comboItems, categories, store, params] = await Promise.all([
     getProducts(),
@@ -45,6 +45,7 @@ async function EncargoLoader({
       whatsapp={store.whatsapp ?? null}
       initialProductSlug={params.producto}
       initialCategorySlug={params.categoria}
+      initialMode={params.modo}
     />
   );
 }
@@ -52,7 +53,7 @@ async function EncargoLoader({
 export default function EncargoPage({
   searchParams,
 }: {
-  searchParams: Promise<{ producto?: string; categoria?: string }>;
+  searchParams: Promise<{ producto?: string; categoria?: string; modo?: string }>;
 }) {
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-5 py-10 sm:px-8">

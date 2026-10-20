@@ -12,6 +12,8 @@ interface QuantityStepperProps {
   /** Nombre del ítem, para las etiquetas accesibles. */
   label: string;
   invalid?: boolean;
+  /** Bloquea el "−" aunque la cantidad sea mayor que 0 (p. ej. mínimo global). */
+  disableDecrease?: boolean;
   onChange: (value: number) => void;
 }
 
@@ -22,6 +24,7 @@ export function QuantityStepper({
   step = 1,
   label,
   invalid,
+  disableDecrease,
   onChange,
 }: QuantityStepperProps) {
   function decrease() {
@@ -48,7 +51,7 @@ export function QuantityStepper({
         className={stepButton}
         aria-label={`Quitar cantidad de ${label}`}
         onClick={decrease}
-        disabled={value <= 0}
+        disabled={value <= 0 || disableDecrease}
       >
         −
       </button>

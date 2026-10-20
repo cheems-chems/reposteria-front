@@ -10,6 +10,7 @@ import {
   comboFill,
   comboOrderLine,
   comboQuantitiesOf,
+  calcularPrecioCombo,
   lineTotal,
   orderTotals,
   productPrice,
@@ -216,7 +217,83 @@ describe("saleMode combo", () => {
 
   it("cuenta las unidades del combo aunque esté vacío", () => {
     const line = comboOrderLine(COMBO, {}, COMBO_ITEMS);
-    expect(orderTotals([line])).toEqual({ units: 60, total: 43000 });
+    expect(orderTotals([line])).toEqual({ units: 0, total: 43000 });
+  });
+});
+
+describe("calcularPrecioCombo", () => {
+  it("cobra el precio base sin cambios", () => {
+    const pricing = calcularPrecioCombo(
+      COMBO,
+      comboQuantitiesOf(COMBO),
+      COMBO_ITEMS,
+    );
+    expect(pricing.units).toBe(60);
+    expect(pricing.extraUnits).toBe(0);
+    expect(pricing.extras).toEqual([]);
+    expect(pricing.total).toBe(43000);
+    expect(pricing.customized).toBe(false);
+    expect(pricing.belowMinimum).toBe(false);
+  });
+
+  it("mantiene el precio base al redistribuir con el mismo total", () => {
+    const pricing = calcularPrecioCombo(
+      COMBO,
+      { deditos: 30, empanadas: 15, ojitos: 10, "bolitas-de-carne": 5 },
+      COMBO_ITEMS,
+    );
+    expect(pricing.units).toBe(60);
+    expect(pricing.extraUnits).toBe(0);
+    expect(pricing.extras).toEqual([]);
+    expect(pricing.total).toBe(43000);
+    expect(pricing.customized).toBe(true);
+  });
+
+  it("suma cada unidad extra al precio unitario del pasaboca", () => {
+    const pricing = calcularPrecioCombo(
+      COMBO,
+      { deditos: 20, empanadas: 15, ojitos: 15, "bolitas-de-carne": 15 },
+      COMBO_ITEMS,
+    );
+    expect(pricing.units).toBe(65);
+    expect(pricing.extraUnits).toBe(5);
+    expect(pricing.extras).toEqual([
+      {
+        productSlug: "deditos",
+        name: "Deditos",
+        quantity: 5,
+        unitPrice: 1000,
+        subtotal: 5000,
+      },
+    ]);
+    expect(pricing.extrasTotal).toBe(5000);
+    expect(pricing.total).toBe(48000);
+  });
+
+  it("compensa las unidades extra con las que se quitan de otro pasaboca", () => {
+    const pricing = calcularPrecioCombo(
+      COMBO,
+      { deditos: 25, empanadas: 10, ojitos: 15, "bolitas-de-carne": 15 },
+      COMBO_ITEMS,
+    );
+    expect(pricing.units).toBe(65);
+    expect(pricing.extraUnits).toBe(5);
+    expect(pricing.extras).toHaveLength(1);
+    expect(pricing.extras[0]?.quantity).toBe(5);
+    expect(pricing.total).toBe(48000);
+  });
+
+  it("marca la selección cuando intenta bajar del mínimo sin cobrar extras", () => {
+    const pricing = calcularPrecioCombo(
+      COMBO,
+      { deditos: 10, empanadas: 10, ojitos: 10, "bolitas-de-carne": 10 },
+      COMBO_ITEMS,
+    );
+    expect(pricing.units).toBe(40);
+    expect(pricing.belowMinimum).toBe(true);
+    expect(pricing.extraUnits).toBe(0);
+    expect(pricing.extras).toEqual([]);
+    expect(pricing.total).toBe(43000);
   });
 });
 

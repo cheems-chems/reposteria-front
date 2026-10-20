@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/field";
@@ -44,6 +44,8 @@ interface EncargoFlowProps {
   whatsapp: string | null;
   initialProductSlug?: string;
   initialCategorySlug?: string;
+  /** "armar" abre directo el armador de pasabocas de la categoría. */
+  initialMode?: string;
 }
 
 const STEP_TITLES = [
@@ -117,6 +119,10 @@ function computeInitial(props: EncargoFlowProps): InitialState {
     };
   }
 
+  if (props.initialMode === "armar" && !product && !comboItem) {
+    state.choice = BUILDER;
+  }
+
   return state;
 }
 
@@ -153,6 +159,8 @@ export function EncargoFlow(props: EncargoFlowProps) {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [opened, setOpened] = useState(false);
+  const builderRef = useRef<HTMLDivElement | null>(null);
+  const autoScrolled = useRef(false);
 
   const category =
     categorySlug !== null
@@ -185,6 +193,19 @@ export function EncargoFlow(props: EncargoFlowProps) {
   const isBuilderChoice = choice === BUILDER;
   const isCustom = choice === OTRO;
   const waNumber = normalizeWhatsApp(whatsapp);
+
+  useEffect(() => {
+    if (props.initialMode !== "armar" || !isBuilderChoice) return;
+    if (autoScrolled.current) return;
+    const id = window.setTimeout(() => {
+      autoScrolled.current = true;
+      builderRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+    return () => window.clearTimeout(id);
+  }, [props.initialMode, isBuilderChoice]);
 
   const orderLines: OrderLine[] = (() => {
     if (categorySlug === null) return [];
@@ -288,14 +309,10 @@ export function EncargoFlow(props: EncargoFlowProps) {
         } else if (selectedCombo) {
           if (selectedCombo.editable) {
             const fill = comboFill(selectedCombo, comboSelection);
-            if (!fill.matches) {
-              return fill.missing > 0
-                ? `Te faltan ${fill.missing} ${
-                    fill.missing === 1 ? "unidad" : "unidades"
-                  } del combo.`
-                : `Te sobran ${fill.excess} ${
-                    fill.excess === 1 ? "unidad" : "unidades"
-                  } del combo.`;
+            if (fill.missing > 0) {
+              return `Te faltan ${fill.missing} ${
+                fill.missing === 1 ? "unidad" : "unidades"
+              } del combo.`;
             }
           }
         } else {
@@ -364,6 +381,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
             break;
           case "combo": {
             lines.push(`Combo: ${line.name} (${line.totalUnits} unidades)`);
+            if (line.customized) lines.push("Combo personalizado");
             if (line.composition.length > 0) {
               lines.push(
                 `Composición: ${line.composition
@@ -371,6 +389,28 @@ export function EncargoFlow(props: EncargoFlowProps) {
                   .join(", ")}`,
               );
             }
+            if (line.extraUnits && line.extraUnits > 0) {
+              lines.push(
+                `Incluye ${line.extraUnits} ${
+                  line.extraUnits === 1 ? "unidad extra" : "unidades extra"
+                }${
+                  line.extras && line.extras.length > 0
+                    ? `: ${line.extras
+                        .map(
+                          (extra) =>
+                            `${extra.quantity} × ${extra.name} (${formatCOP(
+                              extra.subtotal,
+                            )})`,
+                        )
+                        .join(", ")}`
+                    : ""
+                }`,
+              );
+            }
+            if (line.basePrice != null) {
+              lines.push(`Precio base: ${formatCOP(line.basePrice)}`);
+            }
+            lines.push(`Total del combo: ${formatCOP(line.total)}`);
             break;
           }
           case "builder":
@@ -477,8 +517,8 @@ export function EncargoFlow(props: EncargoFlowProps) {
 
             {step === 0 && categorySlug !== null && kind === "combo" ? (
               <p className="text-sm text-texto-suave">
-                Elige un combo o arma el tuyo desde cero. Puedes ajustar la
-                distribución de un combo sin cambiar su precio.
+                Elige un combo o arma el tuyo desde cero. Cambia los pasabocas a
+                tu gusto. Si agregas unidades extra, se suman al total.
               </p>
             ) : null}
 
@@ -624,13 +664,18 @@ export function EncargoFlow(props: EncargoFlowProps) {
                 ) : null}
 
                 {isBuilderChoice ? (
-                  <PasabocaBuilder
-                    items={categoryItems}
-                    selection={builderSelection}
-                    minTotalUnits={minTotalUnits}
-                    onChangeQuantity={setBuilderQuantity}
-                    onChangePreparation={setBuilderPreparation}
-                  />
+                  <div
+                    ref={builderRef}
+                    className="scroll-mt-24 sm:scroll-mt-28"
+                  >
+                    <PasabocaBuilder
+                      items={categoryItems}
+                      selection={builderSelection}
+                      minTotalUnits={minTotalUnits}
+                      onChangeQuantity={setBuilderQuantity}
+                      onChangePreparation={setBuilderPreparation}
+                    />
+                  </div>
                 ) : null}
 
                 <Link
@@ -849,6 +894,33 @@ export function EncargoFlow(props: EncargoFlowProps) {
                             {item.name} ×{item.quantity}
                           </span>
                         ))}
+                        {line.customized ? (
+                          <span className="mt-1 font-sans text-xs font-medium text-fucsia-hover">
+                            Combo personalizado
+                          </span>
+                        ) : null}
+                        {line.extraUnits && line.extraUnits > 0 ? (
+                          <span className="text-xs text-texto-suave">
+                            Incluye {line.extraUnits}{" "}
+                            {line.extraUnits === 1
+                              ? "unidad extra"
+                              : "unidades extra"}
+                          </span>
+                        ) : null}
+                        {(line.extras ?? []).map((extra) => (
+                          <span
+                            key={extra.productSlug}
+                            className="tabular text-xs text-texto-suave"
+                          >
+                            Extras: {extra.quantity} × {extra.name} ·{" "}
+                            {formatCOP(extra.subtotal)}
+                          </span>
+                        ))}
+                        {line.basePrice != null ? (
+                          <span className="tabular text-xs text-texto-suave">
+                            Precio base: {formatCOP(line.basePrice)}
+                          </span>
+                        ) : null}
                       </dd>
                     </div>
                   ) : null,

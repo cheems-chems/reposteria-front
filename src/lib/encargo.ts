@@ -2,6 +2,7 @@
 
 import type {
   BuilderItemProduct,
+  ComboExtra,
   ComboProduct,
   CompositionDisplay,
   OrderLine,
@@ -147,18 +148,102 @@ export function comboCompositionDisplay(
     .filter((item) => item.quantity > 0);
 }
 
+export interface ComboPricing {
+  /** Unidades del combo en la selección actual. */
+  units: number;
+  /** Unidades incluidas en el precio base. */
+  baseUnits: number;
+  /** Unidades por encima del precio base. */
+  extraUnits: number;
+  basePrice: number;
+  extras: ComboExtra[];
+  extrasTotal: number;
+  total: number;
+  /** La distribución o el total difieren del combo original. */
+  customized: boolean;
+  /** La selección no alcanza las unidades mínimas del combo. */
+  belowMinimum: boolean;
+}
+
+/**
+ * Regla de precio de combos editables:
+ * - Con el total de unidades del combo (o menos), se paga el precio base,
+ *   aunque cambien las proporciones.
+ * - Cada unidad por encima del total se cobra al precio unitario del pasaboca
+ *   que la aporta; las unidades quitadas de otros pasabocas compensan primero.
+ * - El mínimo es el total de unidades del combo.
+ * Función pura: no valida la UI, solo describe el precio.
+ */
+export function calcularPrecioCombo(
+  combo: ComboProduct,
+  cantidades: PackSelection,
+  items: BuilderItemProduct[],
+): ComboPricing {
+  const allowedSlugs = comboAllowedSlugs(combo);
+  const baseBySlug = new Map(
+    combo.composition.map((item) => [item.productSlug, item.quantity]),
+  );
+  const units = allowedSlugs.reduce(
+    (acc, slug) => acc + (cantidades[slug] ?? 0),
+    0,
+  );
+  const extraUnits = Math.max(0, units - combo.totalUnits);
+
+  const extras: ComboExtra[] = [];
+  let pending = extraUnits;
+  for (const slug of allowedSlugs) {
+    if (pending <= 0) break;
+    const quantity = cantidades[slug] ?? 0;
+    const added = quantity - (baseBySlug.get(slug) ?? 0);
+    if (added <= 0) continue;
+    const charged = Math.min(pending, added);
+    pending -= charged;
+    const item = items.find((entry) => entry.slug === slug);
+    const unitPrice = item?.unitPrice ?? 0;
+    extras.push({
+      productSlug: slug,
+      name: item?.name ?? slug,
+      quantity: charged,
+      unitPrice,
+      subtotal: unitPrice * charged,
+    });
+  }
+
+  const extrasTotal = extras.reduce((acc, extra) => acc + extra.subtotal, 0);
+  const customized = allowedSlugs.some(
+    (slug) => (cantidades[slug] ?? 0) !== (baseBySlug.get(slug) ?? 0),
+  );
+
+  return {
+    units,
+    baseUnits: combo.totalUnits,
+    extraUnits,
+    basePrice: combo.price,
+    extras,
+    extrasTotal,
+    total: combo.price + extrasTotal,
+    customized,
+    belowMinimum: units < combo.totalUnits,
+  };
+}
+
 export function comboOrderLine(
   combo: ComboProduct,
   selection: PackSelection,
   items: BuilderItemProduct[],
 ): OrderLine {
+  const pricing = calcularPrecioCombo(combo, selection, items);
   return {
     kind: "combo",
     productSlug: combo.slug,
     name: combo.name,
-    totalUnits: combo.totalUnits,
-    total: combo.price,
+    totalUnits: pricing.units,
+    total: pricing.total,
     composition: comboCompositionDisplay(combo, selection, items),
+    basePrice: pricing.basePrice,
+    extraUnits: pricing.extraUnits,
+    extras: pricing.extras,
+    customized: pricing.customized,
   };
 }
 

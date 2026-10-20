@@ -43,7 +43,9 @@ export function cartCount(items: CartItem[]): number {
 export function itemDescription(item: CartItem): string | null {
   switch (item.line.kind) {
     case "combo":
-      return `${item.line.totalUnits} unidades`;
+      return item.line.customized
+        ? `Combo personalizado · ${item.line.totalUnits} unidades`
+        : `${item.line.totalUnits} unidades`;
     case "pack":
       return `${item.line.unitsPerPack} u. por bandeja`;
     default:
@@ -73,6 +75,25 @@ export function buildCartMessage(items: CartItem[]): string {
             `  Composición: ${line.composition
               .map((part) => `${part.name} ${part.quantity}`)
               .join(", ")}`,
+          );
+        }
+        if (line.customized) lines.push("  Combo personalizado");
+        if (line.extraUnits && line.extraUnits > 0) {
+          lines.push(
+            `  Incluye ${line.extraUnits} ${
+              line.extraUnits === 1 ? "unidad extra" : "unidades extra"
+            }${
+              line.extras && line.extras.length > 0
+                ? `: ${line.extras
+                    .map(
+                      (extra) =>
+                        `${extra.quantity} × ${extra.name} (${formatCOP(
+                          extra.subtotal,
+                        )})`,
+                    )
+                    .join(", ")}`
+                : ""
+            }`,
           );
         }
         break;

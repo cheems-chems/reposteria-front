@@ -60,9 +60,6 @@ export function RecipeDetail({ recipe, className }: RecipeDetailProps) {
 		<div className={cn('flex flex-col gap-6', className)}>
 			{/* Tiempo de preparación como dato protagonista */}
 			<div className="texture-paper border border-vino bg-vino px-4 py-4 text-lienzo">
-				<p className="font-sans text-[11px] uppercase tracking-[0.2em] text-rosa-claro">
-					Hecho por encargo
-				</p>
 				<p className="mt-1 font-serif text-2xl italic leading-snug">
 					Lo hacemos por encargo: {prepText}.
 				</p>

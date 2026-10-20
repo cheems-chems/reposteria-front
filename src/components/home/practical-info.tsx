@@ -1,5 +1,6 @@
 import { SectionHeading } from '@/components/home/decor';
 import { Reveal } from '@/components/home/reveal';
+import { DecorativeBubbles } from '@/components/ui/decorative-bubbles';
 import { practicalInfo, type PracticalItem } from '@/content/home';
 
 const ICONS: Record<PracticalItem['icon'], string> = {
@@ -13,7 +14,8 @@ const ICONS: Record<PracticalItem['icon'], string> = {
 /** Franja práctica: entrega, anticipación y horario (textos de ejemplo editables). */
 export function PracticalInfo() {
 	return (
-		<section className="relative border-t border-borde bg-rosa-palido/60">
+		<section className="relative isolate border-t border-borde bg-rosa-palido/60">
+			<DecorativeBubbles preset="a" />
 			<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 				<Reveal>
 					<SectionHeading title="Información para tu pedido" />

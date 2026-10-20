@@ -3,6 +3,7 @@ import { Logo } from "@/components/brand/logo";
 import { CopyrightYear } from "@/components/layout/copyright-year";
 import { InstagramIcon } from "@/components/ui/instagram-icon";
 import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
+import { DecorativeBubbles } from "@/components/ui/decorative-bubbles";
 import { buttonClasses } from "@/components/ui/button";
 import { getStoreInfo } from "@/lib/api";
 import { brand } from "@/lib/brand";
@@ -27,16 +28,6 @@ function ColumnTitle({ children }: { children: React.ReactNode }) {
     <h2 className="font-sans text-[11px] uppercase tracking-[0.16em] text-vino/80">
       {children}
     </h2>
-  );
-}
-
-/** Solo fondo decorativo. Muffle con blur para no cortarse de forma fea. */
-function FooterBubble({ className }: { className: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`pointer-events-none absolute rounded-full blur-2xl ${className}`}
-    />
   );
 }
 
@@ -91,8 +82,7 @@ export async function SiteFooter() {
 
   return (
     <footer className="relative isolate mt-16 overflow-hidden border-t border-rosa-medio/60 bg-gradient-to-b from-rosa-palido/80 via-rosa-palido/30 to-rosa-palido/20">
-      <FooterBubble className="-left-10 top-8 size-24 bg-rosa-medio/20" />
-      <FooterBubble className="-right-12 bottom-10 size-32 bg-rosa-claro/25" />
+      <DecorativeBubbles preset="b" />
 
       <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-8 gap-y-6 px-5 py-8 sm:px-8 md:grid-cols-[1.3fr_1fr_1.2fr] md:gap-x-6 md:py-10 md:gap-y-8">
         <div className="flex flex-col items-start gap-2">

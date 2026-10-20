@@ -12,6 +12,7 @@ import { HeroSeal } from '@/components/home/hero-art';
 import { SectionCircle } from '@/components/home/section-circle';
 import { Reveal } from '@/components/home/reveal';
 import { ButtonLink } from '@/components/ui/button-link';
+import { DecorativeBubbles } from '@/components/ui/decorative-bubbles';
 import { PriceSeal } from '@/components/ui/price-seal';
 import { SafeImage } from '@/components/ui/safe-image';
 import {
@@ -124,7 +125,8 @@ export default async function HomePage() {
 
 	return (
 		<main className="flex flex-1 flex-col">
-			<section className="relative overflow-x-clip">
+			<section className="relative isolate overflow-x-clip">
+				<DecorativeBubbles preset="a" />
 				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-8 lg:py-20">
 					<div className="relative z-10 flex flex-col items-start gap-5">
 						<h1 className="animate-entrada font-serif text-4xl leading-[1.05] text-vino sm:text-5xl lg:text-6xl">
@@ -225,7 +227,8 @@ export default async function HomePage() {
 				</div>
 			</section>
 
-			<section className="relative border-b border-borde bg-transparent sm:bg-rosa-claro/40">
+			<section className="relative isolate border-b border-borde bg-transparent sm:bg-rosa-claro/40">
+				<DecorativeBubbles preset="b" />
 				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
 					<header className="text-center">
 						<h2 className="font-serif text-3xl text-vino sm:text-4xl">
@@ -259,7 +262,8 @@ export default async function HomePage() {
 			</section>
 
 			{moreProducts.length > 0 ? (
-				<section className="relative border-t border-borde bg-rosa-palido/70">
+				<section className="relative isolate border-t border-borde bg-rosa-palido/70">
+					<DecorativeBubbles preset="c" />
 					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 						<Reveal>
 							<SectionHeading
@@ -406,7 +410,8 @@ export default async function HomePage() {
 				<WaveDivider fill="var(--color-combo-wave-bottom)" />
 			</section>
 
-			<section className="relative overflow-x-clip bg-rosa-palido">
+			<section className="relative isolate overflow-x-clip bg-rosa-palido">
+				<DecorativeBubbles preset="d" />
 				<div className="relative mx-auto w-full max-w-5xl px-5 py-20 sm:px-8 lg:py-24">
 					<header className="mx-auto max-w-2xl text-center">
 						<h2 className="font-serif text-3xl text-vino sm:text-4xl">

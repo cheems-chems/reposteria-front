@@ -196,19 +196,17 @@ export default async function HomePage() {
 				</div>
 			</section>
 
-			<section className="relative z-10 mx-auto -mt-8 w-full max-w-6xl px-5 sm:-mt-10 sm:px-8">
+			<section className="relative z-10 mx-auto mt-8 w-full max-w-6xl px-5 sm:mt-10 sm:px-8">
 				<div className="rounded-2xl border border-borde bg-white shadow-[0_20px_60px_rgba(90,18,51,0.08)]">
-					<ul className="mx-auto grid w-full grid-cols-2 gap-x-5 gap-y-6 px-5 py-6 sm:gap-x-6 sm:px-6 sm:py-7 lg:grid-cols-4 lg:gap-x-8">
-						{trust.map((item, idx) => (
+					<ul className="grid grid-cols-1 divide-y divide-borde/60 px-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-5">
+						{trust.map((item) => (
 							<li
-								key={item.label}
-								className={`flex flex-col items-start gap-2 ${
-									idx > 0 ? 'lg:border-l lg:border-borde/60 lg:pl-6' : 'lg:pr-4'
-								}`}
+								key={item.text}
+								className="flex items-center gap-3 py-3 sm:px-5 sm:py-4"
 							>
 								<svg
 									viewBox="0 0 24 24"
-									className="size-10 shrink-0 text-fucsia sm:size-11"
+									className="size-7 shrink-0 text-fucsia sm:size-8"
 									fill="none"
 									stroke="currentColor"
 									strokeWidth={1.6}
@@ -218,11 +216,8 @@ export default async function HomePage() {
 								>
 									<path d={item.path} />
 								</svg>
-								<span className="font-sans text-sm font-bold text-vino sm:text-base">
-									{item.label}
-								</span>
-								<span className="font-sans text-sm text-texto-suave sm:text-[15px]">
-									{item.description}
+								<span className="text-sm text-vino/90 sm:text-[15px]">
+									{item.text}
 								</span>
 							</li>
 						))}
@@ -269,7 +264,6 @@ export default async function HomePage() {
 						<Reveal>
 							<SectionHeading
 								title="Los más pedidos"
-								description="Una muestra de lo que más nos encargan. Agrégalos a tu encargo y confirma por WhatsApp."
 							/>
 						</Reveal>
 						<div className="mt-10 grid auto-rows-fr grid-cols-2 items-stretch gap-4 lg:grid-cols-4">

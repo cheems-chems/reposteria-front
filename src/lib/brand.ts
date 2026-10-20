@@ -24,6 +24,8 @@ export const brand = {
     city: "", // pendiente de confirmar
     address: "", // pendiente de confirmar
     whatsapp: "573161865235", // provisional
+    // Mensaje prellenado del botón flotante (edítalo aquí y cambia en todo el sitio).
+    whatsappMessage: "Hola Elvi, quiero hacer un pedido",
     phone: "",
     email: "",
     instagram: "",

@@ -101,3 +101,31 @@ const sectionBlurbs: Record<string, string> = {
 export function sectionBlurb(slug: string): string {
   return sectionBlurbs[slug] ?? "Hecho por encargo, en casa.";
 }
+
+/**
+ * EJEMPLO: reemplaza estos textos por los datos reales del negocio.
+ * Se muestran en la franja "Información para tu pedido" de la portada.
+ */
+export interface PracticalItem {
+  title: string;
+  text: string;
+  icon: "entrega" | "tiempo" | "horario";
+}
+
+export const practicalInfo: PracticalItem[] = [
+  {
+    icon: "entrega",
+    title: "Zona de entrega",
+    text: "Bogotá y municipios cercanos (ejemplo). Coordinamos por WhatsApp.",
+  },
+  {
+    icon: "tiempo",
+    title: "Anticipación mínima",
+    text: "48 horas para encargos (ejemplo). Personalizados, consultar.",
+  },
+  {
+    icon: "horario",
+    title: "Horario de atención",
+    text: "Lunes a sábado, 8:00 a.m. a 6:00 p.m. (ejemplo).",
+  },
+];

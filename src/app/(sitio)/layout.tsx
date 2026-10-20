@@ -3,6 +3,7 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { WhatsAppFloat } from "@/components/layout/whatsapp-float";
 import { getStoreInfo } from "@/lib/api";
 
 export default async function SiteLayout({
@@ -23,6 +24,7 @@ export default async function SiteLayout({
         </div>
       </div>
       <CartDrawer />
+      <WhatsAppFloat phone={store.whatsapp} />
     </CartProvider>
   );
 }

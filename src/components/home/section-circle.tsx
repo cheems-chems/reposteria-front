@@ -22,6 +22,13 @@ interface SectionCircleProps {
   index: number;
 }
 
+/** Texto del enlace de cada sección en "Compra por sección". */
+const linkTextBySection: Record<string, string> = {
+  dulces: "Ver tortas y postres",
+  salados: "Ver pasabocas",
+  congelados: "Ver congelados",
+};
+
 // Cículo grande con identidad propia: SOLO el fondo y el dibujo cambian por
 // sección. Las partículas y el anillo giran/mueven con transform y opacity.
 export function SectionCircle({
@@ -144,7 +151,7 @@ export function SectionCircle({
           </span>
         </span>
         <span className="font-sans text-sm font-semibold text-fucsia-hover">
-          Ver todo →
+          {linkTextBySection[section.slug] ?? "Ver todo"} →
         </span>
       </Link>
     </Reveal>

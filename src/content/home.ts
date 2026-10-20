@@ -108,7 +108,7 @@ export const practicalInfo: PracticalItem[] = [
   {
     icon: "entrega",
     title: "Zona de entrega",
-    text: "Barranquilla y municipios cercanos (ejemplo). Coordinamos por WhatsApp.",
+    text: "Santa Marta y municipios cercanos (ejemplo). Coordinamos por WhatsApp.",
   },
   {
     icon: "tiempo",

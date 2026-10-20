@@ -1,5 +1,5 @@
 import { AddToCartButton } from '@/components/cart/add-to-cart-button';
-import { ProductGrid } from '@/components/store/product-grid';
+import { ProductTicket } from '@/components/product/product-ticket';
 import {
 	CheckList,
 	Marquee,
@@ -20,6 +20,15 @@ import {
 	sectionArtTheme,
 } from '@/components/ui/section-art';
 
+// Selección de "Los más pedidos": ids del catálogo existente (ver src/lib/api/tienda/).
+// Una torta/postre, la Milhojas de guayaba, la Bandeja de deditos de queso y el Combo 1.
+const FEATURED_IDS = [
+	'tarta-de-limon',
+	'milhojas-de-guayaba',
+	'bandeja-deditos-de-queso',
+	'combo-1',
+];
+
 const HERO_IMAGE = '/img/hero.png';
 const HERO_ALT = 'Torta rosada de tres pisos';
 const HERO_TEXTO =
@@ -32,7 +41,11 @@ const HERO_SPARKLES: { className: string; delay: string }[] = [
 	{ className: '-bottom-4 -left-5', delay: '3s' },
 	{ className: 'bottom-24 -right-4', delay: '0.75s' },
 ];
-import { orderLineForProduct } from '@/lib/encargo';
+import {
+	orderLineForProduct,
+	productPrice,
+	productTypeLabel,
+} from '@/lib/encargo';
 import {
 	getCategories,
 	getComboItems,
@@ -41,6 +54,7 @@ import {
 	getReviews,
 	getSections,
 	type ComboProduct,
+	type ProductListItem,
 } from '@/lib/api';
 import {
 	bannerCombo,
@@ -76,8 +90,10 @@ export default async function HomePage() {
 		? orderLineForProduct(highlightCombo, comboItems)
 		: null;
 
-	const withoutCombo = featured.filter((p) => p.slug !== highlightCombo?.slug);
-	const moreProducts = withoutCombo.length > 0 ? withoutCombo : featured;
+	const productsById = new Map(products.map((product) => [product.slug, product]));
+	const moreProducts = FEATURED_IDS.map((id) => productsById.get(id)).filter(
+		(product): product is ProductListItem => Boolean(product),
+	);
 
 	const sectionByCategory = new Map(
 		categories
@@ -313,16 +329,49 @@ export default async function HomePage() {
 			) : null}
 
 			{moreProducts.length > 0 ? (
-				<section className="relative border-t border-borde bg-tarjeta">
+				<section className="relative border-t border-borde bg-rosa-palido/70">
 					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 						<Reveal>
 							<SectionHeading
 								title="Los más pedidos"
-								description="Una muestra de lo que más nos encargan."
+								description={
+									<span className="text-lg text-texto-suave">
+										Una muestra de lo que más nos encargan.
+									</span>
+								}
 							/>
 						</Reveal>
 						<Reveal delay={80} className="mt-10">
-							<ProductGrid products={moreProducts} comboItems={comboItems} />
+							<div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
+								{moreProducts.map((product) => {
+									const line = product.available
+										? orderLineForProduct(product, comboItems)
+										: null;
+									return (
+										<ProductTicket
+											key={product.slug}
+											art={sectionArtKey(product.categorySlug, product.categoryName)}
+											product={{
+												slug: product.slug,
+												name: product.name,
+												price: productPrice(product),
+												category: product.categoryName,
+												imageUrl: product.imageUrl,
+												available: product.available,
+												compareAt: product.compareAt,
+												featured: product.featured,
+												typeLabel: productTypeLabel(product),
+											}}
+											action={
+												line ? (
+													<AddToCartButton line={line} size="sm" fullWidth />
+												) : undefined
+											}
+											className="h-full"
+										/>
+									);
+								})}
+							</div>
 						</Reveal>
 					</div>
 				</section>

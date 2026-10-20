@@ -365,45 +365,49 @@ export default async function HomePage() {
 
 			<PracticalInfo />
 
-			<section
-				className="relative overflow-x-clip"
-				style={{
-					backgroundImage:
-						'linear-gradient(135deg, var(--color-combo-from) 0%, var(--color-combo-from) 60%, var(--color-combo-to) 100%)',
-				}}
-			>
-				{/* Ondas con el color del fondo contiguo: empalman con el degradado sin cortes. */}
-				<WaveDivider fill="var(--color-combo-wave-top)" flip />
+			{/* Banda "Arma tu combo": la forma ondulada la pinta la propia banda
+			    (ondas fucsia + cuerpo con degradado). Todo lo que queda fuera de
+			    la onda es transparente, así se ve el fondo del body con las volitas. */}
+			<section className="relative">
+				<WaveDivider fill="var(--color-combo-from)" flip />
 
-				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-14 pb-16 sm:px-8 lg:grid-cols-2 lg:gap-12 lg:py-16">
-					<div className="flex flex-col items-center gap-5 text-center lg:items-start lg:text-left">
-						<h2 className="font-serif text-[2.5rem] leading-[1.05] text-white sm:text-[3.4rem]">
-							{bannerCombo.title}
-						</h2>
-						<p className="max-w-[38ch] text-[1.1rem] font-normal leading-[1.6] text-white/[0.92]">
-							{bannerCombo.text}
-						</p>
-						<ButtonLink
-							href="/encargo?categoria=combos&modo=armar"
-							size="lg"
-							variant="inverse"
-							className="group mt-1 px-9 py-4 text-xl font-bold sm:px-10"
-						>
-							<span className="font-bold">{bannerCombo.cta}</span>
-							<span
-								aria-hidden="true"
-								className="transition-transform duration-200 ease-suave group-hover:translate-x-1"
+				<div
+					className="relative"
+					style={{
+						backgroundImage:
+							'linear-gradient(180deg, var(--color-combo-from) 0%, var(--color-combo-to) 100%)',
+					}}
+				>
+					<div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-14 pb-16 sm:px-8 lg:grid-cols-2 lg:gap-12 lg:py-16">
+						<div className="flex flex-col items-center gap-5 text-center lg:items-start lg:text-left">
+							<h2 className="font-serif text-[2.5rem] leading-[1.05] text-white sm:text-[3.4rem]">
+								{bannerCombo.title}
+							</h2>
+							<p className="max-w-[38ch] text-[1.1rem] font-normal leading-[1.6] text-white/[0.92]">
+								{bannerCombo.text}
+							</p>
+							<ButtonLink
+								href="/encargo?categoria=combos&modo=armar"
+								size="lg"
+								variant="inverse"
+								className="group mt-1 px-9 py-4 text-xl font-bold sm:px-10"
 							>
-								→
-							</span>
-						</ButtonLink>
-					</div>
-					<div className="relative mx-auto flex w-full max-w-md items-center justify-center lg:mx-0">
-						<ComboArt art={comboArtKey} />
+								<span className="font-bold">{bannerCombo.cta}</span>
+								<span
+									aria-hidden="true"
+									className="transition-transform duration-200 ease-suave group-hover:translate-x-1"
+								>
+									→
+								</span>
+							</ButtonLink>
+						</div>
+						<div className="relative mx-auto flex w-full max-w-md items-center justify-center lg:mx-0">
+							<ComboArt art={comboArtKey} />
+						</div>
 					</div>
 				</div>
 
-				<WaveDivider fill="var(--color-combo-wave-bottom)" />
+				<WaveDivider fill="var(--color-combo-to)" />
 			</section>
 
 			<section className="relative isolate overflow-x-clip">
@@ -438,7 +442,6 @@ export default async function HomePage() {
 						))}
 					</ol>
 				</div>
-				<WaveDivider className="text-lienzo" flip />
 			</section>
 
 			<section className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-8">

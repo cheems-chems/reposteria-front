@@ -7,8 +7,12 @@
   el contenedor y las secciones NO necesitan overflow-hidden y no se recortan las
   sombras de los botones. Sin animaciones.
 
-  Colores de la paleta: bg-rosa-claro / bg-rosa-medio, con opacidad 25-45%.
+  Dos tonos, de arriba hacia abajo: clara, clara, clara, oscura, clara, oscura,
+  oscura, clara. Clara = rosa claro (30-35%). Oscura = rosa medio (35-50%), más
+  marcada pero sin llegar al fucsia.
   Tamaños: 90-220 px en móvil; 160-380 px desde md.
+
+  Las clases van como literales completos (Tailwind no extrae nombres construidos).
 */
 
 type Bubble = {
@@ -21,38 +25,46 @@ type Bubble = {
 };
 
 const BUBBLES: Bubble[] = [
+  // 1 · clara
   {
     className: "size-[180px] md:size-[340px] bg-rosa-claro/35",
     style: { top: "3%", left: "-5rem" },
   },
+  // 2 · clara
   {
-    className: "size-[140px] md:size-[260px] bg-rosa-medio/30",
+    className: "size-[140px] md:size-[260px] bg-rosa-claro/30",
     style: { top: "14%", right: "-4rem" },
   },
+  // 3 · clara
   {
-    className: "size-[110px] md:size-[180px] bg-rosa-claro/40",
+    className: "size-[110px] md:size-[180px] bg-rosa-claro/35",
     style: { top: "27%", left: "-3.5rem" },
   },
+  // 4 · oscura
   {
-    className: "size-[200px] md:size-[380px] bg-rosa-medio/25",
-    style: { top: "41%", right: "-6rem" },
+    className: "size-[160px] md:size-[340px] bg-rosa-medio/40",
+    style: { top: "41%", right: "-5.5rem" },
   },
+  // 5 · clara
   {
     className: "size-[120px] md:size-[200px] bg-rosa-claro/35",
     style: { top: "56%", left: "-4rem" },
   },
+  // 6 · oscura
   {
-    className: "size-[160px] md:size-[300px] bg-rosa-medio/30",
-    style: { top: "70%", right: "-5rem" },
+    className: "size-[150px] md:size-[300px] bg-rosa-medio/38",
+    style: { top: "70%", right: "-6rem" },
     desktopOnly: true,
   },
+  // 7 · oscura
   {
-    className: "size-[100px] md:size-[160px] bg-rosa-claro/40",
-    style: { top: "85%", left: "-3.5rem" },
+    className: "size-[90px] md:size-[160px] bg-rosa-medio/45",
+    style: { top: "85%", left: "-5.5rem" },
     desktopOnly: true,
   },
+  // 8 · clara
   {
-    className: "size-[130px] md:size-[220px] bg-rosa-medio/30",
+    className: "size-[130px] md:size-[220px] bg-rosa-claro/30",
     style: { top: "95%", right: "-4.5rem" },
     desktopOnly: true,
   },

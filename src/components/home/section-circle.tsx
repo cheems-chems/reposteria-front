@@ -5,6 +5,10 @@ import {
   sectionArtTheme,
   type SectionArtKey,
 } from "@/components/ui/section-art";
+import {
+  ParticleGlyph,
+  sectionParticles,
+} from "@/components/ui/section-particles";
 import { SafeImage } from "@/components/ui/safe-image";
 import { cn } from "@/lib/cn";
 import type { Section } from "@/lib/api";
@@ -18,9 +22,8 @@ interface SectionCircleProps {
   index: number;
 }
 
-// Círculo grande con identidad propia: SOLO el fondo y el dibujo cambian por
-// sección. Anillo discontinuo uniforme detrás, ficha del mismo tamaño y el
-// dibujo se inclina al pasar el mouse (con prefers-reduced-motion respetado).
+// Cículo grande con identidad propia: SOLO el fondo y el dibujo cambian por
+// sección. Las partículas y el anillo giran/mueven con transform y opacity.
 export function SectionCircle({
   section,
   art,
@@ -29,6 +32,13 @@ export function SectionCircle({
   index,
 }: SectionCircleProps) {
   const theme = sectionArtTheme(art);
+  const particles = sectionParticles(art);
+  const particleInk =
+    art === "congelados"
+      ? "text-azul-oscuro/70"
+      : art === "salados"
+        ? "text-vino/35"
+        : "text-fucsia/70";
 
   return (
     <Reveal delay={index * 90}>
@@ -36,7 +46,7 @@ export function SectionCircle({
         href={`/tienda?seccion=${section.slug}`}
         className={cn(
           "group flex w-full max-w-52 flex-col items-center gap-3 text-center",
-          "transition-transform duration-300 ease-suave hover:-translate-y-1",
+          "transition-transform duration-300 ease-suave hover:-translate-y-1.5",
           "motion-reduce:hover:translate-y-0",
         )}
       >
@@ -72,6 +82,8 @@ export function SectionCircle({
                     className={cn(
                       "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 motion-reduce:group-hover:rotate-0 sm:w-20 lg:w-24",
                       theme.ink,
+                      art === "congelados" && "animate-girar-lento motion-reduce:animate-none",
+                      art === "dulces" && "animate-rebote motion-reduce:animate-none",
                     )}
                   />
                 }
@@ -82,14 +94,42 @@ export function SectionCircle({
                 className={cn(
                   "w-16 transition-transform duration-300 ease-suave group-hover:-rotate-6 motion-reduce:group-hover:rotate-0 sm:w-20 lg:w-24",
                   theme.ink,
+                  art === "congelados" && "animate-girar-lento motion-reduce:animate-none",
+                  art === "dulces" && "animate-rebote motion-reduce:animate-none",
                 )}
               />
             )}
           </span>
 
+          {/* Partículas DESPUÉS del círculo, encima de él y (en Dulces) también
+              del badge, sin capturar clics */}
+          <span
+            aria-hidden="true"
+            className={cn(
+              "pointer-events-none absolute inset-0",
+              art === "dulces" ? "z-30" : "z-10",
+            )}
+          >
+            {particles.map((particle, i) => (
+              <span
+                key={i}
+                className={cn(
+                  "absolute block",
+                  particle.size ?? "size-4",
+                  particle.ink ?? particleInk,
+                  particle.className,
+                  particle.desktopOnly && "hidden sm:block",
+                )}
+                style={particle.style}
+              >
+                <ParticleGlyph art={art} />
+              </span>
+            ))}
+          </span>
+
           <span
             aria-label={`${productCount} productos`}
-            className="absolute -right-1 -top-1 flex size-8 items-center justify-center rounded-full border-2 border-lienzo bg-vino font-serif text-base text-white sm:size-10 sm:text-lg"
+            className="absolute -right-1 -top-1 z-20 flex size-8 items-center justify-center rounded-full border-2 border-lienzo bg-vino font-serif text-base text-white sm:size-10 sm:text-lg"
           >
             {productCount}
           </span>

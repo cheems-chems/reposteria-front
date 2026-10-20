@@ -34,18 +34,32 @@ export interface SectionArtTheme {
   tile: string;
   /** Color del dibujo (trazo con currentColor). */
   ink: string;
+  /** Fondo de la tarjeta de producto: degradado de la sección hacia blanco. */
+  card: string;
 }
 
 export function sectionArtTheme(key: SectionArtKey): SectionArtTheme {
   switch (key) {
     case "dulces":
-      return { tile: "bg-fucsia", ink: "text-white" };
+      return {
+        tile: "bg-fucsia",
+        ink: "text-white",
+        card: "bg-linear-to-b from-rosa-claro/50 to-tarjeta",
+      };
     case "salados":
-      return { tile: "bg-mantequilla", ink: "text-vino" };
+      return {
+        tile: "bg-mantequilla",
+        ink: "text-vino",
+        card: "bg-linear-to-b from-mantequilla/30 to-tarjeta",
+      };
     case "congelados":
-      return { tile: "bg-hielo", ink: "text-azul-oscuro" };
+      return {
+        tile: "bg-hielo",
+        ink: "text-azul-oscuro",
+        card: "bg-linear-to-b from-hielo/35 to-tarjeta",
+      };
     default:
-      return { tile: "bg-tarjeta", ink: "text-fucsia" };
+      return { tile: "bg-tarjeta", ink: "text-fucsia", card: "bg-tarjeta" };
   }
 }
 
@@ -72,11 +86,12 @@ export function SectionArt({
     >
       {art === "dulces" ? (
         <>
-          {/* Rebanada de torta: gajito en pie con capas y cereza */}
+          {/* Rebanada de torta: glaseado y cereza con relleno; líneas en blanco */}
+          <path d="M75 58 L98 58 L98 46 Z" className="fill-lienzo" />
           <path d="M18 90 L98 90 L98 46 Z" />
           <path d="M47 74 L98 74" />
           <path d="M75 58 L98 58" />
-          <circle cx="95" cy="38" r="6.5" />
+          <circle cx="95" cy="38" r="6.5" className="fill-fucsia" />
           <path d="M95 31.5 c 1.5 -6 6 -8.5 10.5 -7.5" />
         </>
       ) : art === "salados" ? (

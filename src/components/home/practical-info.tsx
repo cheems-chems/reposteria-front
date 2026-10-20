@@ -21,7 +21,7 @@ export function PracticalInfo() {
 				<ul className="mt-10 grid gap-4 sm:grid-cols-3">
 					{practicalInfo.map((item, index) => (
 						<Reveal key={item.title} delay={index * 80} className="h-full">
-							<li className="flex h-full flex-col gap-3 rounded-soft border border-borde bg-tarjeta p-5">
+							<li className="flex h-full flex-col gap-3 rounded-soft border border-borde bg-transparent p-5">
 								<span className="flex size-11 items-center justify-center rounded-full bg-fucsia/10 text-fucsia">
 									<svg
 										viewBox="0 0 24 24"

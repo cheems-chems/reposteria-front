@@ -21,10 +21,10 @@ const sizes: Record<
     tag: "text-sm",
     word: "text-5xl sm:text-6xl",
   },
-  // Header: 52 px en móvil, 60 px en escritorio (altura del header ~68/76 px).
+  // Header: 56 px en móvil, 68 px en escritorio (más legible sin romper la barra).
   header: {
-    logo: 60,
-    img: "size-[52px] sm:size-[60px]",
+    logo: 68,
+    img: "size-[56px] sm:size-[68px]",
     tag: "text-xs",
     word: "text-2xl",
   },

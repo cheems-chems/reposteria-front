@@ -269,14 +269,14 @@ export default function MuestraPage() {
         note="Paleta rosa-fucsia: lienzo rosa muy claro, títulos en vino oscuro y una sola acción (fucsia fuerte). Contrastes AA verificados para texto."
       >
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
-          <TokenSwatch name="lienzo" hex="#FFF1F4" text="text-vino" bg="bg-lienzo" note="Fondo de página" ring />
+          <TokenSwatch name="lienzo" hex="#FFF1F4" text="text-vino" bg="bg-lienzo" note="Fondo de página (rosa pastel)" ring />
           <TokenSwatch name="tarjeta" hex="#FFFFFF" text="text-vino" bg="bg-tarjeta" note="Tarjetas y paneles" ring />
           <TokenSwatch name="rosa-claro" hex="#FFD6E2" text="text-vino" bg="bg-rosa-claro" note="Fondos suaves, franjas" />
           <TokenSwatch name="rosa-medio" hex="#F9A8C0" text="text-vino" bg="bg-rosa-medio" note="Círculos de producto" />
           <TokenSwatch name="borde" hex="#F5C2D2" text="text-vino" bg="bg-borde" note="Bordes finos" />
-          <TokenSwatch name="vino" hex="#5A1233" text="text-lienzo" bg="bg-vino" note="Títulos · AA 11.7:1" />
+          <TokenSwatch name="vino" hex="#5A1233" text="text-lienzo" bg="bg-vino" note="Títulos · AA 12.2:1" />
           <TokenSwatch name="texto" hex="#3B2A30" text="text-lienzo" bg="bg-texto" note="Texto principal · AA" />
-          <TokenSwatch name="texto-suave" hex="#7A5A63" text="text-lienzo" bg="bg-texto-suave" note="Texto secundario · AA 5.2:1" />
+          <TokenSwatch name="texto-suave" hex="#684852" text="text-lienzo" bg="bg-texto-suave" note="Texto secundario · AA 7.3:1" />
           <TokenSwatch name="fucsia" hex="#D6195F" text="text-white" bg="bg-fucsia" note="Acción (texto blanco) · AA" />
           <TokenSwatch name="fucsia-hover" hex="#B8124F" text="text-white" bg="bg-fucsia-hover" note="Hover · texto fucsia AA" />
         </div>

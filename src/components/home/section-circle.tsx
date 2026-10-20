@@ -139,7 +139,7 @@ export function SectionCircle({
           <span className="font-serif text-lg font-bold text-vino sm:text-xl">
             {section.name}
           </span>
-          <span className="max-w-44 text-xs text-texto-suave sm:max-w-52 sm:text-sm">
+          <span className="max-w-44 text-sm text-texto-suave sm:max-w-52 sm:text-base">
             {blurb}
           </span>
         </span>

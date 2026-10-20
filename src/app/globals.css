@@ -10,12 +10,20 @@
   Contraste (WCAG AA) verificado:
     - Blanco sobre fucsia #D6195F .......... 5.0:1  (texto normal ✓)
     - Blanco sobre fucsia-hover #B8124F .... 6.5:1  (texto normal ✓)
-    - Fucsia #D6195F sobre lienzo .......... 4.6:1  (texto normal ✓)
-    - Vino #5A1233 sobre lienzo ............ 11.7:1 (texto normal ✓)
+    - Fucsia #D6195F sobre fondo ........... 4.6:1  (texto normal ✓)
+    - Vino #5A1233 sobre fondo ............. 12.2:1 (texto normal ✓)
+    - Secundario #684852 sobre fondo ....... 7.3:1  (texto normal ✓)
+    - Secundario #684852 sobre rosa-palido . 6.6:1  (texto normal ✓)
     - Vino #5A1233 sobre mantequilla #FFD166  9.3:1  (texto normal ✓)
     - Azul oscuro #1F4E79 sobre hielo #BDE4F7  6.4:1  (texto normal ✓)
+    - Blanco sobre WhatsApp #0F7A40 ........ 5.4:1  (texto normal ✓)
   ============================================================================
 */
+
+/* Fondo de página: cámbialo solo aquí y se actualiza todo el sitio. */
+:root {
+  --color-bg: #FFF1F4; /* rosa pastel original */
+}
 
 @theme inline {
   /* --- Paleta --------------------------------------------------------------- */
@@ -24,17 +32,21 @@
   --color-rosa-medio: #F9A8C0; /* círculos de producto, decoración */
   --color-rosa-claro: #FFD6E2; /* fondos suaves, franjas */
   --color-rosa-palido: #FDE4EC; /* franjas de sección (un poco más intenso) */
-  --color-lienzo: #FFF1F4; /* fondo de página */
+  --color-lienzo: var(--color-bg); /* superficie base (alias del fondo) */
   --color-tarjeta: #FFFFFF; /* tarjetas y paneles */
   --color-borde: #F5C2D2; /* bordes finos */
   --color-vino: #5A1233; /* títulos */
   --color-texto: #3B2A30; /* texto principal */
-  --color-texto-suave: #7A5A63; /* texto secundario (AA) */
+  --color-texto-suave: #684852; /* texto secundario (AA holgado) */
 
   /* --- Identidad por sección (círculo y dibujo) ----------------------------- */
   --color-mantequilla: #FFD166; /* Salados: círculo */
   --color-hielo: #BDE4F7; /* Congelados: círculo */
   --color-azul-oscuro: #1F4E79; /* Congelados: dibujo */
+
+  /* --- Acción externa ------------------------------------------------------- */
+  --color-whatsapp: #0F7A40; /* botón flotante y pedidos por WhatsApp */
+  --color-whatsapp-hover: #0B6B37; /* hover del verde */
 
   /* --- Tipografía ---------------------------------------------------------- */
   --font-serif: var(--font-playfair), "Georgia", "Times New Roman", serif;
@@ -56,7 +68,7 @@
   }
 
   body {
-    background-color: var(--color-lienzo);
+    background-color: var(--color-bg);
     color: var(--color-texto);
     font-family: var(--font-sans);
     font-synthesis-weight: none;

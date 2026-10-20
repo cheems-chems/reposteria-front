@@ -28,8 +28,7 @@ const FEATURED_IDS = [
 	'bandeja-deditos-de-queso',
 	'combo-1',
 ];
-
-const HERO_IMAGE = '/img/hero.png';
+const HERO_IMAGE = '/img/heroRosa.png';
 const HERO_ALT = 'Torta rosada de tres pisos';
 const HERO_TEXTO =
 	'Tortas, postres y pasabocas hechos por Elvi, a tu gusto. Arma tu pedido y lo confirmamos por WhatsApp.';

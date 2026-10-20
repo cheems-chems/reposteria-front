@@ -354,13 +354,30 @@
   }
 
   /* --- Combo: animaciones de fritura (solo transform/opacity) --------------- */
+  .combo-halo {
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 209, 102, 0.55) 0%,
+      rgba(255, 209, 102, 0.28) 45%,
+      rgba(255, 214, 226, 0) 72%
+    );
+    animation: combo-halo 3.6s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  .combo-anillo-onda {
+    animation: combo-anillo-onda 3s ease-out infinite;
+    will-change: transform, opacity;
+  }
+
   .combo-pulso {
     animation: combo-pulso 4s ease-in-out infinite;
   }
 
   .combo-vapor {
-    animation: combo-vapor 4.5s ease-in-out infinite;
+    animation: combo-vapor var(--dur, 4.5s) ease-in-out infinite;
     animation-delay: var(--delay, 0s);
+    transform-origin: bottom center;
   }
 
   .combo-burbuja {
@@ -569,6 +586,29 @@
   }
 }
 
+@keyframes combo-halo {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.5;
+  }
+}
+
+@keyframes combo-anillo-onda {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
 @keyframes combo-pulso {
   0%,
   100% {
@@ -583,7 +623,7 @@
 
 @keyframes combo-vapor {
   0% {
-    transform: translateY(6px) scaleY(0.85);
+    transform: translateY(6px) scaleY(calc(0.85 * var(--scale, 1)));
     opacity: 0;
   }
   25% {
@@ -593,24 +633,24 @@
     opacity: 0.24;
   }
   100% {
-    transform: translateY(-34px) scaleY(1.08);
+    transform: translateY(-34px) scaleY(calc(1.08 * var(--scale, 1)));
     opacity: 0;
   }
 }
 
 @keyframes combo-burbuja {
   0% {
-    transform: translateY(0) scale(0.6);
+    transform: translate(0, 0) scale(0.55);
     opacity: 0;
   }
-  20% {
+  18% {
     opacity: 0.65;
   }
   70% {
-    opacity: 0.3;
+    opacity: 0.32;
   }
   100% {
-    transform: translateY(-64px) scale(1.05);
+    transform: translate(var(--sx, 4px), calc(-1 * var(--rise, 60px))) scale(0.9);
     opacity: 0;
   }
 }
@@ -710,6 +750,7 @@
   .combo-burbuja,
   .combo-chispa,
   .combo-chisporroteo,
+  .combo-anillo-onda,
   .animate-anillo,
   .animate-brinco,
   .animate-pop,

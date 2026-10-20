@@ -369,7 +369,9 @@ export default async function HomePage() {
 			    (ondas fucsia + cuerpo con degradado). Todo lo que queda fuera de
 			    la onda es transparente, así se ve el fondo del body con las volitas. */}
 			<section className="relative">
-				<WaveDivider fill="var(--color-combo-from)" flip />
+				{/* Tira superior: borde ondulado arriba (hacia afuera) y plano abajo,
+				    pegado al cuerpo. -mb-px evita la costura de 1px. */}
+				<WaveDivider fill="var(--color-combo-from)" className="-mb-px" />
 
 				<div
 					className="relative"
@@ -407,7 +409,9 @@ export default async function HomePage() {
 					</div>
 				</div>
 
-				<WaveDivider fill="var(--color-combo-to)" />
+				{/* Tira inferior: borde plano arriba, pegado al cuerpo, y ondulado
+				    abajo (hacia afuera). -mt-px evita la costura de 1px. */}
+				<WaveDivider fill="var(--color-combo-to)" flip className="-mt-px" />
 			</section>
 
 			<section className="relative isolate overflow-x-clip">

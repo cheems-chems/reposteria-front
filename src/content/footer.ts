@@ -12,6 +12,14 @@ export const footerContent = {
     whatsapp: null as string | null,
   },
 
+  /** Enlaces de la columna Tienda: mismas secciones reales del catálogo. */
+  store: [
+    { href: "/tienda", label: "Todo el catálogo" },
+    { href: "/tienda?seccion=dulces", label: "Tortas y postres" },
+    { href: "/tienda?seccion=salados", label: "Pasabocas" },
+    { href: "/tienda?seccion=congelados", label: "Congelados" },
+  ],
+
   contact: {
     whatsappLabel: "Escríbenos por WhatsApp",
     // Vacío = formatea el número de la tienda (+57 …).

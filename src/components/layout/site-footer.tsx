@@ -4,13 +4,13 @@ import { CopyrightYear } from "@/components/layout/copyright-year";
 import { InstagramIcon } from "@/components/ui/instagram-icon";
 import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
 import { buttonClasses } from "@/components/ui/button";
-import { getCategories, getStoreInfo } from "@/lib/api";
+import { getStoreInfo } from "@/lib/api";
 import { brand } from "@/lib/brand";
 import { normalizeWhatsApp, whatsappUrl } from "@/lib/whatsapp";
 import { footerContent } from "@/content/footer";
 
 const linkClass =
-  "-mx-2 flex min-h-11 items-center rounded-soft px-2 text-[15px] text-vino/80 transition-colors duration-150 ease-suave hover:bg-rosa-claro/40 hover:text-vino lg:min-h-9";
+  "-mx-2 flex min-h-11 items-center rounded-soft px-2 text-[15px] text-vino/80 transition-colors duration-150 ease-suave hover:bg-rosa-claro/40 hover:text-vino md:min-h-0 md:py-1";
 
 /** +57 316 186 5235 a partir de "573161865235". */
 function formatWhatsAppNumber(raw?: string | null): string | null {
@@ -24,9 +24,19 @@ function formatWhatsAppNumber(raw?: string | null): string | null {
 
 function ColumnTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="font-sans text-xs uppercase tracking-[0.18em] text-vino/80">
+    <h2 className="font-sans text-[11px] uppercase tracking-[0.16em] text-vino/80">
       {children}
     </h2>
+  );
+}
+
+/** Solo fondo decorativo. Muffle con blur para no cortarse de forma fea. */
+function FooterBubble({ className }: { className: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute rounded-full blur-2xl ${className}`}
+    />
   );
 }
 
@@ -67,10 +77,7 @@ function ClockIcon({ className }: { className?: string }) {
 }
 
 export async function SiteFooter() {
-  const [store, categories] = await Promise.all([
-    getStoreInfo(),
-    getCategories(),
-  ]);
+  const store = await getStoreInfo();
 
   const waNumber = normalizeWhatsApp(store.whatsapp);
   const waHref = waNumber
@@ -83,9 +90,12 @@ export async function SiteFooter() {
   const instagramHref = footerContent.social.instagram || null;
 
   return (
-    <footer className="mt-16 border-t border-rosa-medio/60 bg-gradient-to-b from-rosa-palido/80 via-rosa-palido/30 to-rosa-palido/20">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.3fr_1fr_1.2fr] lg:gap-12">
-        <div className="flex flex-col items-start gap-4">
+    <footer className="relative isolate mt-16 overflow-hidden border-t border-rosa-medio/60 bg-gradient-to-b from-rosa-palido/80 via-rosa-palido/30 to-rosa-palido/20">
+      <FooterBubble className="-left-10 top-8 size-24 bg-rosa-medio/20" />
+      <FooterBubble className="-right-12 bottom-10 size-32 bg-rosa-claro/25" />
+
+      <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-8 gap-y-6 px-5 py-8 sm:px-8 md:grid-cols-[1.3fr_1fr_1.2fr] md:gap-x-6 md:py-10 md:gap-y-8">
+        <div className="flex flex-col items-start gap-2">
           <Logo size="footer" showText={false} className="self-start" />
           <p className="max-w-xs text-sm text-texto-suave">
             {footerContent.tagline}
@@ -96,42 +106,35 @@ export async function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="flex size-11 items-center justify-center rounded-full border border-borde bg-lienzo/60 text-vino/80 transition-colors duration-150 ease-suave hover:bg-rosa-claro hover:text-vino"
+              className="mt-1 flex size-10 items-center justify-center rounded-full border border-borde bg-lienzo/60 text-vino/80 transition-colors duration-150 ease-suave hover:bg-rosa-claro hover:text-vino"
             >
               <InstagramIcon className="size-5" />
             </a>
           ) : null}
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <ColumnTitle>Tienda</ColumnTitle>
           <nav
-            className="grid grid-cols-2 gap-x-4 lg:flex lg:flex-col lg:gap-y-0"
+            className="grid grid-cols-2 gap-x-6 gap-y-0 md:grid-cols-1"
             aria-label="Tienda"
           >
-            <Link className={linkClass} href="/tienda">
-              Todo el catálogo
-            </Link>
-            {categories.map((category) => (
-              <Link
-                key={category.slug}
-                className={linkClass}
-                href={`/tienda/${category.slug}`}
-              >
-                {category.name}
+            {footerContent.store.map((item) => (
+              <Link key={item.href} className={linkClass} href={item.href}>
+                {item.label}
               </Link>
             ))}
           </nav>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <ColumnTitle>Contacto</ColumnTitle>
           {waHref ? (
             <a
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${buttonClasses({ variant: "primary" })} presion mt-1 w-fit items-center gap-2 whitespace-nowrap px-5 py-3`}
+              className={`${buttonClasses({ variant: "primary" })} presion w-fit items-center gap-2 whitespace-nowrap px-5 py-2.5`}
             >
               <WhatsAppIcon className="size-5" />
               {footerContent.contact.whatsappLabel}
@@ -142,7 +145,7 @@ export async function SiteFooter() {
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="-mx-2 flex min-h-11 items-center gap-2 rounded-soft px-2 text-[15px] text-vino/90 transition-colors duration-150 ease-suave hover:bg-rosa-claro/40 hover:text-vino"
+              className="-mx-2 flex min-h-11 items-center gap-2 rounded-soft px-2 text-[15px] text-vino/90 transition-colors duration-150 ease-suave hover:bg-rosa-claro/40 hover:text-vino md:min-h-0 md:py-0.5"
             >
               <WhatsAppIcon className="size-4 shrink-0 text-whatsapp" />
               <span className="tabular">{waDisplay}</span>
@@ -150,7 +153,7 @@ export async function SiteFooter() {
           ) : waDisplay ? (
             <p className="tabular text-[15px] text-vino/90">{waDisplay}</p>
           ) : null}
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-1">
             <li className="flex items-start gap-2 text-[15px] text-vino/90">
               <MapPinIcon className="mt-0.5 size-4 shrink-0 text-vino/70" />
               <span>{footerContent.contact.city}</span>
@@ -168,8 +171,8 @@ export async function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-rosa-medio/50 pb-24 lg:pb-6">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 py-6 text-center sm:flex-row sm:justify-between sm:gap-4 sm:px-8 sm:text-left">
+      <div className="relative border-t border-rosa-medio/50">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 py-5 text-center sm:flex-row sm:justify-between sm:gap-4 sm:px-8 sm:py-4 sm:text-left">
           <p className="font-sans text-xs text-texto-suave">
             © <CopyrightYear /> {footerContent.copyright.name} ·{" "}
             {footerContent.copyright.suffix}
@@ -178,7 +181,7 @@ export async function SiteFooter() {
             {footerContent.legal.map((link) => (
               <li key={link.href}>
                 <Link
-                  className="inline-flex min-h-11 items-center px-1 font-sans text-xs text-texto-suave transition-colors duration-150 ease-suave hover:text-vino"
+                  className="inline-flex items-center px-1 font-sans text-xs text-texto-suave transition-colors duration-150 ease-suave hover:text-vino"
                   href={link.href}
                 >
                   {link.label}

@@ -28,8 +28,13 @@ const sizes: Record<
     tag: "text-xs",
     word: "text-2xl",
   },
-  // Footer: 96 px.
-  footer: { logo: 96, img: "size-24", tag: "text-xs", word: "text-3xl" },
+  // Footer: 56 px en móvil, 64 px en escritorio.
+  footer: {
+    logo: 64,
+    img: "size-[56px] md:size-16",
+    tag: "text-xs",
+    word: "text-3xl",
+  },
 };
 
 interface LogoProps {

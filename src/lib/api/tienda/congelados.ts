@@ -19,7 +19,7 @@ export const CONGELADOS_CATEGORIES: Category[] = [
     slug: "bandejas",
     name: "Bandejas",
     description:
-      "Bandejas congeladas (crudas, para freír en casa) de 10 unidades.",
+      "Bandejas congeladas (crudas, para freír en casa).",
     sectionSlug: "congelados",
     imageUrl: null as string | null,
   },

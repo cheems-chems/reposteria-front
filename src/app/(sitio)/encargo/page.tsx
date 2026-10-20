@@ -57,7 +57,6 @@ export default function EncargoPage({
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-5 py-10 sm:px-8">
       <PageHeader
-        eyebrow="Encargo"
         title="Armemos tu encargo"
         description="Responde unas preguntas y te dejamos el mensaje listo para enviar por WhatsApp."
         className="mb-8"

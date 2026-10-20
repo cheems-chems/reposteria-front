@@ -1,6 +1,8 @@
 /*
-  Sección Salados: combos (precios REALES) y ingredientes del armador
-  (precios por unidad INVENTADOS). Pendiente confirmar "Bolitas de carne".
+  Sección Salados: combos (precios REALES, según el catálogo de Elvi's) e
+  ingredientes del armador (precios por unidad INVENTADOS).
+  Pendiente confirmar "Bolitas de carne" (en la imagen del catálogo aparece
+  como "Bolitas de cane", probablemente un error de tipeo).
   Para agregar o cambiar productos, ver ./LEEME.md.
 */
 
@@ -179,6 +181,7 @@ export const SALADOS_PRODUCTS: Product[] = [
       { productSlug: "bolitas-de-carne", quantity: 25 },
     ],
     available: true,
+    featured: false,
     imageUrl: null,
     shortDescription:
       "100 unidades — Deditos 25, Empanadas 25, Ojitos 25, Bolitas de carne 25.",
@@ -204,6 +207,7 @@ export const SALADOS_PRODUCTS: Product[] = [
       { productSlug: "bolitas-de-carne", quantity: 40 },
     ],
     available: true,
+    featured: false,
     imageUrl: null,
     shortDescription:
       "160 unidades — Deditos 40, Empanadas 40, Ojitos 40, Bolitas de carne 40.",
@@ -231,6 +235,7 @@ export const SALADOS_PRODUCTS: Product[] = [
       { productSlug: "papitas-rellenas", quantity: 20 },
     ],
     available: true,
+    featured: false,
     imageUrl: null,
     shortDescription:
       "120 unidades — Deditos 20, Empanadas 20, Ojitos 20, Bolitas de carne 20, Pinchitos 20, Papitas rellenas 20.",

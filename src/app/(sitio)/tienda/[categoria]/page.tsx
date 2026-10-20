@@ -66,7 +66,6 @@ async function CategoriaContenido({ params }: { params: CategoriaParams }) {
 	return (
 		<>
 			<PageHeader
-				eyebrow="Categoría"
 				title={category.name}
 				description={category.description ?? undefined}
 			>

@@ -68,6 +68,75 @@ const BUBBLES: Bubble[] = [
     style: { top: "95%", right: "-4.5rem" },
     desktopOnly: true,
   },
+  // Nuevas volitas medianas y pequeñas, intercaladas entre las grandes.
+  // 9 · clara, mediana
+  {
+    className: "size-[96px] md:size-[112px] bg-rosa-claro/35",
+    style: { top: "8%", right: "2%" },
+  },
+  // 10 · clara, pequeña
+  {
+    className: "size-[40px] md:size-[48px] bg-rosa-claro/35",
+    style: { top: "20%", left: "3%" },
+  },
+  // 11 · intensa, mediana
+  {
+    className: "size-[72px] md:size-[88px] bg-rosa-medio/50",
+    style: { top: "33%", right: "1%" },
+  },
+  // 12 · clara, pequeña
+  {
+    className: "size-[32px] md:size-[40px] bg-rosa-claro/35",
+    style: { top: "47%", left: "4%" },
+  },
+  // 13 · clara, mediana
+  {
+    className: "size-[104px] md:size-[128px] bg-rosa-claro/35",
+    style: { top: "61%", right: "2%" },
+    desktopOnly: true,
+  },
+  // 14 · intensa, pequeña
+  {
+    className: "size-[48px] md:size-[56px] bg-rosa-medio/50",
+    style: { top: "75%", left: "3%" },
+    desktopOnly: true,
+  },
+  // 15 · clara, mediana
+  {
+    className: "size-[88px] md:size-[104px] bg-rosa-claro/35",
+    style: { top: "89%", right: "2%" },
+    desktopOnly: true,
+  },
+  // 16 · intensa, mediana
+  {
+    className: "size-[64px] md:size-[80px] bg-rosa-medio/50",
+    style: { top: "25%", left: "2%" },
+    desktopOnly: true,
+  },
+  // 17 · clara, pequeña
+  {
+    className: "size-[28px] md:size-[36px] bg-rosa-claro/35",
+    style: { top: "40%", right: "4%" },
+    desktopOnly: true,
+  },
+  // 18 · clara, mediana
+  {
+    className: "size-[120px] md:size-[136px] bg-rosa-claro/35",
+    style: { top: "52%", left: "1%" },
+    desktopOnly: true,
+  },
+  // 19 · intensa, pequeña
+  {
+    className: "size-[40px] md:size-[48px] bg-rosa-medio/50",
+    style: { top: "67%", right: "3%" },
+    desktopOnly: true,
+  },
+  // 20 · clara, pequeña
+  {
+    className: "size-[52px] md:size-[56px] bg-rosa-claro/35",
+    style: { top: "81%", right: "1%" },
+    desktopOnly: true,
+  },
 ];
 
 export function PageBubbles() {

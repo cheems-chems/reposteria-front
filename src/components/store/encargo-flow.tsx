@@ -74,6 +74,34 @@ interface InitialState {
   packSelection: PackSelection;
 }
 
+function builderSelectionAtMinimum(
+  items: BuilderItemProduct[],
+  minimum: number,
+  preferredSlug?: string,
+): BuilderSelection {
+  const selection: BuilderSelection = {};
+  const orderedItems = preferredSlug
+    ? [...items].sort(
+        (left, right) =>
+          Number(right.slug === preferredSlug) -
+          Number(left.slug === preferredSlug),
+      )
+    : items;
+  let remaining = minimum;
+
+  for (const item of orderedItems) {
+    if (remaining <= 0) break;
+    const quantity = Math.min(item.stepQty, remaining);
+    selection[item.slug] = {
+      quantity,
+      preparationId: item.preparations?.[0]?.id ?? null,
+    };
+    remaining -= quantity;
+  }
+
+  return selection;
+}
+
 /** Deriva el estado inicial a partir de la URL (?categoria= / ?producto=). */
 function computeInitial(props: EncargoFlowProps): InitialState {
   const { products, comboItems, categories } = props;
@@ -102,6 +130,12 @@ function computeInitial(props: EncargoFlowProps): InitialState {
 
   if (!categorySlug) return state;
 
+  const category = categories.find((item) => item.slug === categorySlug);
+  const categoryItems = comboItems.filter(
+    (item) => item.categorySlug === categorySlug,
+  );
+  const minimum = category?.builderMinTotalUnits ?? 0;
+
   if (product?.saleMode === "single") {
     state.choice = product.slug;
   } else if (product?.saleMode === "combo") {
@@ -111,16 +145,16 @@ function computeInitial(props: EncargoFlowProps): InitialState {
     state.packSelection = { [product.slug]: Math.max(1, product.minPacks) };
   } else if (comboItem) {
     state.choice = BUILDER;
-    state.builderSelection = {
-      [comboItem.slug]: {
-        quantity: comboItem.stepQty,
-        preparationId: comboItem.preparations?.[0]?.id ?? null,
-      },
-    };
+    state.builderSelection = builderSelectionAtMinimum(
+      categoryItems,
+      minimum,
+      comboItem.slug,
+    );
   }
 
   if (props.initialMode === "armar" && !product && !comboItem) {
     state.choice = BUILDER;
+    state.builderSelection = builderSelectionAtMinimum(categoryItems, minimum);
   }
 
   return state;
@@ -271,7 +305,9 @@ export function EncargoFlow(props: EncargoFlowProps) {
   function selectBuilder() {
     setError(null);
     setChoice(BUILDER);
-    setBuilderSelection({});
+    setBuilderSelection(
+      builderSelectionAtMinimum(categoryItems, minTotalUnits),
+    );
   }
 
   /** Vuelve a la selección de tipo sin salir de /encargo. */
@@ -374,6 +410,9 @@ export function EncargoFlow(props: EncargoFlowProps) {
     if (isCustom) {
       lines.push(`Pedido especial: ${customProduct.trim()}`);
     } else {
+      if (isBuilderChoice) {
+        lines.push("Armado desde cero (mínimo 15 unidades):");
+      }
       for (const line of orderLines) {
         switch (line.kind) {
           case "single":
@@ -449,6 +488,21 @@ export function EncargoFlow(props: EncargoFlowProps) {
   }
 
   function sendWhatsApp() {
+    if (isBuilderChoice) {
+      const builderProblem = builderProblems(
+        builderSelection,
+        minTotalUnits,
+      )[0];
+      if (builderProblem) {
+        setError(builderProblem);
+        setStep(0);
+        window.setTimeout(() => {
+          builderRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+        return;
+      }
+    }
+
     const problem = validate(3);
     if (problem) {
       setError(problem);
@@ -517,8 +571,9 @@ export function EncargoFlow(props: EncargoFlowProps) {
 
             {step === 0 && categorySlug !== null && kind === "combo" ? (
               <p className="text-sm text-texto-suave">
-                Elige un combo o arma el tuyo desde cero. Cambia los pasabocas a
-                tu gusto. Si agregas unidades extra, se suman al total.
+                {isBuilderChoice
+                  ? "Elige tus pasabocas, desde un mínimo de 15 unidades en total."
+                  : "Elige un combo o arma el tuyo desde cero. Cambia los pasabocas a tu gusto. Si agregas unidades extra, se suman al total."}
               </p>
             ) : null}
 

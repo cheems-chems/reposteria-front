@@ -1,8 +1,5 @@
 /*
-  Sección Salados: combos (precios REALES, según el catálogo de Elvi's) e
-  ingredientes del armador (precios por unidad INVENTADOS).
-  Pendiente confirmar "Bolitas de carne" (en la imagen del catálogo aparece
-  como "Bolitas de cane", probablemente un error de tipeo).
+  Sección Salados: combos y pasabocas del armador, con precio por unidad.
   Para agregar o cambiar productos, ver ./LEEME.md.
 */
 
@@ -18,8 +15,7 @@ export const SALADOS_CATEGORIES: Category[] = [
     name: "Combos",
     description: "Combos de pasabocas o arma el tuyo desde cero.",
     sectionSlug: "salados",
-    // Mínimo provisional de ejemplo del armador "desde cero".
-    builderMinTotalUnits: 50,
+    builderMinTotalUnits: 15,
     imageUrl: null as string | null,
   },
 ];
@@ -34,7 +30,7 @@ export const SALADOS_COMBO_ITEMS: Product[] = [
     categoryName: "Combos",
     saleMode: "builder",
     comboItem: true,
-    unitPrice: 1000, // FICTICIO
+    unitPrice: 700,
     stepQty: 5,
     available: true,
     featured: false,
@@ -47,12 +43,12 @@ export const SALADOS_COMBO_ITEMS: Product[] = [
   },
   {
     slug: "empanadas",
-    name: "Empanadas",
+    name: "Empanadita",
     categorySlug: "combos",
     categoryName: "Combos",
     saleMode: "builder",
     comboItem: true,
-    unitPrice: 1200, // FICTICIO
+    unitPrice: 900,
     stepQty: 5,
     available: true,
     featured: false,
@@ -70,7 +66,7 @@ export const SALADOS_COMBO_ITEMS: Product[] = [
     categoryName: "Combos",
     saleMode: "builder",
     comboItem: true,
-    unitPrice: 900, // FICTICIO
+    unitPrice: 500,
     stepQty: 5,
     available: true,
     featured: false,
@@ -83,12 +79,12 @@ export const SALADOS_COMBO_ITEMS: Product[] = [
   },
   {
     slug: "bolitas-de-carne",
-    name: "Bolitas de carne",
+    name: "Bolita de carne",
     categorySlug: "combos",
     categoryName: "Combos",
     saleMode: "builder",
     comboItem: true,
-    unitPrice: 1100, // FICTICIO
+    unitPrice: 800,
     stepQty: 5,
     available: true,
     featured: false,
@@ -101,12 +97,12 @@ export const SALADOS_COMBO_ITEMS: Product[] = [
   },
   {
     slug: "pinchitos",
-    name: "Pinchitos",
+    name: "Mini pinchito",
     categorySlug: "combos",
     categoryName: "Combos",
     saleMode: "builder",
     comboItem: true,
-    unitPrice: 1300, // FICTICIO
+    unitPrice: 1200,
     stepQty: 5,
     available: true,
     featured: false,
@@ -119,12 +115,12 @@ export const SALADOS_COMBO_ITEMS: Product[] = [
   },
   {
     slug: "papitas-rellenas",
-    name: "Papitas rellenas",
+    name: "Papita rellena",
     categorySlug: "combos",
     categoryName: "Combos",
     saleMode: "builder",
     comboItem: true,
-    unitPrice: 1500, // FICTICIO
+    unitPrice: 1200,
     stepQty: 5,
     available: true,
     featured: false,

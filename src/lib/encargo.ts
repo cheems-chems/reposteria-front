@@ -283,12 +283,14 @@ export function builderProblems(
   minTotalUnits: number,
 ): string[] {
   const units = builderUnitCount(selection);
-  if (units <= 0) return ["Elige al menos un pasaboca."];
+  if (units <= 0) {
+    return [`Elige pasabocas hasta completar el mínimo de ${minTotalUnits} unidades.`];
+  }
   if (units < minTotalUnits) {
     const missing = minTotalUnits - units;
     return [
-      `Te faltan ${missing} ${missing === 1 ? "unidad" : "unidades"} para el ` +
-        `mínimo de ${minTotalUnits}.`,
+      `Te ${missing === 1 ? "falta 1 unidad" : `faltan ${missing} unidades`} ` +
+        `para completar el mínimo de ${minTotalUnits}.`,
     ];
   }
   return [];

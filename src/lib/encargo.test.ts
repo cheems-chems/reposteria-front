@@ -28,6 +28,7 @@ import type {
   ProductListItem,
   SingleProduct,
 } from "@/lib/api";
+import { SALADOS_CATEGORIES, SALADOS_COMBO_ITEMS } from "@/lib/api/tienda/salados";
 
 const TORTA: SingleProduct = {
   saleMode: "single",
@@ -39,40 +40,11 @@ const TORTA: SingleProduct = {
   price: 45000,
 };
 
-const DEDITOS: BuilderItemProduct = {
-  saleMode: "builder",
-  comboItem: true,
-  slug: "deditos",
-  name: "Deditos",
-  categorySlug: "combos",
-  categoryName: "Combos",
-  available: true,
-  unitPrice: 1000,
-  stepQty: 5,
-};
-
-const EMPANADAS: BuilderItemProduct = {
-  ...DEDITOS,
-  slug: "empanadas",
-  name: "Empanadas",
-  unitPrice: 1200,
-};
-
-const OJITOS: BuilderItemProduct = {
-  ...DEDITOS,
-  slug: "ojitos",
-  name: "Ojitos",
-  unitPrice: 900,
-};
-
-const BOLITAS: BuilderItemProduct = {
-  ...DEDITOS,
-  slug: "bolitas-de-carne",
-  name: "Bolitas de carne",
-  unitPrice: 1100,
-};
-
-const COMBO_ITEMS = [DEDITOS, EMPANADAS, OJITOS, BOLITAS];
+const COMBO_ITEMS: BuilderItemProduct[] = SALADOS_COMBO_ITEMS.filter(
+  (item) => item.saleMode === "builder",
+);
+const DEDITOS = COMBO_ITEMS.find((item) => item.slug === "deditos")!;
+const EMPANADAS = COMBO_ITEMS.find((item) => item.slug === "empanadas")!;
 
 const COMBO: ComboProduct = {
   saleMode: "combo",
@@ -203,9 +175,9 @@ describe("saleMode combo", () => {
     expect(line.totalUnits).toBe(60);
     expect(line.composition).toEqual([
       { name: "Deditos", quantity: 30 },
-      { name: "Empanadas", quantity: 15 },
+      { name: "Empanadita", quantity: 15 },
       { name: "Ojitos", quantity: 10 },
-      { name: "Bolitas de carne", quantity: 5 },
+      { name: "Bolita de carne", quantity: 5 },
     ]);
   });
 
@@ -262,12 +234,12 @@ describe("calcularPrecioCombo", () => {
         productSlug: "deditos",
         name: "Deditos",
         quantity: 5,
-        unitPrice: 1000,
-        subtotal: 5000,
+        unitPrice: 700,
+        subtotal: 3500,
       },
     ]);
-    expect(pricing.extrasTotal).toBe(5000);
-    expect(pricing.total).toBe(48000);
+    expect(pricing.extrasTotal).toBe(3500);
+    expect(pricing.total).toBe(46500);
   });
 
   it("compensa las unidades extra con las que se quitan de otro pasaboca", () => {
@@ -280,7 +252,7 @@ describe("calcularPrecioCombo", () => {
     expect(pricing.extraUnits).toBe(5);
     expect(pricing.extras).toHaveLength(1);
     expect(pricing.extras[0]?.quantity).toBe(5);
-    expect(pricing.total).toBe(48000);
+    expect(pricing.total).toBe(46500);
   });
 
   it("marca la selección cuando intenta bajar del mínimo sin cobrar extras", () => {
@@ -308,13 +280,43 @@ describe("saleMode builder", () => {
     expect(builderUnitCount(seleccion)).toBe(50);
   });
 
+  it("usa los precios por unidad nuevos y el mínimo de 15", () => {
+    expect(
+      SALADOS_CATEGORIES.find((category) => category.slug === "combos")
+        ?.builderMinTotalUnits,
+    ).toBe(15);
+    expect(COMBO_ITEMS.map(({ slug, name, unitPrice }) => [slug, name, unitPrice]))
+      .toEqual([
+        ["deditos", "Deditos", 700],
+        ["empanadas", "Empanadita", 900],
+        ["ojitos", "Ojitos", 500],
+        ["bolitas-de-carne", "Bolita de carne", 800],
+        ["pinchitos", "Mini pinchito", 1200],
+        ["papitas-rellenas", "Papita rellena", 1200],
+      ]);
+  });
+
   it("exige el mínimo total de unidades", () => {
-    expect(builderProblems({}, 50)).toEqual([
-      "Elige al menos un pasaboca.",
+    expect(builderProblems({}, 15)).toEqual([
+      "Elige pasabocas hasta completar el mínimo de 15 unidades.",
     ]);
-    expect(builderProblems(seleccion, 50)).toEqual([]);
+    expect(
+      builderProblems({ deditos: { quantity: 14, preparationId: null } }, 15),
+    ).toEqual(["Te falta 1 unidad para completar el mínimo de 15."]);
+    expect(
+      builderProblems({ deditos: { quantity: 5, preparationId: null } }, 15),
+    ).not.toEqual([]);
+    expect(
+      builderProblems({ deditos: { quantity: 10, preparationId: null } }, 15),
+    ).not.toEqual([]);
+    expect(
+      builderProblems({ deditos: { quantity: 15, preparationId: null } }, 15),
+    ).toEqual([]);
+    expect(
+      builderProblems({ deditos: { quantity: 20, preparationId: null } }, 15),
+    ).toEqual([]);
     expect(builderProblems(seleccion, 80)).toEqual([
-      "Te faltan 30 unidades para el mínimo de 80.",
+      "Te faltan 30 unidades para completar el mínimo de 80.",
     ]);
   });
 
@@ -325,9 +327,31 @@ describe("saleMode builder", () => {
       kind: "builder",
       productSlug: "deditos",
       quantity: 25,
-      unitPrice: 1000,
+      unitPrice: 700,
     });
-    expect(orderTotals(lines)).toEqual({ units: 50, total: 55000 });
+    expect(orderTotals(lines)).toEqual({ units: 50, total: 40000 });
+  });
+
+  it("suma precios por unidad nuevos en una mezcla de pasabocas", () => {
+    const lines = buildBuilderLines(COMBO_ITEMS, {
+      deditos: { quantity: 5, preparationId: null },
+      empanadas: { quantity: 5, preparationId: null },
+      ojitos: { quantity: 5, preparationId: null },
+    });
+
+    expect(
+      lines.map((line) =>
+        line.kind === "builder"
+          ? [line.name, line.quantity, line.unitPrice]
+          : null,
+      ),
+    )
+      .toEqual([
+        ["Deditos", 5, 700],
+        ["Empanadita", 5, 900],
+        ["Ojitos", 5, 500],
+      ]);
+    expect(orderTotals(lines)).toEqual({ units: 15, total: 10500 });
   });
 
   it("aplica el ajuste de la preparación al precio unitario", () => {
@@ -338,8 +362,8 @@ describe("saleMode builder", () => {
     const lines = buildBuilderLines([conPrep], {
       deditos: { quantity: 10, preparationId: "frito" },
     });
-    expect(lines[0]).toMatchObject({ quantity: 10, unitPrice: 1200 });
-    expect(lineTotal(lines[0])).toBe(12000);
+    expect(lines[0]).toMatchObject({ quantity: 10, unitPrice: 900 });
+    expect(lineTotal(lines[0])).toBe(9000);
   });
 });
 
@@ -381,7 +405,7 @@ describe("totales combinados", () => {
       }),
       ...buildPackLines(BANDEJAS, { "bandeja-deditos-de-queso": 2 }),
     ];
-    expect(orderTotals(lines)).toEqual({ units: 107, total: 208000 });
+    expect(orderTotals(lines)).toEqual({ units: 107, total: 200500 });
   });
 });
 
@@ -396,7 +420,7 @@ describe("derivados por saleMode", () => {
   });
 
   it("usa unitPrice en ítems de armador y price en el resto", () => {
-    expect(productPrice(DEDITOS)).toBe(1000);
+    expect(productPrice(DEDITOS)).toBe(700);
     expect(productPrice(TORTA)).toBe(45000);
     expect(productPrice(COMBO)).toBe(43000);
     expect(productPrice(BANDEJA_QUESO)).toBe(25000);

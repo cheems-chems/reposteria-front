@@ -47,6 +47,8 @@ export function PasabocaBuilder({
           );
           const unitPrice = unitPriceFor(item.unitPrice, preparation);
           const subtotal = unitPrice * quantity;
+          const decreaseWouldBreakMinimum =
+            units - Math.min(quantity, item.stepQty) < minTotalUnits;
 
           return (
             <li key={item.slug} className="flex flex-col gap-3 py-4">
@@ -67,6 +69,7 @@ export function PasabocaBuilder({
                   value={quantity}
                   step={item.stepQty}
                   label={item.name}
+                  disableDecrease={decreaseWouldBreakMinimum}
                   onChange={(next) => onChangeQuantity(item.slug, next)}
                 />
               </div>

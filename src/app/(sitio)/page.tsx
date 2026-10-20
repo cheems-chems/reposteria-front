@@ -124,8 +124,8 @@ export default async function HomePage() {
 	return (
 		<main className="flex flex-1 flex-col">
 			<section className="relative isolate overflow-x-clip">
-				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-8 lg:py-20">
-					<div className="relative z-10 flex flex-col items-start gap-5">
+				<div className="relative mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-8 lg:py-20">
+					<div className="relative z-10 flex min-w-0 flex-col items-start gap-5">
 						<h1 className="animate-entrada font-serif text-4xl leading-[1.05] text-vino sm:text-5xl lg:text-6xl">
 							Hecho en casa,
 							<br />
@@ -138,7 +138,7 @@ export default async function HomePage() {
 							{HERO_TEXTO}
 						</p>
 						<div
-							className="animate-entrada mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
+							className="animate-entrada mt-1 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row sm:justify-start"
 							style={{ animationDelay: '240ms' }}
 						>
 							<ButtonLink href="/tienda" size="lg" className="w-full sm:w-auto">
@@ -155,7 +155,7 @@ export default async function HomePage() {
 						</div>
 					</div>
 
-					<div className="relative z-0 mx-auto w-full max-w-xl lg:mx-0 lg:-mr-12 lg:max-w-none">
+					<div className="relative z-0 mx-auto w-full min-w-0 max-w-xl lg:mx-0 lg:-mr-12 lg:max-w-none">
 						<div className="relative mx-auto flex w-full max-w-85 justify-center sm:max-w-md lg:max-w-none">
 							<span
 								aria-hidden="true"

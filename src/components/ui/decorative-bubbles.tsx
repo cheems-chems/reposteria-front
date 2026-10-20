@@ -32,7 +32,7 @@ export function PageBubbles() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 select-none overflow-hidden"
+      className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden"
       data-page-bubbles
     >
       <style>{`

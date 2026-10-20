@@ -455,7 +455,7 @@ export default async function HomePage() {
 					{faqs.map((faq) => (
 						<details
 							key={faq.question}
-							className="group rounded-soft border border-borde bg-transparent px-4 py-3 open:border-fucsia/50"
+							className="group rounded-soft border border-borde bg-white px-4 py-3 open:border-fucsia/50"
 						>
 							<summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-lg text-vino [&::-webkit-details-marker]:hidden">
 								{faq.question}

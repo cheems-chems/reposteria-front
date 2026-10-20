@@ -44,7 +44,7 @@ export const faqs: FaqItem[] = [
   {
     question: "¿Puedo personalizar mi combo?",
     answer:
-      "Sí. En “Arma tu combo” eliges los pasabocas y ajustas la mezcla a tu gusto, desde un mínimo de 15 unidades.",
+      "Sí. En “Arma tu combo” eliges los pasabocas y ajustas la mezcla a tu gusto; el mínimo es de 15 unidades por tipo de pasaboca, de a 5.",
   },
   {
     question: "¿Hacen domicilios?",
@@ -70,7 +70,7 @@ export const comoFuncionaSteps: PasoItem[] = [
 
 export const bannerCombo = {
   title: "Arma tu combo",
-  text: "Arma tu combo con un mínimo de 15 unidades. Dinos qué pasabocas quieres y te lo preparamos.",
+  text: "Arma tu combo con mínimo 15 unidades por tipo de pasaboca, de a 5. Dinos cuáles quieres y te lo preparamos.",
   cta: "Arma tu combo",
 };
 

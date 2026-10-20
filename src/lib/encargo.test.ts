@@ -11,8 +11,11 @@ import {
   comboOrderLine,
   comboQuantitiesOf,
   calcularPrecioCombo,
+  decreaseBuilderQuantity,
+  increaseBuilderQuantity,
   lineTotal,
   orderTotals,
+  normalizeBuilderQuantity,
   productPrice,
   productTypeLabel,
   resolvePreparation,
@@ -296,28 +299,42 @@ describe("saleMode builder", () => {
       ]);
   });
 
-  it("exige el mínimo total de unidades", () => {
+  it("valida el mínimo por tipo de pasaboca", () => {
     expect(builderProblems({}, 15)).toEqual([
-      "Elige pasabocas hasta completar el mínimo de 15 unidades.",
+      "Elige al menos un pasaboca (mínimo 15 unidades por tipo).",
     ]);
     expect(
-      builderProblems({ deditos: { quantity: 14, preparationId: null } }, 15),
-    ).toEqual(["Te falta 1 unidad para completar el mínimo de 15."]);
-    expect(
-      builderProblems({ deditos: { quantity: 5, preparationId: null } }, 15),
-    ).not.toEqual([]);
-    expect(
       builderProblems({ deditos: { quantity: 10, preparationId: null } }, 15),
-    ).not.toEqual([]);
+    ).toEqual(["Cada pasaboca debe tener 0 o mínimo 15 unidades, de a 5."]);
     expect(
       builderProblems({ deditos: { quantity: 15, preparationId: null } }, 15),
     ).toEqual([]);
     expect(
       builderProblems({ deditos: { quantity: 20, preparationId: null } }, 15),
     ).toEqual([]);
-    expect(builderProblems(seleccion, 80)).toEqual([
-      "Te faltan 30 unidades para completar el mínimo de 80.",
-    ]);
+    expect(builderProblems(seleccion, 15)).toEqual([]);
+  });
+
+  it("suma una mezcla válida de 15 Deditos y 20 Empanaditas", () => {
+    const selection = {
+      deditos: { quantity: 15, preparationId: null },
+      empanadas: { quantity: 20, preparationId: null },
+    };
+    expect(builderProblems(selection, 15)).toEqual([]);
+    expect(
+      orderTotals(buildBuilderLines(COMBO_ITEMS, selection)),
+    ).toEqual({ units: 35, total: 28500 });
+  });
+
+  it("aplica saltos y normaliza la cantidad manual por tipo", () => {
+    expect(increaseBuilderQuantity(0)).toBe(15);
+    expect(increaseBuilderQuantity(15)).toBe(20);
+    expect(increaseBuilderQuantity(20)).toBe(25);
+    expect(decreaseBuilderQuantity(20)).toBe(15);
+    expect(decreaseBuilderQuantity(15)).toBe(0);
+    expect(normalizeBuilderQuantity(0)).toBe(0);
+    expect(normalizeBuilderQuantity(7)).toBe(15);
+    expect(normalizeBuilderQuantity(16)).toBe(20);
   });
 
   it("genera una línea por ítem con cantidad > 0", () => {
@@ -334,9 +351,8 @@ describe("saleMode builder", () => {
 
   it("suma precios por unidad nuevos en una mezcla de pasabocas", () => {
     const lines = buildBuilderLines(COMBO_ITEMS, {
-      deditos: { quantity: 5, preparationId: null },
-      empanadas: { quantity: 5, preparationId: null },
-      ojitos: { quantity: 5, preparationId: null },
+      deditos: { quantity: 15, preparationId: null },
+      empanadas: { quantity: 20, preparationId: null },
     });
 
     expect(
@@ -347,11 +363,10 @@ describe("saleMode builder", () => {
       ),
     )
       .toEqual([
-        ["Deditos", 5, 700],
-        ["Empanadita", 5, 900],
-        ["Ojitos", 5, 500],
+        ["Deditos", 15, 700],
+        ["Empanadita", 20, 900],
       ]);
-    expect(orderTotals(lines)).toEqual({ units: 15, total: 10500 });
+    expect(orderTotals(lines)).toEqual({ units: 35, total: 28500 });
   });
 
   it("aplica el ajuste de la preparación al precio unitario", () => {
@@ -360,10 +375,10 @@ describe("saleMode builder", () => {
       preparations: [{ id: "frito", label: "Frito", priceDelta: 200 }],
     };
     const lines = buildBuilderLines([conPrep], {
-      deditos: { quantity: 10, preparationId: "frito" },
+      deditos: { quantity: 15, preparationId: "frito" },
     });
-    expect(lines[0]).toMatchObject({ quantity: 10, unitPrice: 900 });
-    expect(lineTotal(lines[0])).toBe(9000);
+    expect(lines[0]).toMatchObject({ quantity: 15, unitPrice: 900 });
+    expect(lineTotal(lines[0])).toBe(13500);
   });
 });
 

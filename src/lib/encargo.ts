@@ -277,20 +277,54 @@ export function builderUnitCount(selection: BuilderSelection): number {
   );
 }
 
-// Vacío = válido.
+export function normalizeBuilderQuantity(
+  quantity: number,
+  minimumPerItem = 15,
+  step = 5,
+): number {
+  if (!Number.isFinite(quantity) || quantity <= 0) return 0;
+  if (quantity < minimumPerItem) return minimumPerItem;
+  return minimumPerItem + Math.ceil((quantity - minimumPerItem) / step) * step;
+}
+
+export function increaseBuilderQuantity(
+  quantity: number,
+  minimumPerItem = 15,
+  step = 5,
+): number {
+  return quantity < minimumPerItem ? minimumPerItem : quantity + step;
+}
+
+export function decreaseBuilderQuantity(
+  quantity: number,
+  minimumPerItem = 15,
+  step = 5,
+): number {
+  if (quantity <= minimumPerItem) return 0;
+  return Math.max(minimumPerItem, quantity - step);
+}
+
 export function builderProblems(
   selection: BuilderSelection,
-  minTotalUnits: number,
+  minimumPerItem: number,
+  step = 5,
 ): string[] {
-  const units = builderUnitCount(selection);
-  if (units <= 0) {
-    return [`Elige pasabocas hasta completar el mínimo de ${minTotalUnits} unidades.`];
-  }
-  if (units < minTotalUnits) {
-    const missing = minTotalUnits - units;
+  const quantities = Object.values(selection).map((entry) => entry.quantity);
+  if (quantities.every((quantity) => quantity <= 0)) {
     return [
-      `Te ${missing === 1 ? "falta 1 unidad" : `faltan ${missing} unidades`} ` +
-        `para completar el mínimo de ${minTotalUnits}.`,
+      `Elige al menos un pasaboca (mínimo ${minimumPerItem} unidades por tipo).`,
+    ];
+  }
+  if (
+    quantities.some(
+      (quantity) =>
+        quantity > 0 &&
+        (quantity < minimumPerItem ||
+          (quantity - minimumPerItem) % step !== 0),
+    )
+  ) {
+    return [
+      `Cada pasaboca debe tener 0 o mínimo ${minimumPerItem} unidades, de a ${step}.`,
     ];
   }
   return [];

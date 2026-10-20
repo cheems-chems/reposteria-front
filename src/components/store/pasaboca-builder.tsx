@@ -8,6 +8,9 @@ import {
   builderProblems,
   builderUnitCount,
   buildBuilderLines,
+  decreaseBuilderQuantity,
+  increaseBuilderQuantity,
+  normalizeBuilderQuantity,
   orderTotals,
   resolvePreparation,
   unitPriceFor,
@@ -17,7 +20,7 @@ import {
 interface PasabocaBuilderProps {
   items: BuilderItemProduct[];
   selection: BuilderSelection;
-  minTotalUnits: number;
+  minUnitsPerType: number;
   onChangeQuantity: (slug: string, quantity: number) => void;
   onChangePreparation: (slug: string, preparationId: string) => void;
 }
@@ -26,14 +29,14 @@ interface PasabocaBuilderProps {
 export function PasabocaBuilder({
   items,
   selection,
-  minTotalUnits,
+  minUnitsPerType,
   onChangeQuantity,
   onChangePreparation,
 }: PasabocaBuilderProps) {
   const lines = buildBuilderLines(items, selection);
   const totals = orderTotals(lines);
   const units = builderUnitCount(selection);
-  const problems = builderProblems(selection, minTotalUnits);
+  const problems = builderProblems(selection, minUnitsPerType);
 
   return (
     <div className="flex flex-col">
@@ -47,9 +50,6 @@ export function PasabocaBuilder({
           );
           const unitPrice = unitPriceFor(item.unitPrice, preparation);
           const subtotal = unitPrice * quantity;
-          const decreaseWouldBreakMinimum =
-            units - Math.min(quantity, item.stepQty) < minTotalUnits;
-
           return (
             <li key={item.slug} className="flex flex-col gap-3 py-4">
               <div className="flex items-start justify-between gap-3">
@@ -61,15 +61,32 @@ export function PasabocaBuilder({
                     {formatCOP(unitPrice)} por unidad
                   </p>
                   <p className="text-xs text-texto-suave">
-                    De a {item.stepQty}.
+                    Mínimo {minUnitsPerType}, de a {item.stepQty}.
                   </p>
                 </div>
 
                 <QuantityStepper
                   value={quantity}
+                  min={minUnitsPerType}
                   step={item.stepQty}
                   label={item.name}
-                  disableDecrease={decreaseWouldBreakMinimum}
+                  normalizeInput={(next) =>
+                    normalizeBuilderQuantity(next, minUnitsPerType, item.stepQty)
+                  }
+                  nextIncrease={(current) =>
+                    increaseBuilderQuantity(
+                      current,
+                      minUnitsPerType,
+                      item.stepQty,
+                    )
+                  }
+                  nextDecrease={(current) =>
+                    decreaseBuilderQuantity(
+                      current,
+                      minUnitsPerType,
+                      item.stepQty,
+                    )
+                  }
                   onChange={(next) => onChangeQuantity(item.slug, next)}
                 />
               </div>

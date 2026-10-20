@@ -14,6 +14,10 @@ interface QuantityStepperProps {
   invalid?: boolean;
   /** Bloquea el "−" aunque la cantidad sea mayor que 0 (p. ej. mínimo global). */
   disableDecrease?: boolean;
+  /** Normaliza la cantidad manual al salir del campo. */
+  normalizeInput?: (value: number) => number;
+  nextIncrease?: (value: number) => number;
+  nextDecrease?: (value: number) => number;
   onChange: (value: number) => void;
 }
 
@@ -25,18 +29,29 @@ export function QuantityStepper({
   label,
   invalid,
   disableDecrease,
+  normalizeInput,
+  nextIncrease,
+  nextDecrease,
   onChange,
 }: QuantityStepperProps) {
   function decrease() {
-    if (value <= 0) {
+    if (value <= min) {
       onChange(0);
       return;
     }
+    if (nextDecrease) {
+      onChange(nextDecrease(value));
+      return;
+    }
     const next = value - step;
-    onChange(next < min ? 0 : next);
+    onChange(next < min ? min : next);
   }
 
   function increase() {
+    if (nextIncrease) {
+      onChange(nextIncrease(value));
+      return;
+    }
     if (value <= 0) {
       onChange(Math.max(min, step));
       return;
@@ -58,7 +73,7 @@ export function QuantityStepper({
       <Input
         type="number"
         inputMode="numeric"
-        min={0}
+        min={min}
         step={step}
         value={value > 0 ? String(value) : ""}
         aria-label={`Cantidad de ${label}`}
@@ -72,6 +87,11 @@ export function QuantityStepper({
           const parsed = Math.floor(Number(raw));
           if (Number.isNaN(parsed)) return;
           onChange(Math.max(0, parsed));
+        }}
+        onBlur={() => {
+          if (!normalizeInput) return;
+          const normalized = normalizeInput(value);
+          if (normalized !== value) onChange(normalized);
         }}
         className="w-14 px-1 text-center"
       />

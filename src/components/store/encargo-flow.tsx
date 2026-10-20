@@ -74,34 +74,6 @@ interface InitialState {
   packSelection: PackSelection;
 }
 
-function builderSelectionAtMinimum(
-  items: BuilderItemProduct[],
-  minimum: number,
-  preferredSlug?: string,
-): BuilderSelection {
-  const selection: BuilderSelection = {};
-  const orderedItems = preferredSlug
-    ? [...items].sort(
-        (left, right) =>
-          Number(right.slug === preferredSlug) -
-          Number(left.slug === preferredSlug),
-      )
-    : items;
-  let remaining = minimum;
-
-  for (const item of orderedItems) {
-    if (remaining <= 0) break;
-    const quantity = Math.min(item.stepQty, remaining);
-    selection[item.slug] = {
-      quantity,
-      preparationId: item.preparations?.[0]?.id ?? null,
-    };
-    remaining -= quantity;
-  }
-
-  return selection;
-}
-
 /** Deriva el estado inicial a partir de la URL (?categoria= / ?producto=). */
 function computeInitial(props: EncargoFlowProps): InitialState {
   const { products, comboItems, categories } = props;
@@ -131,9 +103,6 @@ function computeInitial(props: EncargoFlowProps): InitialState {
   if (!categorySlug) return state;
 
   const category = categories.find((item) => item.slug === categorySlug);
-  const categoryItems = comboItems.filter(
-    (item) => item.categorySlug === categorySlug,
-  );
   const minimum = category?.builderMinTotalUnits ?? 0;
 
   if (product?.saleMode === "single") {
@@ -145,16 +114,16 @@ function computeInitial(props: EncargoFlowProps): InitialState {
     state.packSelection = { [product.slug]: Math.max(1, product.minPacks) };
   } else if (comboItem) {
     state.choice = BUILDER;
-    state.builderSelection = builderSelectionAtMinimum(
-      categoryItems,
-      minimum,
-      comboItem.slug,
-    );
+    state.builderSelection = {
+      [comboItem.slug]: {
+        quantity: minimum || comboItem.stepQty,
+        preparationId: comboItem.preparations?.[0]?.id ?? null,
+      },
+    };
   }
 
   if (props.initialMode === "armar" && !product && !comboItem) {
     state.choice = BUILDER;
-    state.builderSelection = builderSelectionAtMinimum(categoryItems, minimum);
   }
 
   return state;
@@ -209,7 +178,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
       ? comboItems.filter((p) => p.categorySlug === categorySlug)
       : [];
   const kind = categorySlug !== null ? categorySaleKind(categoryProducts) : null;
-  const minTotalUnits = category?.builderMinTotalUnits ?? 0;
+  const minUnitsPerType = category?.builderMinTotalUnits ?? 15;
 
   const singleProducts = categoryProducts.filter(
     (p): p is SingleProduct => p.saleMode === "single",
@@ -305,9 +274,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
   function selectBuilder() {
     setError(null);
     setChoice(BUILDER);
-    setBuilderSelection(
-      builderSelectionAtMinimum(categoryItems, minTotalUnits),
-    );
+    setBuilderSelection({});
   }
 
   /** Vuelve a la selección de tipo sin salir de /encargo. */
@@ -340,7 +307,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
         if (!selectedSingle) return "Elige un producto para continuar.";
       } else if (kind === "combo") {
         if (isBuilderChoice) {
-          const problems = builderProblems(builderSelection, minTotalUnits);
+          const problems = builderProblems(builderSelection, minUnitsPerType);
           if (problems.length > 0) return problems[0];
         } else if (selectedCombo) {
           if (selectedCombo.editable) {
@@ -411,7 +378,9 @@ export function EncargoFlow(props: EncargoFlowProps) {
       lines.push(`Pedido especial: ${customProduct.trim()}`);
     } else {
       if (isBuilderChoice) {
-        lines.push("Armado desde cero (mínimo 15 unidades):");
+        lines.push(
+          "Armado desde cero (mínimo 15 unidades por tipo de pasaboca):",
+        );
       }
       for (const line of orderLines) {
         switch (line.kind) {
@@ -491,7 +460,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
     if (isBuilderChoice) {
       const builderProblem = builderProblems(
         builderSelection,
-        minTotalUnits,
+        minUnitsPerType,
       )[0];
       if (builderProblem) {
         setError(builderProblem);
@@ -572,7 +541,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
             {step === 0 && categorySlug !== null && kind === "combo" ? (
               <p className="text-sm text-texto-suave">
                 {isBuilderChoice
-                  ? "Elige tus pasabocas, desde un mínimo de 15 unidades en total."
+                  ? "Elige tus pasabocas. Cada tipo se arma desde un mínimo de 15 unidades, de a 5."
                   : "Elige un combo o arma el tuyo desde cero. Cambia los pasabocas a tu gusto. Si agregas unidades extra, se suman al total."}
               </p>
             ) : null}
@@ -726,7 +695,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
                     <PasabocaBuilder
                       items={categoryItems}
                       selection={builderSelection}
-                      minTotalUnits={minTotalUnits}
+                      minUnitsPerType={minUnitsPerType}
                       onChangeQuantity={setBuilderQuantity}
                       onChangePreparation={setBuilderPreparation}
                     />

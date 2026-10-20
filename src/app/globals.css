@@ -193,9 +193,85 @@
       box-shadow 200ms var(--ease-suave);
   }
 
-  .levante:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 34px rgba(90, 18, 51, 0.12);
+  /* Solo en dispositivos con hover: en táctil no se queda "pegado". */
+  @media (hover: hover) {
+    .levante:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 34px rgba(90, 18, 51, 0.12);
+    }
+  }
+
+  /* Brillo diagonal que cruza la imagen de la tarjeta UNA vez al entrar en
+     hover; solo transform, sin blur ni will-change. */
+  .tarjeta-brillo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 38%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 62%
+    );
+    transform: translateX(-130%);
+  }
+
+  @media (hover: hover) {
+    .group:hover .tarjeta-brillo::after {
+      animation: brillo 700ms ease-out 1;
+    }
+  }
+
+  /* Etiqueta de descuento: brillo que cruza cada 4.5 s (la única animación
+     continua de las tarjetas, y nunca en táctil). Va por DETRÁS del texto
+     (z-index negativo dentro del stacking context de la etiqueta). */
+  .oferta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.7) 50%,
+      transparent 65%
+    );
+    transform: translateX(-120%);
+  }
+
+  @media (hover: hover) {
+    .oferta::after {
+      animation: oferta-brillo 4.5s ease-in-out infinite;
+    }
+  }
+
+  /* Salto corto del contador del encargo cuando el número aumenta */
+  .animate-brinco {
+    animation: brinco 400ms ease-out 1;
+  }
+
+  /* Pop del check "✓ Agregado" */
+  .animate-pop {
+    animation: pop-check 320ms var(--ease-suave) 1;
+  }
+
+  /* Presión del botón: conserva los cambios de color y además anima transform */
+  .presion {
+    transition-property:
+      color,
+      background-color,
+      border-color,
+      outline-color,
+      fill,
+      stroke,
+      transform,
+      scale,
+      rotate,
+      translate;
+    transition-duration: 150ms;
+    transition-timing-function: var(--ease-suave);
   }
 
   /* Ocultar barra de scroll horizontal */
@@ -206,6 +282,87 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* --- Animaciones decorativas por sección (transform/opacity) -------------- */
+
+  /* Copo de nieve: giro lento continuo */
+  .animate-girar-lento {
+    animation: girar 20s linear infinite;
+    transform-origin: center;
+  }
+
+  /* Copitos que caen despacio alrededor del círculo */
+  .animate-caer {
+    animation: caer 7s var(--ease-suave) infinite;
+  }
+
+  /* Hilitos de vapor que suben y se desvanecen */
+  .animate-vapor {
+    animation: vapor 4.5s ease-in-out infinite;
+  }
+
+  /* Cereza que rebota suave cada pocos segundos */
+  .animate-rebote {
+    animation: rebote 3.5s ease-in-out infinite;
+  }
+
+  /* Confites/destellos que parpadean alrededor: opacidad 0.6→1 para que se
+     noten siempre (solo los confeti de la sección Dulces usan este nombre). */
+  .animate-confite {
+    animation: confite 3.8s ease-in-out infinite;
+  }
+
+  /* Gestos de sección SOLO al hacer hover sobre la tarjeta: reutilizan los
+     mismos keyframes de arriba pero no corren en reposo ni en táctil. */
+  @media (hover: hover) {
+    .group:hover .gesto-rebote {
+      animation: rebote 3.5s ease-in-out infinite;
+    }
+
+    .group:hover .gesto-girar-lento {
+      animation: girar 20s linear infinite;
+      transform-origin: center;
+    }
+
+    .group:hover .gesto-vapor {
+      animation: vapor 4.5s ease-in-out infinite;
+    }
+  }
+
+  /* Círculo del combo: flotación discreta (±6 px) en 6 s */
+  .animate-flotar-combo {
+    animation: flotar-combo 6s ease-in-out infinite;
+  }
+
+  /* Bolitas del combo: deriva mínima */
+  .animate-deriva {
+    animation: deriva 7s ease-in-out infinite;
+  }
+
+  /* Paso que aparece: fade + subida, disparado por data-shown */
+  .paso {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 500ms var(--ease-suave),
+      transform 500ms var(--ease-suave);
+  }
+
+  .paso[data-shown="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Línea punteada que se dibuja al entrar a la vista */
+  .linea-pasos {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 900ms var(--ease-suave);
+  }
+
+  .linea-pasos[data-shown="true"] {
+    transform: scaleX(1);
   }
 }
 
@@ -299,6 +456,132 @@
   }
 }
 
+@keyframes caer {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(34px) scale(1);
+  }
+}
+
+@keyframes vapor {
+  0% {
+    opacity: 0;
+    transform: translateY(2px) translateX(0) scaleY(0.8);
+  }
+  35% {
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) translateX(2px) scaleY(1.1);
+  }
+}
+
+@keyframes rebote {
+  0%,
+  62%,
+  100% {
+    transform: translateY(0);
+  }
+  76% {
+    transform: translateY(-6px);
+  }
+  88% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes confite {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes flotar-combo {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes deriva {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(3px, -4px);
+  }
+}
+
+@keyframes brillo {
+  from {
+    transform: translateX(-130%);
+  }
+  to {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes oferta-brillo {
+  0% {
+    transform: translateX(-120%);
+  }
+  45%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes brinco {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    transform: translateY(-4px) scale(1.15);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes pop-check {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -307,8 +590,30 @@
   .animate-torta,
   .animate-destello,
   .animate-entrada,
-  .animate-sello {
+  .animate-sello,
+  .animate-girar-lento,
+  .animate-caer,
+  .animate-vapor,
+  .animate-rebote,
+  .animate-confite,
+  .animate-flotar-combo,
+  .animate-deriva,
+  .animate-anillo,
+  .animate-brinco,
+  .animate-pop,
+  .gesto-rebote,
+  .gesto-girar-lento,
+  .gesto-vapor,
+  .tarjeta-brillo::after,
+  .oferta::after {
     animation: none;
+  }
+  .reveal,
+  .paso,
+  .linea-pasos,
+  .levante:hover {
+    opacity: 1;
+    transform: none;
   }
   *,
   *::before,

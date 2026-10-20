@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 import { cn } from "@/lib/cn";
 
@@ -25,6 +26,20 @@ export function CartButton({ className }: { className?: string }) {
   const { count, open } = useCart();
   const showCount = count > 0;
 
+  // Salto corto del contador SOLO cuando el número aumenta (sin tocar la
+  // lógica del carrito: es puramente presentacional).
+  const lastCount = useRef(count);
+  const [bump, setBump] = useState(false);
+
+  useEffect(() => {
+    const previous = lastCount.current;
+    lastCount.current = count;
+    if (count <= previous) return;
+    setBump(true);
+    const timer = setTimeout(() => setBump(false), 400);
+    return () => clearTimeout(timer);
+  }, [count]);
+
   return (
     <button
       type="button"
@@ -39,7 +54,12 @@ export function CartButton({ className }: { className?: string }) {
     >
       <BagIcon className="size-5" />
       {showCount ? (
-        <span className="tabular absolute -right-1.5 -top-1.5 flex min-w-5 items-center justify-center rounded-full bg-fucsia px-1 text-[11px] font-semibold leading-5 text-white">
+        <span
+          className={cn(
+            "tabular absolute -right-1.5 -top-1.5 flex min-w-5 items-center justify-center rounded-full bg-fucsia px-1 text-[11px] font-semibold leading-5 text-white",
+            bump && "animate-brinco",
+          )}
+        >
           {count > 99 ? "99+" : count}
         </span>
       ) : null}

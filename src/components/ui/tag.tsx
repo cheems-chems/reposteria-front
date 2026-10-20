@@ -19,7 +19,7 @@ export function Tag({ children, accent = "rosa-medio", className }: TagProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-ticket border bg-tarjeta/60 px-2 py-0.5 font-sans text-[11px] font-medium uppercase tracking-[0.14em]",
+        "inline-flex items-center rounded-ticket border bg-tarjeta px-2 py-0.5 font-sans text-[11px] font-medium uppercase tracking-[0.14em]",
         accents[accent],
         className,
       )}

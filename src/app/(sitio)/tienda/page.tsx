@@ -84,6 +84,7 @@ async function TiendaContenido({
           <ProductGrid
             products={productsByCategory.get(category.slug) ?? []}
             comboItems={comboItems}
+            entranceKey={sectionSlug ?? "todo"}
           />
         </div>
       ))}

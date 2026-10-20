@@ -334,22 +334,20 @@ export default async function HomePage() {
 						<Reveal>
 							<SectionHeading
 								title="Los más pedidos"
-								description={
-									<span className="text-lg text-texto-suave">
-										Una muestra de lo que más nos encargan.
-									</span>
-								}
 							/>
 						</Reveal>
-						<Reveal delay={80} className="mt-10">
-							<div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
-								{moreProducts.map((product) => {
-									const line = product.available
-										? orderLineForProduct(product, comboItems)
-										: null;
-									return (
+						<div className="mt-10 grid grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
+							{moreProducts.map((product, index) => {
+								const line = product.available
+									? orderLineForProduct(product, comboItems)
+									: null;
+								return (
+									<Reveal
+										key={product.slug}
+										delay={Math.min(index, 7) * 60}
+										className="h-full"
+									>
 										<ProductTicket
-											key={product.slug}
 											art={sectionArtKey(product.categorySlug, product.categoryName)}
 											product={{
 												slug: product.slug,
@@ -369,10 +367,10 @@ export default async function HomePage() {
 											}
 											className="h-full"
 										/>
-									);
-								})}
-							</div>
-						</Reveal>
+									</Reveal>
+								);
+							})}
+						</div>
 					</div>
 				</section>
 			) : null}

@@ -7,6 +7,7 @@ import {
   sectionArtTheme,
   type SectionArtKey,
 } from "@/components/ui/section-art";
+import { ParticleGlyph } from "@/components/ui/section-particles";
 import { SafeImage } from "@/components/ui/safe-image";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { cn } from "@/lib/cn";
@@ -48,11 +49,20 @@ export function ProductTicket({
   const available = product.available !== false;
   const theme = sectionArtTheme(art);
 
+  // Gestos de la sección, SOLO al hacer hover y sobre el ícono provisional.
+  const sectionGesture =
+    art === "dulces"
+      ? "gesto-rebote"
+      : art === "congelados"
+        ? "gesto-girar-lento"
+        : "";
+
   const artPanel = (
     <span
       className={cn(
         "absolute inset-0 flex items-center justify-center",
         theme.tile,
+        "transition-transform duration-[400ms] ease-suave group-hover:scale-105 motion-reduce:group-hover:scale-100",
       )}
     >
       <SectionArt
@@ -61,15 +71,25 @@ export function ProductTicket({
           featured ? "w-20 sm:w-32" : "w-16 sm:w-20",
           "opacity-90",
           theme.ink,
+          sectionGesture,
         )}
       />
+      {art === "salados" ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-[20%] mx-auto h-7 w-5 text-vino/45 opacity-0 gesto-vapor"
+        >
+          <ParticleGlyph art="salados" />
+        </span>
+      ) : null}
     </span>
   );
 
   return (
     <div
       className={cn(
-        "group levante flex flex-col bg-tarjeta",
+        "group levante flex flex-col rounded-soft overflow-hidden",
+        theme.card,
         "border border-borde hover:border-vino/60",
         !available && "opacity-70",
         className,
@@ -82,7 +102,7 @@ export function ProductTicket({
       >
         <div
           className={cn(
-            "relative m-2 overflow-hidden border border-borde bg-lienzo",
+            "relative m-2 overflow-hidden rounded-ticket border border-borde bg-lienzo",
             featured ? "aspect-4/3" : "aspect-4/5",
           )}
         >
@@ -97,7 +117,7 @@ export function ProductTicket({
                   : "(max-width: 768px) 50vw, 22vw"
               }
               className={cn(
-                "object-cover transition-transform duration-200 ease-suave group-hover:scale-[1.02]",
+                "object-cover transition-transform duration-[400ms] ease-suave group-hover:scale-105 motion-reduce:group-hover:scale-100",
                 !available && "grayscale",
               )}
               fallback={artPanel}
@@ -106,10 +126,15 @@ export function ProductTicket({
             artPanel
           )}
           {!available ? (
-            <span className="absolute left-0 top-0 m-2">
+            <span className="absolute left-0 top-0 z-10 m-2">
               <StatusBadge label="No disponible" tone="apagado" />
             </span>
           ) : null}
+          {/* Brillo diagonal: un solo paso por hover, nunca en reposo */}
+          <span
+            aria-hidden="true"
+            className="tarjeta-brillo pointer-events-none absolute inset-0"
+          />
         </div>
 
         <div className="flex flex-1 flex-col gap-2 px-3 pb-3 pt-1">
@@ -132,6 +157,7 @@ export function ProductTicket({
               amount={product.price}
               compareAt={product.compareAt}
               size={featured ? "lg" : "md"}
+              groupPop
             />
           </div>
         </div>

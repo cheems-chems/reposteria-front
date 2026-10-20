@@ -39,14 +39,6 @@ export const trust: TrustItem[] = [
   },
 ];
 
-export const marqueePhrases = [
-  "Hecho en casa",
-  "Ingredientes seleccionados",
-  "Perfectos para cualquier ocasión",
-  "Pedidos por encargo vía WhatsApp",
-  "El sabor que une, lo hacemos con amor",
-];
-
 export const faqs: FaqItem[] = [
   {
     question: "¿Cómo hago un pedido?",
@@ -87,7 +79,7 @@ export const comoFuncionaSteps: PasoItem[] = [
 
 export const bannerCombo = {
   title: "Arma tu combo",
-  text: "Elige tus pasabocas favoritos por unidades y armamos contigo el combo perfecto para tu ocasión.",
+  text: "Dinos cuántos pasabocas quieres y de qué: nosotros te armamos el combo.",
   cta: "Arma tu combo",
 };
 
@@ -116,7 +108,7 @@ export const practicalInfo: PracticalItem[] = [
   {
     icon: "entrega",
     title: "Zona de entrega",
-    text: "Bogotá y municipios cercanos (ejemplo). Coordinamos por WhatsApp.",
+    text: "Barranquilla y municipios cercanos (ejemplo). Coordinamos por WhatsApp.",
   },
   {
     icon: "tiempo",

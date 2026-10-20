@@ -2,11 +2,11 @@ import { AddToCartButton } from '@/components/cart/add-to-cart-button';
 import { ProductTicket } from '@/components/product/product-ticket';
 import {
 	CheckList,
-	Marquee,
 	SectionHeading,
 	WaveDivider,
 } from '@/components/home/decor';
 import Image from 'next/image';
+import { ComboArt } from '@/components/home/combo-art';
 import { PracticalInfo } from '@/components/home/practical-info';
 import { HeroSeal } from '@/components/home/hero-art';
 import { SectionCircle } from '@/components/home/section-circle';
@@ -59,7 +59,6 @@ import {
 	bannerCombo,
 	comoFuncionaSteps,
 	faqs,
-	marqueePhrases,
 	sectionBlurb,
 	trust,
 } from '@/content/home';
@@ -109,16 +108,15 @@ export default async function HomePage() {
 		}
 	}
 
-	const comboTheme = sectionArtTheme(
-		sectionArtKey(highlightCombo?.slug, highlightCombo?.name),
-	);
+	const comboArtKey = sectionArtKey(highlightCombo?.slug, highlightCombo?.name);
+	const comboTheme = sectionArtTheme(comboArtKey);
 	const comboArtPanel = (
 		<span
 			aria-hidden="true"
 			className={`absolute inset-0 flex items-center justify-center ${comboTheme.tile}`}
 		>
 			<SectionArt
-				art={sectionArtKey(highlightCombo?.slug, highlightCombo?.name)}
+				art={comboArtKey}
 				className={`w-28 sm:w-36 ${comboTheme.ink}`}
 			/>
 		</span>
@@ -148,7 +146,7 @@ export default async function HomePage() {
 								Ver la tienda
 							</ButtonLink>
 							<ButtonLink
-								href="/encargo?categoria=combos"
+								href="/encargo?categoria=combos&modo=armar"
 								size="lg"
 								variant="secondary"
 								className="w-full sm:w-auto"
@@ -371,59 +369,47 @@ export default async function HomePage() {
 				</section>
 			) : null}
 
-			<Marquee phrases={marqueePhrases} />
-
 			<PracticalInfo />
 
-			<section className="relative overflow-x-clip bg-fucsia">
-				<WaveDivider className="text-tarjeta" />
-				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-20 sm:px-8 lg:grid-cols-2 lg:gap-12 lg:py-24">
+			<section
+				className="relative overflow-x-clip"
+				style={{
+					backgroundImage:
+						'linear-gradient(135deg, var(--color-combo-from) 0%, var(--color-combo-from) 60%, var(--color-combo-to) 100%)',
+				}}
+			>
+				{/* Ondas con el color del fondo contiguo: empalman con el degradado sin cortes. */}
+				<WaveDivider fill="var(--color-combo-wave-top)" flip />
+
+				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-14 pb-16 sm:px-8 lg:grid-cols-2 lg:gap-12 lg:py-16">
 					<div className="flex flex-col items-center gap-5 text-center lg:items-start lg:text-left">
-						<h2 className="font-serif text-4xl leading-[1.05] text-white sm:text-5xl">
+						<h2 className="font-serif text-[2.5rem] leading-[1.05] text-white sm:text-[3.4rem]">
 							{bannerCombo.title}
 						</h2>
-						<p className="max-w-md text-lg text-white sm:text-xl">
+						<p className="max-w-[38ch] text-[1.1rem] font-normal leading-[1.6] text-white/[0.92]">
 							{bannerCombo.text}
 						</p>
 						<ButtonLink
-							href="/encargo?categoria=combos"
+							href="/encargo?categoria=combos&modo=armar"
 							size="lg"
 							variant="inverse"
-							className="mt-1 px-8 text-lg"
+							className="group mt-1 px-9 py-4 text-xl font-bold sm:px-10"
 						>
-							{bannerCombo.cta}
+							<span className="font-bold">{bannerCombo.cta}</span>
+							<span
+								aria-hidden="true"
+								className="transition-transform duration-200 ease-suave group-hover:translate-x-1"
+							>
+								→
+							</span>
 						</ButtonLink>
 					</div>
 					<div className="relative mx-auto flex w-full max-w-md items-center justify-center lg:mx-0">
-						<span
-							aria-hidden="true"
-							className="absolute size-64 rounded-full bg-white/20 sm:size-80"
-						/>
-						<span
-							aria-hidden="true"
-							className="absolute -left-2 top-2 size-16 animate-flotar rounded-full bg-white/25 sm:size-24"
-						/>
-						<span
-							aria-hidden="true"
-							className="absolute bottom-2 -right-1 size-12 animate-flotar-lento rounded-full bg-white/20 sm:size-20"
-						/>
-						<div className="relative aspect-square w-56 overflow-hidden rounded-full border border-white/40 bg-white/90 sm:w-72">
-							{highlightCombo?.imageUrl ? (
-								<SafeImage
-									src={highlightCombo.imageUrl}
-									alt={highlightCombo.name}
-									fill
-									sizes="(max-width: 1024px) 288px, 288px"
-									className="object-cover"
-									fallback={comboArtPanel}
-								/>
-							) : (
-								comboArtPanel
-							)}
-						</div>
+						<ComboArt art={comboArtKey} />
 					</div>
 				</div>
-				<WaveDivider className="text-rosa-palido" flip />
+
+				<WaveDivider fill="var(--color-combo-wave-bottom)" />
 			</section>
 
 			<section className="relative overflow-x-clip bg-rosa-palido">

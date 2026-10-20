@@ -23,6 +23,17 @@
 /* Fondo de página: cámbialo solo aquí y se actualiza todo el sitio. */
 :root {
   --color-bg: #FFF1F4; /* rosa pastel original */
+
+  /* Degradado de la franja "Arma tu combo": inicio oscuro (lado del texto)
+     hacia coral rosado. Las ondas usan las variables de la paleta. */
+  --color-combo-from: #D6195F;
+  --color-combo-to: #F06292;
+  --color-combo-wave-top: color-mix(
+    in srgb,
+    var(--color-rosa-palido) 60%,
+    var(--color-bg)
+  );
+  --color-combo-wave-bottom: var(--color-rosa-palido);
 }
 
 @theme inline {
@@ -163,11 +174,6 @@
   /* Entrada del texto del héroe (una sola vez): fade + subida de 16 px */
   .animate-entrada {
     animation: entrada 600ms ease-out both;
-  }
-
-  /* Franja de frases: deslizamiento continuo (contenido duplicado) */
-  .animate-desfile {
-    animation: desfile 32s linear infinite;
   }
 
   /* Anillo discontinuo que gira lento detrás de los círculos */
@@ -352,6 +358,35 @@
     animation: deriva 7s ease-in-out infinite;
   }
 
+  /* --- Combo: animaciones de fritura (solo transform/opacity) --------------- */
+  .combo-pulso {
+    animation: combo-pulso 4s ease-in-out infinite;
+  }
+
+  .combo-vapor {
+    animation: combo-vapor 4.5s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .combo-burbuja {
+    animation: combo-burbuja var(--dur, 4s) ease-in infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .combo-chispa {
+    animation: combo-chispa var(--dur, 2.6s) ease-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .combo-chisporroteo {
+    animation: combo-chisporroteo 2.4s ease-in-out infinite;
+  }
+
+  /* Pausa todas las animaciones del combo cuando la sección no se ve. */
+  .combo-paused * {
+    animation-play-state: paused;
+  }
+
   /* Paso que aparece: fade + subida, disparado por data-shown */
   .paso {
     opacity: 0;
@@ -418,15 +453,6 @@
   50% {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes desfile {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
   }
 }
 
@@ -548,6 +574,80 @@
   }
 }
 
+@keyframes combo-pulso {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.65;
+  }
+}
+
+@keyframes combo-vapor {
+  0% {
+    transform: translateY(6px) scaleY(0.85);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.24;
+  }
+  100% {
+    transform: translateY(-34px) scaleY(1.08);
+    opacity: 0;
+  }
+}
+
+@keyframes combo-burbuja {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.65;
+  }
+  70% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-64px) scale(1.05);
+    opacity: 0;
+  }
+}
+
+@keyframes combo-chispa {
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.8;
+  }
+  55% {
+    transform: translate(var(--sx, 0), -20px) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(var(--sx, 0), 8px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes combo-chisporroteo {
+  0%,
+  100% {
+    transform: rotate(-1.2deg) translateX(-1px);
+  }
+  50% {
+    transform: rotate(1.2deg) translateX(1px);
+  }
+}
+
 @keyframes brillo {
   from {
     transform: translateX(-130%);
@@ -610,6 +710,11 @@
   .animate-confite,
   .animate-flotar-combo,
   .animate-deriva,
+  .combo-pulso,
+  .combo-vapor,
+  .combo-burbuja,
+  .combo-chispa,
+  .combo-chisporroteo,
   .animate-anillo,
   .animate-brinco,
   .animate-pop,

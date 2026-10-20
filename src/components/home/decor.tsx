@@ -41,9 +41,11 @@ export function SectionHeading({
 export function WaveDivider({
   className,
   flip = false,
+  fill,
 }: {
   className?: string;
   flip?: boolean;
+  fill?: string;
 }) {
   return (
     <div
@@ -56,48 +58,10 @@ export function WaveDivider({
         className={cn("block h-10 w-full sm:h-14", flip && "rotate-180")}
       >
         <path
-          fill="currentColor"
+          fill={fill ?? "currentColor"}
           d="M0,30 C180,64 360,2 720,30 C1080,58 1260,2 1440,30 L1440,64 L0,64 Z"
         />
       </svg>
-    </div>
-  );
-}
-
-/** Franja de frases deslizándose (contenido duplicado para bucle continuo). */
-export function Marquee({
-  phrases,
-  className,
-}: {
-  phrases: string[];
-  className?: string;
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "group relative flex overflow-hidden border-y border-borde bg-tarjeta py-3",
-        className,
-      )}
-    >
-      <div className="flex w-max animate-desfile">
-        {[0, 1].map((copy) => (
-          <ul key={copy} className="flex shrink-0 items-center">
-            {phrases.map((phrase) => (
-              <li
-                key={`${copy}-${phrase}`}
-                className="flex items-center gap-4 px-6 font-serif text-lg italic text-vino/80"
-              >
-                <span
-                  aria-hidden="true"
-                  className="size-2 rounded-full bg-fucsia"
-                />
-                {phrase}
-              </li>
-            ))}
-          </ul>
-        ))}
-      </div>
     </div>
   );
 }

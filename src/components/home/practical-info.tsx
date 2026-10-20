@@ -13,7 +13,7 @@ const ICONS: Record<PracticalItem['icon'], string> = {
 /** Franja práctica: entrega, anticipación y horario (textos de ejemplo editables). */
 export function PracticalInfo() {
 	return (
-		<section className="relative border-y border-borde bg-rosa-palido/60">
+		<section className="relative border-t border-borde bg-rosa-palido/60">
 			<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
 				<Reveal>
 					<SectionHeading title="Información para tu pedido" />
@@ -36,8 +36,10 @@ export function PracticalInfo() {
 										<path d={ICONS[item.icon]} />
 									</svg>
 								</span>
-								<h3 className="font-serif text-lg text-vino">{item.title}</h3>
-								<p className="text-sm text-texto-suave sm:text-[15px]">
+								<h3 className="font-serif text-lg text-vino sm:text-xl">
+									{item.title}
+								</h3>
+								<p className="text-[15px] text-texto sm:text-base">
 									{item.text}
 								</p>
 							</li>

@@ -1,38 +1,30 @@
 /*
   Volitas globales en bandas CSS de 600 px que alternan las variantes A y B.
-  Cada banda tiene cinco círculos (cuatro claros y uno intenso). El fondo se
+  Cada banda tiene tres círculos grandes y medianos. El fondo se
   repite en Y y la capa se recorta sola, sin animaciones ni nodos por burbuja.
 */
 
 const BUBBLE_BLOCK_A = `
   radial-gradient(circle 100px at -4px 124px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 52px at calc(100% - 60px) 232px, rgb(255 214 226 / 50%) 99%, transparent 100%),
-  radial-gradient(circle 24px at 32px 354px, rgb(249 168 192 / 65%) 99%, transparent 100%),
-  radial-gradient(circle 20px at calc(100% - 36px) 450px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 44px at 8px 556px, rgb(255 214 226 / 50%) 99%, transparent 100%)
 `;
 
 const BUBBLE_BLOCK_B = `
   radial-gradient(circle 105px at calc(100% + 2px) 124px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 48px at 58px 218px, rgb(249 168 192 / 65%) 99%, transparent 100%),
-  radial-gradient(circle 18px at calc(100% - 32px) 333px, rgb(255 214 226 / 50%) 99%, transparent 100%),
-  radial-gradient(circle 26px at 42px 441px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 48px at calc(100% + 4px) 550px, rgb(255 214 226 / 50%) 99%, transparent 100%)
 `;
 
 const BUBBLE_BLOCK_A_DESKTOP = `
   radial-gradient(circle 160px at -10px 190px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 62px at 18% 258px, rgb(255 214 226 / 50%) 99%, transparent 100%),
-  radial-gradient(circle 26px at 6% 370px, rgb(249 168 192 / 65%) 99%, transparent 100%),
-  radial-gradient(circle 24px at 82% 455px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 56px at 14% 558px, rgb(255 214 226 / 50%) 99%, transparent 100%)
 `;
 
 const BUBBLE_BLOCK_B_DESKTOP = `
   radial-gradient(circle 170px at calc(100% + 10px) 180px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 60px at 82% 250px, rgb(249 168 192 / 65%) 99%, transparent 100%),
-  radial-gradient(circle 24px at 16% 345px, rgb(255 214 226 / 50%) 99%, transparent 100%),
-  radial-gradient(circle 28px at 88% 450px, rgb(255 214 226 / 50%) 99%, transparent 100%),
   radial-gradient(circle 64px at calc(100% + 4px) 555px, rgb(255 214 226 / 50%) 99%, transparent 100%)
 `;
 

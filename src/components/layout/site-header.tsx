@@ -10,7 +10,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-borde bg-lienzo/95 backdrop-blur supports-backdrop-filter:bg-lienzo/80">
-      <div className="mx-auto flex min-h-[68px] w-full max-w-6xl items-center gap-3 px-4 py-2 sm:min-h-[76px] sm:gap-4 sm:px-8">
+      <div className="mx-auto flex min-h-17 w-full max-w-6xl items-center gap-3 px-4 py-2 sm:min-h-19 sm:gap-4 sm:px-8">
         <Logo size="header" showText={false} className="shrink-0" />
 
         <nav

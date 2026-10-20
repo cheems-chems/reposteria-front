@@ -179,7 +179,7 @@ export default async function HomePage() {
 								width={1537}
 								height={1023}
 								sizes="(max-width: 640px) 435px, (max-width: 1024px) 530px, 660px"
-								className="pointer-events-none relative z-10 h-72 w-auto max-w-none shrink-0 animate-torta object-contain drop-shadow-[0_24px_45px_rgba(90,18,51,0.22)] sm:h-[352px] lg:h-[436px]"
+								className="pointer-events-none relative z-10 h-72 w-auto max-w-none shrink-0 animate-torta object-contain drop-shadow-[0_24px_45px_rgba(90,18,51,0.22)] sm:h-88 lg:h-109"
 							/>
 							<HeroSeal />
 						</div>

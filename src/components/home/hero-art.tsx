@@ -51,7 +51,7 @@ export function HeroArt() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none relative z-0 mx-auto flex h-64 w-full max-w-[340px] items-center justify-center overflow-hidden sm:h-80 sm:max-w-md lg:aspect-3/2 lg:h-auto lg:max-w-none"
+      className="pointer-events-none relative z-0 mx-auto flex h-64 w-full max-w-sm items-center justify-center overflow-hidden sm:h-80 sm:max-w-md lg:aspect-3/2 lg:h-auto lg:max-w-none"
     >
       <span className="size-44 rounded-full bg-fucsia sm:size-64 lg:size-80" />
       <span className="absolute -left-3 top-3 z-0 size-16 animate-flotar rounded-full bg-rosa-medio sm:-left-2 sm:top-4 sm:size-28" />

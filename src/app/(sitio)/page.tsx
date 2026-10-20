@@ -221,7 +221,7 @@ export default async function HomePage() {
 				</div>
 			</section>
 
-			<section className="relative border-b border-borde bg-rosa-claro/40">
+			<section className="relative border-b border-borde bg-transparent sm:bg-rosa-claro/40">
 				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
 					<header className="text-center">
 						<h2 className="font-serif text-3xl text-vino sm:text-4xl">

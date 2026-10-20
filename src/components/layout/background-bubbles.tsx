@@ -1,3 +1,7 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 type Bubble = {
   top: string;
   side: "left" | "right";
@@ -5,47 +9,90 @@ type Bubble = {
   size: string;
   color: string;
   opacity: number;
-  mobile?: boolean;
+  mobileOpacity?: number;
 };
 
-// Configuración de las bolitas de fondo: top en % de la altura de la página,
-// side + offset (negativo = se sale del borde), size/color en clases de Tailwind
-// y opacity en 0–100. Con mobile: false la bolita se oculta en pantallas chicas.
+// Configuración de las bolitas de fondo: top en píxeles (independiente de la
+// altura del contenido), side + offset (negativo = se sale del borde),
+// size/color en clases de Tailwind.
 const BUBBLES: Bubble[] = [
-  { top: "3%", side: "right", offset: "-3rem", size: "size-24 sm:size-44 lg:size-64", color: "bg-fucsia", opacity: 10, mobile: true },
-  { top: "8%", side: "left", offset: "-2rem", size: "size-24 sm:size-40 lg:size-80", color: "bg-rosa-claro", opacity: 70, mobile: true },
-  { top: "16%", side: "right", offset: "1rem", size: "size-20 sm:size-36 lg:size-56", color: "bg-rosa-medio", opacity: 40 },
-  { top: "24%", side: "left", offset: "-4rem", size: "size-28 sm:size-56 lg:size-[420px]", color: "bg-rosa-claro", opacity: 55 },
-  { top: "33%", side: "right", offset: "-5rem", size: "size-24 sm:size-44 lg:size-80", color: "bg-fucsia", opacity: 12 },
-  { top: "41%", side: "left", offset: "2rem", size: "size-20 sm:size-36 lg:size-64", color: "bg-rosa-medio", opacity: 35 },
-  { top: "50%", side: "right", offset: "-3rem", size: "size-20 sm:size-48 lg:size-[380px]", color: "bg-rosa-claro", opacity: 60, mobile: true },
-  { top: "59%", side: "left", offset: "-4rem", size: "size-24 sm:size-40 lg:size-72", color: "bg-fucsia", opacity: 10 },
-  { top: "67%", side: "right", offset: "1.5rem", size: "size-16 sm:size-32 lg:size-48", color: "bg-rosa-medio", opacity: 35 },
-  { top: "75%", side: "left", offset: "-2rem", size: "size-20 sm:size-36 lg:size-56", color: "bg-rosa-claro", opacity: 50, mobile: true },
-  { top: "83%", side: "right", offset: "-3rem", size: "size-16 sm:size-28 lg:size-44", color: "bg-rosa-medio", opacity: 30 },
-  { top: "87%", side: "left", offset: "-1rem", size: "size-12 sm:size-24 lg:size-36", color: "bg-rosa-claro", opacity: 45, mobile: true },
+  { top: "32px", side: "right", offset: "-3rem", size: "size-[100px] sm:size-44 lg:size-64", color: "bg-rosa-claro", opacity: 70, mobileOpacity: 0.7 },
+  { top: "160px", side: "left", offset: "-3rem", size: "size-[110px] sm:size-40 lg:size-80", color: "bg-fucsia", opacity: 12, mobileOpacity: 0.3 },
+  { top: "320px", side: "right", offset: "-2.5rem", size: "size-[120px] sm:size-36 lg:size-56", color: "bg-rosa-medio", opacity: 40, mobileOpacity: 0.7 },
+  { top: "520px", side: "left", offset: "-3.5rem", size: "size-[130px] sm:size-56 lg:size-[420px]", color: "bg-rosa-claro", opacity: 55, mobileOpacity: 0.65 },
+  { top: "760px", side: "right", offset: "-4rem", size: "size-[110px] sm:size-44 lg:size-80", color: "bg-fucsia", opacity: 12, mobileOpacity: 0.28 },
+  { top: "1040px", side: "left", offset: "-3rem", size: "size-[100px] sm:size-36 lg:size-64", color: "bg-rosa-medio", opacity: 35, mobileOpacity: 0.7 },
+  { top: "1360px", side: "right", offset: "-3.5rem", size: "size-[140px] sm:size-48 lg:size-[380px]", color: "bg-rosa-claro", opacity: 60, mobileOpacity: 0.7 },
+  { top: "1720px", side: "left", offset: "-4rem", size: "size-[120px] sm:size-40 lg:size-72", color: "bg-fucsia", opacity: 10, mobileOpacity: 0.26 },
+  { top: "2120px", side: "right", offset: "-3rem", size: "size-[110px] sm:size-32 lg:size-48", color: "bg-rosa-medio", opacity: 35, mobileOpacity: 0.7 },
+  { top: "2560px", side: "left", offset: "-3.5rem", size: "size-[130px] sm:size-36 lg:size-56", color: "bg-rosa-claro", opacity: 50, mobileOpacity: 0.68 },
 ];
 
-export function BackgroundBubbles() {
+// Set propio para la Tienda: fijo a la pantalla, pocas bolitas repartidas por
+// las esquinas y bordes laterales, lejos del texto.
+const TIENDA_BUBBLES: Bubble[] = [
+  { top: "8%", side: "right", offset: "-3rem", size: "size-[100px] sm:size-40 lg:size-56", color: "bg-rosa-claro", opacity: 70, mobileOpacity: 0.7 },
+  { top: "22%", side: "left", offset: "-3rem", size: "size-[110px] sm:size-44 lg:size-64", color: "bg-fucsia", opacity: 12, mobileOpacity: 0.3 },
+  { top: "44%", side: "right", offset: "-3.5rem", size: "size-[120px] sm:size-48 lg:size-72", color: "bg-rosa-medio", opacity: 40, mobileOpacity: 0.7 },
+  { top: "62%", side: "left", offset: "-3.5rem", size: "size-[130px] sm:size-52 lg:size-80", color: "bg-rosa-claro", opacity: 60, mobileOpacity: 0.68 },
+  { top: "82%", side: "right", offset: "-3rem", size: "size-[100px] sm:size-36 lg:size-56", color: "bg-fucsia", opacity: 10, mobileOpacity: 0.28 },
+  { top: "94%", side: "left", offset: "-2.5rem", size: "size-[110px] sm:size-32 lg:size-48", color: "bg-rosa-medio", opacity: 35, mobileOpacity: 0.7 },
+];
+
+function Bubbles({
+  bubbles,
+  className,
+}: {
+  bubbles: Bubble[];
+  className: string;
+}) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-x-clip"
+      data-bubbles
+      className={className}
     >
-      {BUBBLES.map((bubble) => (
+      {bubbles.map((bubble, index) => (
         <span
-          key={`${bubble.side}-${bubble.top}`}
-          className={`absolute rounded-full ${bubble.color} ${bubble.size} ${
-            bubble.mobile ? "" : "hidden sm:block"
-          }`}
+          key={`${bubble.side}-${bubble.top}-${index}`}
+          className={`absolute rounded-full ${bubble.color} ${bubble.size}`}
           style={{
             top: bubble.top,
             left: bubble.side === "left" ? bubble.offset : undefined,
             right: bubble.side === "right" ? bubble.offset : undefined,
-            opacity: bubble.opacity / 100,
+            opacity: `calc(var(--bubble-mobile-opacity, ${bubble.opacity / 100}) * 1)`,
           }}
         />
       ))}
+      <style>{`
+        @media (max-width: 767px) {
+          ${bubbles.map((bubble, index) => {
+            const op = bubble.mobileOpacity ?? bubble.opacity / 100;
+            return `[data-bubbles] > span:nth-child(${index + 1}) { --bubble-mobile-opacity: ${op}; }`;
+          }).join("\n")}
+        }
+      `}</style>
     </div>
+  );
+}
+
+export function BackgroundBubbles() {
+  const pathname = usePathname();
+  const isTienda = pathname === "/tienda";
+
+  if (isTienda) {
+    return (
+      <Bubbles
+        bubbles={TIENDA_BUBBLES}
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      />
+    );
+  }
+
+  return (
+    <Bubbles
+      bubbles={BUBBLES}
+      className="pointer-events-none absolute inset-0 overflow-x-clip"
+    />
   );
 }

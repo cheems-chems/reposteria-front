@@ -7,7 +7,7 @@ import {
 	WaveDivider,
 } from '@/components/home/decor';
 import Image from 'next/image';
-import { ReviewsBlock } from '@/components/home/reviews-block';
+import { PracticalInfo } from '@/components/home/practical-info';
 import { HeroSeal } from '@/components/home/hero-art';
 import { SectionCircle } from '@/components/home/section-circle';
 import { Reveal } from '@/components/home/reveal';
@@ -51,7 +51,6 @@ import {
 	getComboItems,
 	getFeaturedProducts,
 	getProducts,
-	getReviews,
 	getSections,
 	type ComboProduct,
 	type ProductListItem,
@@ -66,14 +65,13 @@ import {
 } from '@/content/home';
 
 export default async function HomePage() {
-	const [sections, featured, comboItems, products, categories, reviews] =
+	const [sections, featured, comboItems, products, categories] =
 		await Promise.all([
 			getSections(),
 			getFeaturedProducts(),
 			getComboItems(),
 			getProducts(),
 			getCategories(),
-			getReviews(),
 		]);
 
 	const highlightCombo =
@@ -110,9 +108,6 @@ export default async function HomePage() {
 			);
 		}
 	}
-
-	// En desarrollo se muestran ejemplos con etiqueta EJEMPLO; en producción solo reseñas reales.
-	const visibleReviews = reviews.filter((review) => !review.example);
 
 	const comboTheme = sectionArtTheme(
 		sectionArtKey(highlightCombo?.slug, highlightCombo?.name),
@@ -228,7 +223,7 @@ export default async function HomePage() {
 								<span className="font-sans text-sm font-bold text-vino sm:text-base">
 									{item.label}
 								</span>
-								<span className="font-sans text-xs text-texto-suave sm:text-sm">
+								<span className="font-sans text-sm text-texto-suave sm:text-[15px]">
 									{item.description}
 								</span>
 							</li>
@@ -269,6 +264,54 @@ export default async function HomePage() {
 					)}
 				</div>
 			</section>
+
+			{moreProducts.length > 0 ? (
+				<section className="relative border-t border-borde bg-rosa-palido/70">
+					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
+						<Reveal>
+							<SectionHeading
+								title="Los más pedidos"
+								description="Una muestra de lo que más nos encargan. Agrégalos a tu encargo y confirma por WhatsApp."
+							/>
+						</Reveal>
+						<div className="mt-10 grid auto-rows-fr grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
+							{moreProducts.map((product, index) => {
+								const line = product.available
+									? orderLineForProduct(product, comboItems)
+									: null;
+								return (
+									<Reveal
+										key={product.slug}
+										delay={Math.min(index, 7) * 60}
+										className="h-full"
+									>
+										<ProductTicket
+											art={sectionArtKey(product.categorySlug, product.categoryName)}
+											product={{
+												slug: product.slug,
+												name: product.name,
+												price: productPrice(product),
+												category: product.categoryName,
+												imageUrl: product.imageUrl,
+												available: product.available,
+												compareAt: product.compareAt,
+												featured: product.featured,
+												typeLabel: productTypeLabel(product),
+											}}
+											action={
+												line ? (
+													<AddToCartButton line={line} size="sm" fullWidth />
+												) : undefined
+											}
+											className="h-full"
+										/>
+									</Reveal>
+								);
+							})}
+						</div>
+					</div>
+				</section>
+			) : null}
 
 			{highlightCombo ? (
 				<section className="relative">
@@ -328,56 +371,9 @@ export default async function HomePage() {
 				</section>
 			) : null}
 
-			{moreProducts.length > 0 ? (
-				<section className="relative border-t border-borde bg-rosa-palido/70">
-					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-						<Reveal>
-							<SectionHeading
-								title="Los más pedidos"
-							/>
-						</Reveal>
-						<div className="mt-10 grid grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
-							{moreProducts.map((product, index) => {
-								const line = product.available
-									? orderLineForProduct(product, comboItems)
-									: null;
-								return (
-									<Reveal
-										key={product.slug}
-										delay={Math.min(index, 7) * 60}
-										className="h-full"
-									>
-										<ProductTicket
-											art={sectionArtKey(product.categorySlug, product.categoryName)}
-											product={{
-												slug: product.slug,
-												name: product.name,
-												price: productPrice(product),
-												category: product.categoryName,
-												imageUrl: product.imageUrl,
-												available: product.available,
-												compareAt: product.compareAt,
-												featured: product.featured,
-												typeLabel: productTypeLabel(product),
-											}}
-											action={
-												line ? (
-													<AddToCartButton line={line} size="sm" fullWidth />
-												) : undefined
-											}
-											className="h-full"
-										/>
-									</Reveal>
-								);
-							})}
-						</div>
-					</div>
-				</section>
-			) : null}
-
 			<Marquee phrases={marqueePhrases} />
 
-			<ReviewsBlock reviews={visibleReviews} />
+			<PracticalInfo />
 
 			<section className="relative overflow-x-clip bg-fucsia">
 				<WaveDivider className="text-tarjeta" />

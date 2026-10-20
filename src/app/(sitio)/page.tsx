@@ -383,51 +383,81 @@ export default async function HomePage() {
 
 			<section className="relative overflow-x-clip bg-fucsia">
 				<WaveDivider className="text-tarjeta" />
-				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-5 py-16 sm:px-8 lg:grid-cols-2">
-					<div className="flex flex-col items-start gap-4">
-						<h2 className="font-serif text-3xl text-white sm:text-4xl">
+				<div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-20 sm:px-8 lg:grid-cols-2 lg:gap-12 lg:py-24">
+					<div className="flex flex-col items-center gap-5 text-center lg:items-start lg:text-left">
+						<h2 className="font-serif text-4xl leading-[1.05] text-white sm:text-5xl">
 							{bannerCombo.title}
 						</h2>
-						<p className="max-w-md text-lg text-white">{bannerCombo.text}</p>
+						<p className="max-w-md text-lg text-white sm:text-xl">
+							{bannerCombo.text}
+						</p>
 						<ButtonLink
 							href="/encargo?categoria=combos"
 							size="lg"
 							variant="inverse"
-							className="mt-1"
+							className="mt-1 px-8 text-lg"
 						>
 							{bannerCombo.cta}
 						</ButtonLink>
 					</div>
-					<div aria-hidden="true" className="relative hidden h-40 lg:block">
-						<span className="absolute right-8 top-0 size-40 rounded-full bg-white/15 animate-flotar" />
-						<span className="absolute bottom-0 right-40 size-24 rounded-full bg-white/10 animate-flotar-lento" />
+					<div className="relative mx-auto flex w-full max-w-md items-center justify-center lg:mx-0">
+						<span
+							aria-hidden="true"
+							className="absolute size-64 rounded-full bg-white/20 sm:size-80"
+						/>
+						<span
+							aria-hidden="true"
+							className="absolute -left-2 top-2 size-16 animate-flotar rounded-full bg-white/25 sm:size-24"
+						/>
+						<span
+							aria-hidden="true"
+							className="absolute bottom-2 -right-1 size-12 animate-flotar-lento rounded-full bg-white/20 sm:size-20"
+						/>
+						<div className="relative aspect-square w-56 overflow-hidden rounded-full border border-white/40 bg-white/90 sm:w-72">
+							{highlightCombo?.imageUrl ? (
+								<SafeImage
+									src={highlightCombo.imageUrl}
+									alt={highlightCombo.name}
+									fill
+									sizes="(max-width: 1024px) 288px, 288px"
+									className="object-cover"
+									fallback={comboArtPanel}
+								/>
+							) : (
+								comboArtPanel
+							)}
+						</div>
 					</div>
 				</div>
-				<WaveDivider className="text-vino" flip />
+				<WaveDivider className="text-rosa-palido" flip />
 			</section>
 
-			<section className="relative overflow-x-clip bg-vino">
-				<div className="relative mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
+			<section className="relative overflow-x-clip bg-rosa-palido">
+				<div className="relative mx-auto w-full max-w-5xl px-5 py-20 sm:px-8 lg:py-24">
 					<header className="mx-auto max-w-2xl text-center">
-						<h2 className="font-serif text-3xl text-white sm:text-4xl">
+						<h2 className="font-serif text-3xl text-vino sm:text-4xl">
 							Cómo funciona
 						</h2>
 						<span
 							aria-hidden="true"
-							className="mx-auto mt-3 block h-1 w-12 rounded-full bg-white"
+							className="mx-auto mt-3 block h-1 w-12 rounded-full bg-fucsia"
 						/>
 					</header>
-					<ol className="mt-12 grid gap-10 sm:grid-cols-3">
+					<ol className="relative mt-14 grid gap-12 sm:grid-cols-3 sm:gap-8">
+						<span
+							aria-hidden="true"
+							className="pointer-events-none absolute left-[16.66%] right-[16.66%] top-7 hidden border-t-2 border-dashed border-rosa-medio sm:block"
+						/>
 						{comoFuncionaSteps.map((step, index) => (
 							<li
 								key={step.title}
-								className="flex flex-col items-center gap-3 text-center"
+								className="relative flex flex-col items-center gap-4 text-center"
 							>
-								<span className="flex size-12 items-center justify-center rounded-full border border-white/70 font-serif text-2xl text-white">
+								<span className="relative z-10 flex size-14 items-center justify-center rounded-full bg-fucsia font-serif text-2xl text-white">
 									{index + 1}
 								</span>
-								<h3 className="font-serif text-xl text-white">{step.title}</h3>
-								<p className="max-w-xs font-sans text-sm text-white/90">
+								<h3 className="font-serif text-xl text-vino">{step.title}</h3>
+								<p className="max-w-xs font-sans text-base text-vino/80">
 									{step.text}
 								</p>
 							</li>

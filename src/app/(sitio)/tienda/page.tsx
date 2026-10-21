@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Tienda",
   description:
-    "Catálogo de dulces, salados y congelados hechos en casa: tortas, bizcochos, postres, combos de pasabocas y bandejas.",
+    "Cookies, pudín, pasabocas y bandejas congeladas hechos en casa.",
 };
 
 type TiendaSearchParams = Promise<{ seccion?: string | string[] }>;

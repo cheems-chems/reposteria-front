@@ -24,7 +24,7 @@ interface SectionCircleProps {
 
 /** Texto del enlace de cada sección en "Compra por sección". */
 const linkTextBySection: Record<string, string> = {
-  dulces: "Ver tortas y postres",
+  dulces: "Ver dulces",
   salados: "Ver pasabocas",
   congelados: "Ver congelados",
 };

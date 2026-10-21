@@ -21,10 +21,9 @@ import {
 } from '@/components/ui/section-art';
 
 // Selección de "Los más pedidos": ids del catálogo existente (ver src/lib/api/tienda/).
-// Una torta/postre, la Milhojas de guayaba, la Bandeja de deditos de queso y el Combo 1.
 const FEATURED_IDS = [
-	'tarta-de-limon',
-	'milhojas-de-guayaba',
+	'cookies',
+	'pudin',
 	'bandeja-deditos-de-queso',
 	'combo-1',
 ];

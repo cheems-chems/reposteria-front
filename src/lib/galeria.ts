@@ -4,12 +4,8 @@ import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 export const GALERIA_POR_PRODUCTO: Readonly<Record<string, string>> = {
-  "milhojas-de-guayaba": "dulces/tortas-personalizadas",
-  "tarta-de-limon": "dulces/tortas-personalizadas",
-  "panela-y-nuez": "dulces/tortas-personalizadas",
-  "bizcocho-de-chocolate": "dulces/tortas-personalizadas",
-  "tres-leches": "dulces/postres",
-  "cuadritos-de-coco": "dulces/postres",
+  cookies: "dulces/coquei",
+  pudin: "dulces/pudin",
   "combo-1": "salados/combos",
   "combo-2": "salados/combos",
   "combo-3": "salados/combos",

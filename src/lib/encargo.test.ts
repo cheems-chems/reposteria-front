@@ -33,12 +33,12 @@ import type {
 } from "@/lib/api";
 import { SALADOS_CATEGORIES, SALADOS_COMBO_ITEMS } from "@/lib/api/tienda/salados";
 
-const TORTA: SingleProduct = {
+const COOKIE: SingleProduct = {
   saleMode: "single",
-  slug: "milhojas-de-guayaba",
-  name: "Milhojas de guayaba",
-  categorySlug: "tortas",
-  categoryName: "Tortas",
+  slug: "cookies",
+  name: "Cookies",
+  categorySlug: "dulces",
+  categoryName: "Dulces",
   available: true,
   price: 45000,
 };
@@ -92,11 +92,11 @@ const BANDEJAS = [BANDEJA_QUESO, BANDEJA_BOCADILLO];
 
 describe("saleMode single", () => {
   it("hace una línea de precio fijo con cantidad por defecto 1", () => {
-    const line = singleLine(TORTA);
+    const line = singleLine(COOKIE);
     expect(line).toEqual({
       kind: "single",
-      productSlug: "milhojas-de-guayaba",
-      name: "Milhojas de guayaba",
+      productSlug: "cookies",
+      name: "Cookies",
       quantity: 1,
       unitPrice: 45000,
     });
@@ -104,7 +104,7 @@ describe("saleMode single", () => {
   });
 
   it("multiplica el precio por la cantidad", () => {
-    const line = singleLine(TORTA, 3);
+    const line = singleLine(COOKIE, 3);
     expect(lineTotal(line)).toBe(135000);
     expect(orderTotals([line])).toEqual({ units: 3, total: 135000 });
   });
@@ -413,7 +413,7 @@ describe("saleMode pack", () => {
 describe("totales combinados", () => {
   it("suma unidades y total de los cuatro modos", () => {
     const lines = [
-      singleLine(TORTA, 2),
+      singleLine(COOKIE, 2),
       comboOrderLine(COMBO, comboQuantitiesOf(COMBO), COMBO_ITEMS),
       ...buildBuilderLines(COMBO_ITEMS, {
         deditos: { quantity: 25, preparationId: null },
@@ -426,17 +426,17 @@ describe("totales combinados", () => {
 
 describe("derivados por saleMode", () => {
   it("detecta el tipo de venta de una categoría", () => {
-    expect(categorySaleKind([TORTA])).toBe("single");
+    expect(categorySaleKind([COOKIE])).toBe("single");
     expect(categorySaleKind([COMBO])).toBe("combo");
     expect(categorySaleKind(BANDEJAS)).toBe("pack");
     expect(categorySaleKind([])).toBe("empty");
     expect(categorySaleKind([DEDITOS, EMPANADAS])).toBe("empty");
-    expect(categorySaleKind([TORTA, COMBO])).toBe("single");
+    expect(categorySaleKind([COOKIE, COMBO])).toBe("single");
   });
 
   it("usa unitPrice en ítems de armador y price en el resto", () => {
     expect(productPrice(DEDITOS)).toBe(700);
-    expect(productPrice(TORTA)).toBe(45000);
+    expect(productPrice(COOKIE)).toBe(45000);
     expect(productPrice(COMBO)).toBe(43000);
     expect(productPrice(BANDEJA_QUESO)).toBe(25000);
   });
@@ -444,12 +444,12 @@ describe("derivados por saleMode", () => {
   it("describe el tipo de venta en la tarjeta", () => {
     expect(productTypeLabel(COMBO)).toBe("Combo · 60 unidades");
     expect(productTypeLabel(BANDEJA_QUESO)).toBe("Bandeja · 10 unidades");
-    expect(productTypeLabel(TORTA)).toBeNull();
+    expect(productTypeLabel(COOKIE)).toBeNull();
   });
 
   it("resuelve la preparación elegida o la primera", () => {
     const conPrep: ProductListItem = {
-      ...TORTA,
+      ...COOKIE,
       preparations: [
         { id: "crudo", label: "Crudo", priceDelta: 0 },
         { id: "frito", label: "Frito", priceDelta: 500 },
@@ -457,7 +457,7 @@ describe("derivados por saleMode", () => {
     };
     expect(resolvePreparation(conPrep, "frito")?.id).toBe("frito");
     expect(resolvePreparation(conPrep, "no-existe")?.id).toBe("crudo");
-    expect(resolvePreparation(TORTA, null)).toBeNull();
+    expect(resolvePreparation(COOKIE, null)).toBeNull();
     expect(unitPriceFor(1000, { id: "x", label: "x", priceDelta: 300 })).toBe(
       1300,
     );

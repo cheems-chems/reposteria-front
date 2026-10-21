@@ -15,7 +15,7 @@ export const footerContent = {
   /** Enlaces de la columna Tienda: mismas secciones reales del catálogo. */
   store: [
     { href: "/tienda", label: "Todo el catálogo" },
-    { href: "/tienda?seccion=dulces", label: "Tortas y postres" },
+    { href: "/tienda?seccion=dulces", label: "Dulces" },
     { href: "/tienda?seccion=salados", label: "Pasabocas" },
     { href: "/tienda?seccion=congelados", label: "Congelados" },
   ],

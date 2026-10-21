@@ -38,7 +38,7 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		stepPacks: 1,
 		available: true,
 		featured: true,
-		imageUrl: null,
+		imageUrl: '/img/productos/congelados/bandeja-deditos-de-queso.webp',
 		shortDescription: '20 deditos de queso congelados.',
 		description:
 			'Bandeja de 20 deditos de queso, crudos y congelados para preparar en casa.',

@@ -49,7 +49,7 @@ export function ProductTicket({
   imageLoading = "lazy",
   imageSizes = featured
     ? "(max-width: 768px) 100vw, 33vw"
-    : "(max-width: 419px) calc(100vw - 2.5rem), (max-width: 639px) calc((100vw - 3.5rem) / 2), (max-width: 1023px) calc((100vw - 6rem) / 3), 16.25rem",
+    : "(max-width: 419px) calc(100vw - 3.5rem), (max-width: 639px) calc((100vw - 3.5rem) / 2 - 1rem), (max-width: 1023px) calc((100vw - 6rem) / 3 - 1rem), (max-width: 1279px) calc((100vw - 11rem) / 4), 15.25rem",
   action,
   className,
 }: ProductTicketProps) {

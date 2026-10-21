@@ -1,7 +1,6 @@
 import { AddToCartButton } from '@/components/cart/add-to-cart-button';
 import { ProductTicket } from '@/components/product/product-ticket';
 import {
-	CheckList,
 	SectionHeading,
 	WaveDivider,
 } from '@/components/home/decor';
@@ -12,13 +11,7 @@ import { HeroSeal } from '@/components/home/hero-art';
 import { SectionCircle } from '@/components/home/section-circle';
 import { Reveal } from '@/components/home/reveal';
 import { ButtonLink } from '@/components/ui/button-link';
-import { PriceSeal } from '@/components/ui/price-seal';
-import { SafeImage } from '@/components/ui/safe-image';
-import {
-	SectionArt,
-	sectionArtKey,
-	sectionArtTheme,
-} from '@/components/ui/section-art';
+import { sectionArtKey } from '@/components/ui/section-art';
 
 // Selección de "Los más pedidos": ids del catálogo existente (ver src/lib/api/tienda/).
 const FEATURED_IDS = [
@@ -50,7 +43,6 @@ import {
 	getFeaturedProducts,
 	getProducts,
 	getSections,
-	type ComboProduct,
 	type ProductListItem,
 } from '@/lib/api';
 import { getCardImage } from '@/lib/galeria';
@@ -72,19 +64,7 @@ export default async function HomePage() {
 			getCategories(),
 		]);
 
-	const highlightCombo =
-		featured.find((p): p is ComboProduct => p.saleMode === 'combo') ?? null;
-	const comboComposition = highlightCombo
-		? highlightCombo.composition.map((part) => ({
-				name:
-					comboItems.find((item) => item.slug === part.productSlug)?.name ??
-					part.productSlug,
-				quantity: part.quantity,
-			}))
-		: [];
-	const highlightLine = highlightCombo
-		? orderLineForProduct(highlightCombo, comboItems)
-		: null;
+	const bannerComboProduct = featured.find((p) => p.saleMode === 'combo') ?? null;
 
 	const productsById = new Map(products.map((product) => [product.slug, product]));
 	const moreProducts = FEATURED_IDS.map((id) => productsById.get(id)).filter(
@@ -110,18 +90,9 @@ export default async function HomePage() {
 		}
 	}
 
-	const comboArtKey = sectionArtKey(highlightCombo?.slug, highlightCombo?.name);
-	const comboTheme = sectionArtTheme(comboArtKey);
-	const comboArtPanel = (
-		<span
-			aria-hidden="true"
-			className={`absolute inset-0 flex items-center justify-center ${comboTheme.tile}`}
-		>
-			<SectionArt
-				art={comboArtKey}
-				className={`w-28 sm:w-36 ${comboTheme.ink}`}
-			/>
-		</span>
+	const comboArtKey = sectionArtKey(
+		bannerComboProduct?.slug,
+		bannerComboProduct?.name,
 	);
 
 	return (
@@ -281,7 +252,7 @@ export default async function HomePage() {
 									>
 										<ProductTicket
 											imageLoading={index < 2 ? 'eager' : 'lazy'}
-											imageSizes="(max-width: 1023px) 44vw, 21vw"
+											imageSizes="(max-width: 639px) calc((100vw - 3.5rem) / 2 - 1rem), (max-width: 1023px) calc((100vw - 5rem) / 2 - 1rem), (max-width: 1279px) calc((100vw - 11rem) / 4), 15.125rem"
 											art={sectionArtKey(product.categorySlug, product.categoryName)}
 											product={{
 												slug: product.slug,
@@ -305,64 +276,6 @@ export default async function HomePage() {
 								);
 							})}
 						</div>
-					</div>
-				</section>
-			) : null}
-
-			{highlightCombo ? (
-				<section className="relative">
-					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-						<Reveal>
-							<div className="grid items-center gap-10 lg:grid-cols-2">
-								<div className="relative">
-									<span
-										aria-hidden="true"
-										className="absolute -inset-3 rounded-2rem bg-white/70"
-									/>
-									<div className="relative aspect-4/3 w-full overflow-hidden rounded-soft border border-borde bg-tarjeta">
-										{highlightCombo.imageUrl ? (
-											<SafeImage
-												src={highlightCombo.imageUrl}
-												alt={highlightCombo.name}
-												fill
-												sizes="(max-width: 1024px) 92vw, 520px"
-												className="object-cover"
-												fallback={comboArtPanel}
-											/>
-										) : (
-											comboArtPanel
-										)}
-									</div>
-								</div>
-
-								<div className="flex flex-col items-start gap-5">
-									<h2 className="font-serif text-3xl text-vino sm:text-4xl">
-										{highlightCombo.name}
-									</h2>
-									{comboComposition.length > 0 ? (
-										<CheckList items={comboComposition} />
-									) : null}
-									<PriceSeal amount={highlightCombo.price} size="lg" />
-									<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-										<ButtonLink
-											href={`/encargo?producto=${highlightCombo.slug}`}
-											size="lg"
-											className="w-full sm:w-auto"
-										>
-											Encargar
-										</ButtonLink>
-										{highlightLine ? (
-											<AddToCartButton
-												line={highlightLine}
-												size="lg"
-												variant="secondary"
-												className="w-full sm:w-auto"
-											/>
-										) : null}
-									</div>
-								</div>
-							</div>
-						</Reveal>
 					</div>
 				</section>
 			) : null}

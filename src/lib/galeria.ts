@@ -52,9 +52,10 @@ export function getCardImage(
   imageUrl?: string | null,
 ): string | null {
   const folder = GALERIA_POR_PRODUCTO[slug];
+  if (imageUrl) return imageUrl;
   if (folder && SHARED_GALLERY_FOLDERS.has(folder)) return null;
-  if (!folder) return imageUrl ?? null;
-  return listFolderImages(folder)[0] ?? imageUrl ?? null;
+  if (!folder) return null;
+  return listFolderImages(folder)[0] ?? null;
 }
 
 export async function getProductImages(

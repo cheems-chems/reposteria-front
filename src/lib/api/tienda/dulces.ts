@@ -1,4 +1,4 @@
-/* Sección Dulces. Precios de Cookies y Pudín pendientes de confirmar (EJEMPLO). */
+/* Sección Dulces. Precios de Cookies y tortas personalizadas por confirmar (EJEMPLO). */
 
 import type { Category, Product, Section } from "../types";
 
@@ -34,15 +34,15 @@ export const DULCES_PRODUCTS: Product[] = [
     prepDays: null,
   },
   {
-    slug: "pudin",
-    name: "Pudín",
+    slug: "tortas-personalizadas",
+    name: "Tortas personalizadas",
     categorySlug: "dulces",
     categoryName: "Dulces",
     saleMode: "single",
     price: 28000, // EJEMPLO: precio por confirmar.
     available: true,
     featured: true,
-    imageUrl: null,
+    imageUrl: "/img/productos/dulces/tortas-personalizadas/01.webp",
     shortDescription: "Hecho en casa, por encargo.",
     description: "Hecho en casa, por encargo.",
     ingredients: [],

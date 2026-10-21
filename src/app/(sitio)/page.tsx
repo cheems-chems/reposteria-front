@@ -23,7 +23,7 @@ import {
 // Selección de "Los más pedidos": ids del catálogo existente (ver src/lib/api/tienda/).
 const FEATURED_IDS = [
 	'cookies',
-	'pudin',
+	'tortas-personalizadas',
 	'bandeja-deditos-de-queso',
 	'combo-1',
 ];
@@ -53,6 +53,7 @@ import {
 	type ComboProduct,
 	type ProductListItem,
 } from '@/lib/api';
+import { getCardImage } from '@/lib/galeria';
 import {
 	bannerCombo,
 	comoFuncionaSteps,
@@ -88,6 +89,9 @@ export default async function HomePage() {
 	const productsById = new Map(products.map((product) => [product.slug, product]));
 	const moreProducts = FEATURED_IDS.map((id) => productsById.get(id)).filter(
 		(product): product is ProductListItem => Boolean(product),
+	);
+	const moreProductImages = moreProducts.map((product) =>
+		getCardImage(product.slug, product.imageUrl),
 	);
 
 	const sectionByCategory = new Map(
@@ -276,13 +280,15 @@ export default async function HomePage() {
 										className="h-full"
 									>
 										<ProductTicket
+											imageLoading={index < 2 ? 'eager' : 'lazy'}
+											imageSizes="(max-width: 1023px) 44vw, 21vw"
 											art={sectionArtKey(product.categorySlug, product.categoryName)}
 											product={{
 												slug: product.slug,
 												name: product.name,
 												price: productPrice(product),
 												category: product.categoryName,
-												imageUrl: product.imageUrl,
+												imageUrl: moreProductImages[index] ?? null,
 												available: product.available,
 												compareAt: product.compareAt,
 												featured: product.featured,

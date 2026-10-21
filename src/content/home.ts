@@ -76,7 +76,7 @@ export const bannerCombo = {
 
 // Línea corta neutra bajo cada sección (por slug).
 const sectionBlurbs: Record<string, string> = {
-  dulces: "Cookies y pudín por encargo.",
+  dulces: "Cookies y tortas personalizadas por encargo.",
   salados: "Combos de pasabocas para compartir.",
   congelados: "Bandejas congeladas para freír en casa.",
 };

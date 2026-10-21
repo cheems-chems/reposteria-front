@@ -7,6 +7,7 @@ import { sectionArtKey } from "@/components/ui/section-art";
 import { orderLineForProduct, productPrice, productTypeLabel } from "@/lib/encargo";
 import { cn } from "@/lib/cn";
 import type { BuilderItemProduct, ProductListItem } from "@/lib/api";
+import { getCardImage } from "@/lib/galeria";
 
 /** Retardo de entrada: 60 ms por paso, máximo 8 pasos (420 ms). */
 const STAGGER_STEP_MS = 60;
@@ -48,6 +49,10 @@ export function ProductGrid({
     );
   }
 
+  const cardImages = products.map((product) =>
+    getCardImage(product.slug, product.imageUrl),
+  );
+
   return (
     <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
       {products.map((product, index) => {
@@ -63,7 +68,7 @@ export function ProductGrid({
               name: product.name,
               price: productPrice(product),
               category: product.categoryName,
-              imageUrl: product.imageUrl,
+              imageUrl: cardImages[index] ?? null,
               available: product.available,
               compareAt: product.compareAt,
               featured: product.featured,

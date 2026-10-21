@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { Tag } from "@/components/ui/tag";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -8,7 +9,6 @@ import {
   type SectionArtKey,
 } from "@/components/ui/section-art";
 import { ParticleGlyph } from "@/components/ui/section-particles";
-import { SafeImage } from "@/components/ui/safe-image";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { cn } from "@/lib/cn";
 
@@ -32,6 +32,9 @@ interface ProductTicketProps {
   art?: SectionArtKey;
   /** Variante destacada: más grande y con otro ritmo en la rejilla. */
   featured?: boolean;
+  /** Carga anticipada para las primeras tarjetas visibles de portada. */
+  imageLoading?: "eager" | "lazy";
+  imageSizes?: string;
   /** Acción opcional (p. ej. "Agregar al encargo"), fuera del enlace. */
   action?: ReactNode;
   className?: string;
@@ -43,6 +46,10 @@ export function ProductTicket({
   product,
   art = "casero",
   featured = false,
+  imageLoading = "lazy",
+  imageSizes = featured
+    ? "(max-width: 768px) 100vw, 33vw"
+    : "(max-width: 419px) calc(100vw - 2.5rem), (max-width: 639px) calc((100vw - 3.5rem) / 2), (max-width: 1023px) calc((100vw - 6rem) / 3), 16.25rem",
   action,
   className,
 }: ProductTicketProps) {
@@ -107,20 +114,17 @@ export function ProductTicket({
           )}
         >
           {product.imageUrl ? (
-            <SafeImage
+            <Image
               src={product.imageUrl}
               alt={product.name}
               fill
-              sizes={
-                featured
-                  ? "(max-width: 768px) 100vw, 33vw"
-                  : "(max-width: 768px) 50vw, 22vw"
-              }
+              loading={imageLoading}
+              fetchPriority={imageLoading === "eager" ? "high" : "auto"}
+              sizes={imageSizes}
               className={cn(
                 "object-cover transition-transform duration-[400ms] ease-suave group-hover:scale-105 motion-reduce:group-hover:scale-100",
                 !available && "grayscale",
               )}
-              fallback={artPanel}
             />
           ) : (
             artPanel

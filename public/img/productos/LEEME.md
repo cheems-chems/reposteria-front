@@ -1,7 +1,18 @@
-﻿# Imágenes de productos
+# Fotos de productos
 
-Estructura: `dulces/tortas-personalizadas`, `dulces/postres`, `salados/combos` y `congelados` (una sola carpeta, sin subcarpetas). Guarda tortas, pasteles y bizcochos en `dulces/tortas-personalizadas`; deditos, ojitos, bolitas de carne, empanaditas, papitas rellenas, mini pinchitos y los demás pasabocas y cocteles en `salados/combos`; y todo lo congelado en `congelados`.
+Las fotos optimizadas van en una carpeta por producto, usando su slug dentro
+de la sección correspondiente. Por ejemplo:
 
-Agrega fotos numeradas (`01.jpg`, `02.jpg`...); la primera es la principal. Se aceptan JPG, JPEG, PNG y WebP. Puedes crear más subcarpetas dentro de `dulces/` y `salados/`, pero no dentro de `congelados/`.
+- `dulces/cookies/`
+- `dulces/tortas-personalizadas/`
 
-Guarda las fotos originales del celular en `fotos-originales/`, nunca en `public/`.
+Pon primero la foto principal y nombra los originales en orden alfabético para
+que el optimizador genere `01.webp`, `02.webp` y siguientes. Guarda los
+originales en la misma ruta relativa bajo `fotos-originales/` y ejecuta
+`npm run fotos`.
+
+Las galerías compartidas se mantienen en `salados/combos/` y `congelados/`.
+Se muestran en las fichas que correspondan, pero las tarjetas de esos
+productos conservan el arte de su sección.
+
+Deja las carpetas vacías que ya no se usen con su `.gitkeep`; no las borres.

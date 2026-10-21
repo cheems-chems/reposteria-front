@@ -152,7 +152,7 @@ export const SALADOS_PRODUCTS: Product[] = [
     ],
     available: true,
     featured: true,
-    imageUrl: null,
+    imageUrl: "/img/productos/salados/combos/01.webp",
     shortDescription:
       "60 unidades — Deditos 15, Empanadas 15, Ojitos 15, Bolitas de carne 15.",
     description: "Combo 1 (60 unidades), editable en el encargo.",

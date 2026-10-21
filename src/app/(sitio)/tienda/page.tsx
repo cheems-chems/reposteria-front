@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Tienda",
   description:
-    "Cookies, pudín, pasabocas y bandejas congeladas hechos en casa.",
+    "Cookies, tortas personalizadas, pasabocas y bandejas congeladas hechos en casa.",
 };
 
 type TiendaSearchParams = Promise<{ seccion?: string | string[] }>;

@@ -233,7 +233,7 @@ export default async function HomePage() {
 
 			{moreProducts.length > 0 ? (
 				<section className="relative isolate">
-					<div className="relative mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
+					<div className="relative mx-auto w-full max-w-6xl px-5 pt-14 pb-4 sm:px-8">
 						<Reveal>
 							<SectionHeading
 								title="Los más pedidos"
@@ -280,7 +280,6 @@ export default async function HomePage() {
 				</section>
 			) : null}
 
-			<PracticalInfo />
 
 			{/* Banda "Arma tu combo": la forma ondulada la pinta la propia banda
 			    (ondas fucsia + cuerpo con degradado). Todo lo que queda fuera de
@@ -365,6 +364,7 @@ export default async function HomePage() {
 				</div>
 			</section>
 
+			<PracticalInfo />
 			<section className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-8">
 				<Reveal>
 					<SectionHeading title="Preguntas frecuentes" />

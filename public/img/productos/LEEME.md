@@ -1,18 +1,17 @@
 # Fotos de productos
 
-Las fotos optimizadas van en una carpeta por producto, usando su slug dentro
-de la sección correspondiente. Por ejemplo:
+Las fotos optimizadas van en una carpeta propia por producto, con su slug
+dentro de la sección correspondiente. Hoy tienen fotos propias:
 
 - `dulces/cookies/`
 - `dulces/tortas-personalizadas/`
 
-Pon primero la foto principal y nombra los originales en orden alfabético para
-que el optimizador genere `01.webp`, `02.webp` y siguientes. Guarda los
-originales en la misma ruta relativa bajo `fotos-originales/` y ejecuta
-`npm run fotos`.
+Nombra las fotos originales en el orden deseado y guárdalas bajo la misma ruta
+relativa en `fotos-originales/`. Ejecuta `npm run fotos` para generar las
+salidas `01.webp`, `02.webp` y siguientes.
 
-Las galerías compartidas se mantienen en `salados/combos/` y `congelados/`.
-Se muestran en las fichas que correspondan, pero las tarjetas de esos
-productos conservan el arte de su sección.
+`salados/combos/` y `congelados/` son galerías compartidas para las fichas de
+producto. No se usan para elegir automáticamente la foto de una tarjeta; una
+foto explícita en los datos del producto sí puede aparecer en su tarjeta.
 
-Deja las carpetas vacías que ya no se usen con su `.gitkeep`; no las borres.
+Conserva las carpetas vacías que ya no se usan con su `.gitkeep`.

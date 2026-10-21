@@ -126,13 +126,13 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-        <div className="relative overflow-hidden border border-borde bg-lienzo">
+        <div className="relative overflow-hidden">
           <ProductGallery
             images={productImages}
             productName={product.name}
             fallback={<PhotoPlaceholder
               name={product.name}
-              ratio="4/3"
+              ratio="1/1"
               seed={seedFrom(product.slug)}
               className="border-0"
             />}

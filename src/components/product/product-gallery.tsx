@@ -124,29 +124,31 @@ export function ProductGallery({
             if (event.key === "ArrowRight") showNext();
           }}
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute bottom-0 right-0 size-[calc(100%-12px)] rounded-3xl bg-rosa-claro"
-          />
-          <div className="absolute left-0 top-0 size-[calc(100%-12px)] overflow-hidden rounded-3xl border-2 border-white bg-rosa-claro/20 shadow-[0_20px_60px_rgba(90,18,51,0.12)]">
-          <button
-            ref={triggerRef}
-            type="button"
-            className="absolute inset-0 z-0 cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-fucsia"
-            aria-label={`Ampliar ${imageAlt(active)}`}
-            onClick={() => setExpanded(true)}
-          >
-            <Image
-              key={activeImage}
-              src={activeImage}
-              alt={imageAlt(active)}
-              fill
-              priority={active === 0}
-              sizes={imageSizes}
-              onLoad={() => setLoadedImage(activeImage)}
-              className={`object-cover transition-opacity duration-200 motion-reduce:transition-none ${loadedImage === activeImage ? "opacity-100" : "opacity-0"}`}
+          <div className="absolute left-0 top-0 size-[calc(100%-12px)]">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-2 z-0 rounded-[2rem] bg-rosa-claro/65 md:-inset-3 md:rounded-[2.25rem]"
             />
-          </button>
+            <div className="absolute inset-0 z-10 overflow-hidden rounded-3xl border-2 border-white bg-rosa-claro/20 shadow-[0_20px_60px_rgba(90,18,51,0.12)]">
+              <button
+                ref={triggerRef}
+                type="button"
+                className="absolute inset-0 z-0 cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-fucsia"
+                aria-label={`Ampliar ${imageAlt(active)}`}
+                onClick={() => setExpanded(true)}
+              >
+                <Image
+                  key={activeImage}
+                  src={activeImage}
+                  alt={imageAlt(active)}
+                  fill
+                  priority={active === 0}
+                  sizes={imageSizes}
+                  onLoad={() => setLoadedImage(activeImage)}
+                  className={`object-cover transition-opacity duration-200 motion-reduce:transition-none ${loadedImage === activeImage ? "opacity-100" : "opacity-0"}`}
+                />
+              </button>
+            </div>
           </div>
           {images.length > 1 ? (
             <>

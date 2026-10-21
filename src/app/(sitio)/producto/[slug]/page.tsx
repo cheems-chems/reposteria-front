@@ -126,7 +126,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-        <div className="relative overflow-hidden">
+        <div className="relative min-w-0">
           <ProductGallery
             images={productImages}
             productName={product.name}

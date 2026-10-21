@@ -9,10 +9,11 @@ import { Tag } from "@/components/ui/tag";
 import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { ButtonLink } from "@/components/ui/button-link";
-import { SafeImage } from "@/components/ui/safe-image";
 import { Skeleton } from "@/components/states/skeleton";
 import { orderLineForProduct } from "@/lib/encargo";
 import { useProvisionalData } from "@/lib/api";
+import { getProductImages } from "@/lib/galeria";
+import { ProductGallery } from "@/components/product/product-gallery";
 import {
   getComboItems,
   getProductBySlug,
@@ -89,6 +90,8 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
 
   if (!product) notFound();
 
+  const productImages = await getProductImages(product.slug, product.imageUrl);
+
   const comboItems =
     product.saleMode === "combo" ? await getComboItems() : [];
   const composition =
@@ -124,32 +127,16 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         <div className="relative overflow-hidden border border-borde bg-lienzo">
-          {product.imageUrl ? (
-            <div className="relative aspect-4/3">
-              <SafeImage
-                src={product.imageUrl}
-                alt={product.name}
-                fill
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                className="object-cover"
-                fallback={
-                  <PhotoPlaceholder
-                    name={product.name}
-                    ratio="4/3"
-                    seed={seedFrom(product.slug)}
-                    className="border-0"
-                  />
-                }
-              />
-            </div>
-          ) : (
-            <PhotoPlaceholder
+          <ProductGallery
+            images={productImages}
+            productName={product.name}
+            fallback={<PhotoPlaceholder
               name={product.name}
               ratio="4/3"
               seed={seedFrom(product.slug)}
               className="border-0"
-            />
-          )}
+            />}
+          />
         </div>
 
         <div className="flex flex-col gap-4">

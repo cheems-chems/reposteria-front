@@ -6,7 +6,7 @@ import sharp from "sharp";
 const root = process.cwd();
 const inputRoot = path.join(root, "fotos-originales");
 const outputRoot = path.join(root, "public", "img", "productos");
-const manifestPath = path.join(outputRoot, ".fotos-manifest.json");
+const manifestPath = path.join(inputRoot, ".fotos-manifest.json");
 const acceptedExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".heic"]);
 
 async function readManifest() {

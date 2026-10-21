@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { navLinks } from "@/components/layout/nav-links";
 
-// Menú hamburguesa (< sm): panel desplegable bajo el header; se cierra al tocar un enlace.
+// Menú hamburguesa (< md): panel desplegable bajo el header; se cierra al tocar un enlace.
 export function MobileNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="sm:hidden">
+    <div className="md:hidden">
       <button
         type="button"
         aria-expanded={open}

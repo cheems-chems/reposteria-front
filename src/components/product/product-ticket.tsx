@@ -35,6 +35,8 @@ interface ProductTicketProps {
   /** Carga anticipada para las primeras tarjetas visibles de portada. */
   imageLoading?: "eager" | "lazy";
   imageSizes?: string;
+  /** Ajustes para la tarjeta ancha de una columna en móvil (solo portada). */
+  mobileCompact?: boolean;
   /** Acción opcional (p. ej. "Agregar al encargo"), fuera del enlace. */
   action?: ReactNode;
   className?: string;
@@ -50,6 +52,7 @@ export function ProductTicket({
   imageSizes = featured
     ? "(max-width: 768px) 100vw, 33vw"
     : "(max-width: 419px) calc(100vw - 3.5rem), (max-width: 639px) calc((100vw - 3.5rem) / 2 - 1rem), (max-width: 1023px) calc((100vw - 6rem) / 3 - 1rem), (max-width: 1279px) calc((100vw - 11rem) / 4), 15.25rem",
+  mobileCompact = false,
   action,
   className,
 }: ProductTicketProps) {
@@ -110,7 +113,11 @@ export function ProductTicket({
         <div
           className={cn(
             "relative m-2 overflow-hidden rounded-ticket border border-borde bg-lienzo",
-            featured ? "aspect-4/3" : "aspect-4/5",
+            mobileCompact
+              ? "aspect-4/3 sm:aspect-4/5"
+              : featured
+                ? "aspect-4/3"
+                : "aspect-4/5",
           )}
         >
           {product.imageUrl ? (
@@ -145,7 +152,9 @@ export function ProductTicket({
           {product.category ? <Tag>{product.category}</Tag> : null}
           <h3
             className={cn(
-              "hyphens-auto break-words font-serif font-bold text-vino",
+              mobileCompact
+                ? "hyphens-none break-normal font-serif font-bold text-vino sm:hyphens-auto sm:break-words"
+                : "hyphens-auto break-words font-serif font-bold text-vino",
               featured ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl",
             )}
           >
@@ -156,7 +165,7 @@ export function ProductTicket({
               {product.typeLabel}
             </p>
           ) : null}
-          <div className="mt-auto pt-1">
+          <div className={mobileCompact ? "mt-0 pt-1 sm:mt-auto" : "mt-auto pt-1"}>
             <PriceSeal
               amount={product.price}
               compareAt={product.compareAt}

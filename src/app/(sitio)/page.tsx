@@ -96,7 +96,7 @@ export default async function HomePage() {
 	);
 
 	return (
-		<main className="flex flex-1 flex-col">
+		<main className="flex flex-1 flex-col overflow-x-clip">
 			<section className="relative isolate overflow-x-clip">
 				<div className="relative mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:gap-8 lg:py-20">
 					<div className="relative z-10 flex min-w-0 flex-col items-start gap-5">
@@ -239,7 +239,7 @@ export default async function HomePage() {
 								title="Los más pedidos"
 							/>
 						</Reveal>
-						<div className="mt-10 grid auto-rows-fr grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
+						<div className="mt-10 grid grid-cols-1 items-stretch gap-4 sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-4">
 							{moreProducts.map((product, index) => {
 								const line = product.available
 									? orderLineForProduct(product, comboItems)
@@ -248,11 +248,12 @@ export default async function HomePage() {
 									<Reveal
 										key={product.slug}
 										delay={Math.min(index, 7) * 60}
-										className="h-full"
+										className="mx-auto h-full w-full max-w-md sm:mx-0 sm:max-w-none"
 									>
 										<ProductTicket
+											mobileCompact
 											imageLoading={index < 2 ? 'eager' : 'lazy'}
-											imageSizes="(max-width: 639px) calc((100vw - 3.5rem) / 2 - 1rem), (max-width: 1023px) calc((100vw - 5rem) / 2 - 1rem), (max-width: 1279px) calc((100vw - 11rem) / 4), 15.125rem"
+											imageSizes="(max-width: 639px) min(calc(100vw - 2.5rem), 28rem), (max-width: 1023px) calc((100vw - 5rem) / 2 - 1rem), (max-width: 1279px) calc((100vw - 11rem) / 4), 15.125rem"
 											art={sectionArtKey(product.categorySlug, product.categoryName)}
 											product={{
 												slug: product.slug,

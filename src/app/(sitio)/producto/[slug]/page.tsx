@@ -175,26 +175,28 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
 
           {product.slug === "tortas-personalizadas" ? <TortaCalculadora /> : null}
 
-          {product.available ? (
-            <div className="mt-2 flex flex-col gap-2">
-              <ButtonLink href={cta.href} size="lg" fullWidth>
-                {cta.label}
-              </ButtonLink>
-              {cartLine ? (
-                <AddToCartButton
-                  line={cartLine}
-                  size="lg"
-                  variant="secondary"
-                  fullWidth
-                />
-              ) : null}
-            </div>
-          ) : (
-            <p className="rounded-soft border border-borde bg-tarjeta px-4 py-3 text-sm text-texto-suave">
-              Por ahora no lo tenemos disponible. Escríbenos y te avisamos
-              cuando vuelva.
-            </p>
-          )}
+          {product.slug !== "tortas-personalizadas" ? (
+            product.available ? (
+              <div className="mt-2 flex flex-col gap-2">
+                <ButtonLink href={cta.href} size="lg" fullWidth>
+                  {cta.label}
+                </ButtonLink>
+                {cartLine ? (
+                  <AddToCartButton
+                    line={cartLine}
+                    size="lg"
+                    variant="secondary"
+                    fullWidth
+                  />
+                ) : null}
+              </div>
+            ) : (
+              <p className="rounded-soft border border-borde bg-tarjeta px-4 py-3 text-sm text-texto-suave">
+                Por ahora no lo tenemos disponible. Escríbenos y te avisamos
+                cuando vuelva.
+              </p>
+            )
+          ) : null}
 
           {useProvisionalData ? (
             <p className="font-sans text-xs text-texto-suave">

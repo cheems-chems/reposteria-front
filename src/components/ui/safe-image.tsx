@@ -9,7 +9,7 @@ interface SafeImageProps {
   fill?: boolean;
   sizes?: string;
   className?: string;
-  priority?: boolean;
+  loading?: "eager" | "lazy";
   /** Se muestra si la foto no existe o falla al cargar. */
   fallback?: ReactNode;
 }
@@ -25,7 +25,7 @@ export function SafeImage({
   fill,
   sizes,
   className,
-  priority,
+  loading,
   fallback,
 }: SafeImageProps) {
   const [failed, setFailed] = useState(() => !isRenderableSrc(src));
@@ -39,7 +39,7 @@ export function SafeImage({
       fill={fill}
       sizes={sizes}
       className={className}
-      priority={priority}
+      loading={loading}
       onError={() => setFailed(true)}
     />
   );

@@ -157,7 +157,7 @@ export default async function HomePage() {
 							<Image
 								src={HERO_IMAGE}
 								alt={HERO_ALT}
-								priority
+								loading="eager"
 								width={1537}
 								height={1023}
 								sizes="(max-width: 640px) 435px, (max-width: 1024px) 530px, 660px"

@@ -115,6 +115,7 @@ export function Logo({
           height={s.logo}
           // Círculo sin fondo ni cuadro, sin deformar la imagen.
           className={cn("rounded-full object-contain", s.img)}
+          loading={size === "header" ? "eager" : undefined}
           preload={size === "header" || size === "lg"}
         />
       ) : null}

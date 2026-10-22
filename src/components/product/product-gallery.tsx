@@ -149,7 +149,7 @@ export function ProductGallery({
 									src={activeImage}
 									alt={imageAlt(active)}
 									fill
-									priority={active === 0}
+									loading={active === 0 ? 'eager' : 'lazy'}
 									sizes={imageSizes}
 									onLoad={() => setLoadedImage(activeImage)}
 									className={`object-cover transition-opacity duration-200 motion-reduce:transition-none ${loadedImage === activeImage ? 'opacity-100' : 'opacity-0'}`}
@@ -247,6 +247,7 @@ export function ProductGallery({
 									alt=""
 									fill
 									sizes="(max-width: 639px) 56px, 64px"
+									quality={74}
 									className="object-cover"
 								/>
 							</button>

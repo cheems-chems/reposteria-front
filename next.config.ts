@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
+  images: {
+    qualities: [74, 75],
+  },
   partialPrefetching: true,
   turbopack: {
     rules: {

@@ -14,6 +14,8 @@ import { orderLineForProduct } from "@/lib/encargo";
 import { useProvisionalData } from "@/lib/api";
 import { getProductImages } from "@/lib/galeria";
 import { ProductGallery } from "@/components/product/product-gallery";
+import { TortaCalculadora } from "@/components/product/torta-calculadora";
+import { precioMinimoTorta } from "@/lib/torta-personalizada";
 import {
   getComboItems,
   getProductBySlug,
@@ -144,7 +146,8 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           <h1 className="font-serif text-4xl text-vino sm:text-5xl">
             {product.name}
           </h1>
-          <PriceSeal amount={priceAmount(product)} compareAt={product.compareAt} size="lg" />
+          {product.slug === "tortas-personalizadas" ? <span className="text-sm font-medium text-texto-suave">Desde</span> : null}
+          <PriceSeal amount={product.slug === "tortas-personalizadas" ? precioMinimoTorta() : priceAmount(product)} compareAt={product.slug === "tortas-personalizadas" ? null : product.compareAt} size="lg" />
           {typeLabel ? (
             <p className="font-sans text-sm font-medium text-fucsia-hover">
               {typeLabel}
@@ -169,6 +172,8 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           {product.shortDescription ? (
             <p className="text-texto-suave">{product.shortDescription}</p>
           ) : null}
+
+          {product.slug === "tortas-personalizadas" ? <TortaCalculadora /> : null}
 
           {product.available ? (
             <div className="mt-2 flex flex-col gap-2">

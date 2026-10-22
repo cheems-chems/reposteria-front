@@ -1,8 +1,6 @@
 import type {
-  InputHTMLAttributes,
+  ComponentProps,
   ReactNode,
-  SelectHTMLAttributes,
-  TextareaHTMLAttributes,
 } from "react";
 import { cn } from "@/lib/cn";
 
@@ -59,13 +57,13 @@ export function Field({
 const control =
   "w-full rounded-soft border border-borde bg-tarjeta px-3.5 py-2.5 font-sans text-base text-vino placeholder:text-texto-suave/60 transition-colors duration-150 focus:border-fucsia-hover focus:outline-none aria-invalid:border-fucsia-hover";
 
-export type InputProps = InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = ComponentProps<"input">;
 
 export function Input({ className, ...props }: InputProps) {
   return <input className={cn(control, "min-h-11", className)} {...props} />;
 }
 
-export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+export type TextareaProps = ComponentProps<"textarea">;
 
 export function Textarea({ className, ...props }: TextareaProps) {
   return (
@@ -76,7 +74,7 @@ export function Textarea({ className, ...props }: TextareaProps) {
   );
 }
 
-export type SelectProps = SelectHTMLAttributes<HTMLSelectElement>;
+export type SelectProps = ComponentProps<"select">;
 
 export function Select({ className, children, ...props }: SelectProps) {
   return (

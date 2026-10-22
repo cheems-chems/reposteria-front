@@ -107,6 +107,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
       : undefined;
 
   const typeLabel = fichaTypeLabel(product);
+  const esTorta = product.slug === "tortas-personalizadas";
   const cta =
     product.saleMode === "builder"
       ? { href: `/encargo?categoria=${product.categorySlug}`, label: "Armar mi combo" }
@@ -146,19 +147,40 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           <h1 className="font-serif text-4xl text-vino sm:text-5xl">
             {product.name}
           </h1>
-          {product.slug === "tortas-personalizadas" ? <span className="text-sm font-medium text-texto-suave">Desde</span> : null}
-          <PriceSeal amount={product.slug === "tortas-personalizadas" ? precioMinimoTorta() : priceAmount(product)} compareAt={product.slug === "tortas-personalizadas" ? null : product.compareAt} size="lg" />
-          {typeLabel ? (
-            <p className="font-sans text-sm font-medium text-fucsia-hover">
-              {typeLabel}
-            </p>
-          ) : null}
-          <p className="font-sans text-xs text-texto-suave">
-            El valor final lo confirmamos por WhatsApp.
-          </p>
+          {esTorta ? (
+            <div className="flex flex-col gap-1">
+              <PriceSeal
+                amount={precioMinimoTorta()}
+                compareAt={null}
+                size="lg"
+                prefix="Desde"
+                className="self-start"
+              />
+              <p className="font-sans text-xs text-texto-suave">
+                El valor final lo confirmamos por WhatsApp.
+              </p>
+            </div>
+          ) : (
+            <>
+              <PriceSeal
+                amount={priceAmount(product)}
+                compareAt={product.compareAt}
+                size="lg"
+              />
+              {typeLabel ? (
+                <p className="font-sans text-sm font-medium text-fucsia-hover">
+                  {typeLabel}
+                </p>
+              ) : null}
+              <p className="font-sans text-xs text-texto-suave">
+                El valor final lo confirmamos por WhatsApp.
+              </p>
+            </>
+          )}
           <StatusBadge
             label={product.available ? "Disponible por encargo" : "No disponible"}
             tone={product.available ? "pistacho" : "apagado"}
+            className={esTorta ? "w-fit self-start" : undefined}
           />
           {product.preparations && product.preparations.length > 0 ? (
             <div className="flex flex-wrap gap-2">
@@ -169,7 +191,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
               ))}
             </div>
           ) : null}
-          {product.shortDescription ? (
+          {product.shortDescription && !esTorta ? (
             <p className="text-texto-suave">{product.shortDescription}</p>
           ) : null}
 

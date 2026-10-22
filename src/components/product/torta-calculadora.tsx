@@ -99,10 +99,7 @@ export function TortaCalculadora() {
 		Object.keys(validarDatosPedido(datosPedido)).length === 0;
 	const href =
 		wa && datosValidos
-			? whatsappUrl(
-					wa,
-					armarMensajeWhatsApp(normalized, estimado, datosPedido),
-				)
+			? whatsappUrl(wa, armarMensajeWhatsApp(normalized, estimado, datosPedido))
 			: undefined;
 
 	function actualizarDato<K extends keyof DatosFormulario>(
@@ -150,10 +147,7 @@ export function TortaCalculadora() {
 		}
 		if (!wa) return;
 		window.open(
-			whatsappUrl(
-				wa,
-				armarMensajeWhatsApp(normalized, estimado, datosPedido),
-			),
+			whatsappUrl(wa, armarMensajeWhatsApp(normalized, estimado, datosPedido)),
 			'_blank',
 			'noopener,noreferrer',
 		);
@@ -546,9 +540,7 @@ export function TortaCalculadora() {
 									name="direccion"
 									autoComplete="street-address"
 									value={datos.direccion}
-									onChange={(e) =>
-										actualizarDato('direccion', e.target.value)
-									}
+									onChange={(e) => actualizarDato('direccion', e.target.value)}
 									placeholder="Calle 1 #2-3, barrio"
 									aria-invalid={Boolean(errores.direccion)}
 									aria-describedby={

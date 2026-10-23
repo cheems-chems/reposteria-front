@@ -7,6 +7,7 @@ import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Tag } from "@/components/ui/tag";
 import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
+import { SectionArt } from "@/components/ui/section-art";
 import { PriceSeal } from "@/components/ui/price-seal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Skeleton } from "@/components/states/skeleton";
@@ -70,6 +71,15 @@ function seedFrom(text: string): number {
   return hash;
 }
 
+/** Foto por defecto de congelados, igual a la que usa la tarjeta de la lista. */
+function CongeladosPlaceholder() {
+  return (
+    <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-3xl border-2 border-white bg-hielo text-azul-oscuro">
+      <SectionArt art="congelados" className="w-24 opacity-90 sm:w-32" />
+    </div>
+  );
+}
+
 /** Placeholder del App Shell: mismo contorno que la ficha final. */
 function ProductoFallback() {
   return (
@@ -93,6 +103,10 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
   if (!product) notFound();
 
   const productImages = await getProductImages(product.slug, product.imageUrl);
+  const esCongeladoOBandeja = ["congelados", "bandejas"].includes(
+    product.categorySlug,
+  );
+  const sinImagenesPropias = esCongeladoOBandeja && productImages.length === 0;
 
   const comboItems =
     product.saleMode === "combo" ? await getComboItems() : [];
@@ -133,12 +147,18 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           <ProductGallery
             images={productImages}
             productName={product.name}
-            fallback={<PhotoPlaceholder
-              name={product.name}
-              ratio="1/1"
-              seed={seedFrom(product.slug)}
-              className="border-0"
-            />}
+            fallback={
+              sinImagenesPropias ? (
+                <CongeladosPlaceholder />
+              ) : (
+                <PhotoPlaceholder
+                  name={product.name}
+                  ratio="1/1"
+                  seed={seedFrom(product.slug)}
+                  className="border-0"
+                />
+              )
+            }
           />
         </div>
 

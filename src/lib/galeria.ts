@@ -64,7 +64,7 @@ export async function getProductImages(
 ): Promise<string[]> {
   const folder = GALERIA_POR_PRODUCTO[slug];
   if (!folder) return [];
-  if (slug === "bandeja-deditos-de-queso" && imageUrl) return [imageUrl];
+  if (folder === "congelados") return imageUrl ? [imageUrl] : [];
 
   const images = listFolderImages(folder);
   return images.length > 0 ? images : imageUrl ? [imageUrl] : [];

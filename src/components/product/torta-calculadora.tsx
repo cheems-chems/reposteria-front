@@ -355,7 +355,7 @@ export function TortaCalculadora() {
 										? ' (arriba)'
 										: ''}
 							</legend>
-							<div className="grid grid-cols-3 gap-2">
+							<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
 								{moldes.map((molde) => (
 									<button
 										key={molde.id}
@@ -363,15 +363,15 @@ export function TortaCalculadora() {
 										disabled={molde.orden > bottom}
 										aria-pressed={piso.molde === molde.id}
 										onClick={() => changeMold(index, molde.id)}
-										className={`flex min-h-12 flex-col items-center justify-center rounded-soft border px-1 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fucsia disabled:cursor-not-allowed disabled:opacity-40 ${
+										className={`flex min-h-11 items-center justify-between rounded-soft border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fucsia disabled:cursor-not-allowed disabled:opacity-40 sm:flex-col sm:justify-center sm:px-1 sm:py-1 ${
 											piso.molde === molde.id
 												? 'border-fucsia bg-rosa-claro text-vino'
 												: 'border-borde bg-white text-vino'
 										}`}
 									>
-										<span>{molde.label}</span>
-										<span className="whitespace-nowrap text-sm">
-											Desde ${money(molde.price)}
+										<span className="text-left">{molde.label}</span>
+										<span className="tabular text-sm">
+											${money(molde.price)}
 										</span>
 									</button>
 								))}

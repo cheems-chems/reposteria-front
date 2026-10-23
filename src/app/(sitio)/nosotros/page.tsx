@@ -1,8 +1,6 @@
 import Link from 'next/link';
-import { Alert } from '@/components/ui/alert';
 import { PageHeader } from '@/components/store/page-header';
 import { ButtonLink } from '@/components/ui/button-link';
-import { brand } from '@/lib/brand';
 import { getStoreInfo } from '@/lib/api';
 
 export const metadata = {
@@ -59,12 +57,7 @@ export default async function NosotrosPage() {
 				))}
 			</div>
 
-			{brand.provisionalData ? (
-				<Alert tone="warning" title="Marca provisional" className="mt-10">
-					El nombre <strong>{brand.name}</strong> y estos textos son marcadores
-					de posición. Se reemplazan por la identidad real del negocio.
-				</Alert>
-			) : null}
+
 
 			<div className="mt-10 flex flex-col gap-3 sm:flex-row">
 				<ButtonLink href="/tienda">Ver la tienda</ButtonLink>

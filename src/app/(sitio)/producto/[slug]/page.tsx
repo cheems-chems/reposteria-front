@@ -12,7 +12,7 @@ import { PriceSeal } from "@/components/ui/price-seal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Skeleton } from "@/components/states/skeleton";
 import { orderLineForProduct } from "@/lib/encargo";
-import { useProvisionalData } from "@/lib/api";
+
 import { getProductImages } from "@/lib/galeria";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { TortaCalculadora } from "@/components/product/torta-calculadora";
@@ -240,12 +240,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
             )
           ) : null}
 
-          {useProvisionalData ? (
-            <p className="font-sans text-xs text-texto-suave">
-              Ficha con datos de desarrollo (precio, foto y datos
-              provisionales).
-            </p>
-          ) : null}
+
         </div>
       </div>
 

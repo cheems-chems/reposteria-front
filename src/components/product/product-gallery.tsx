@@ -134,7 +134,7 @@ export function ProductGallery({
 					<div className="absolute left-0 top-0 size-[calc(100%-12px)]">
 						<div
 							aria-hidden="true"
-							className="pointer-events-none absolute -inset-2 z-0 rounded-[2rem] bg-rosa-claro/65 md:-inset-3 md:rounded-[2.25rem]"
+							className="pointer-events-none absolute -inset-2 z-0 rounded-4xl bg-rosa-claro/65 md:-inset-3 md:rounded-[2.25rem]"
 						/>
 						<div className="absolute inset-0 z-10 overflow-hidden rounded-3xl border-2 border-white bg-rosa-claro/20 shadow-[0_20px_60px_rgba(90,18,51,0.12)]">
 							<button
@@ -228,7 +228,7 @@ export function ProductGallery({
 					<div
 						ref={thumbnailsRef}
 						aria-label="Miniaturas de fotos"
-						className="mt-4 flex snap-x gap-2.5 overflow-x-auto px-2 py-2 [scroll-padding-inline:0.5rem] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+						className="mt-4 flex snap-x gap-2.5 overflow-x-auto px-2 py-2 scroll-px-2 scrollbar-none [&::-webkit-scrollbar]:hidden"
 					>
 						{images.map((src, index) => (
 							<button
@@ -259,7 +259,7 @@ export function ProductGallery({
 			{expanded && typeof document !== 'undefined'
 				? createPortal(
 						<div
-							className="fixed inset-0 z-[100] flex items-center justify-center bg-vino/95 p-4 text-white sm:p-8"
+							className="fixed inset-0 z-100 flex items-center justify-center bg-vino/95 p-4 text-white sm:p-8"
 							onMouseDown={(event) => {
 								if (event.target === event.currentTarget) setExpanded(false);
 							}}

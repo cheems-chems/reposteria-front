@@ -15,8 +15,8 @@ import { sectionArtKey } from '@/components/ui/section-art';
 
 // Selección de "Los más pedidos": ids del catálogo existente (ver src/lib/api/tienda/).
 const FEATURED_IDS = [
-	'cookies',
 	'tortas-personalizadas',
+	'cookies',
 	'bandeja-deditos-de-queso',
 	'combo-1',
 ];
@@ -294,7 +294,7 @@ export default async function HomePage() {
 							<h2 className="font-serif text-[2.5rem] leading-[1.05] text-white sm:text-[3.4rem]">
 								{bannerCombo.title}
 							</h2>
-							<p className="max-w-[38ch] text-[1.1rem] font-normal leading-[1.6] text-white/[0.92]">
+							<p className="max-w-[38ch] text-[1.1rem] font-normal leading-[1.6] text-white/92">
 								{bannerCombo.text}
 							</p>
 							<ButtonLink

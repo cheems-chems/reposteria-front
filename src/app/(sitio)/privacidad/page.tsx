@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage, LegalSection } from "@/components/store/legal-page";
+import { legalConfig } from "@/lib/legal-config";
 
 export const metadata: Metadata = {
   title: "Política de privacidad",
@@ -7,6 +8,19 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacidadPage() {
+  const {
+    businessName,
+    legalName,
+    nit,
+    email,
+    privacyEmail,
+    whatsapp,
+    dataRetention,
+    hostingProvider,
+  } = legalConfig;
+  const titular = legalName ?? businessName;
+  const contactoPrivacidad = privacyEmail ?? email ?? whatsapp;
+
   return (
     <LegalPage
       title="Política de privacidad"
@@ -14,16 +28,17 @@ export default function PrivacidadPage() {
     >
       <LegalSection title="1. Responsable del tratamiento">
         <p>
-          El responsable del tratamiento es [razón social], con NIT [NIT] y
-          contacto en [correo]. Para asuntos de datos personales puedes
-          escribir a [correo de privacidad].
+          El responsable del tratamiento es {titular}
+          {nit ? `, con NIT ${nit}` : ""}
+          {email ? ` y contacto en ${email}` : ""}. Para asuntos de datos
+          personales puedes escribir a {contactoPrivacidad}.
         </p>
       </LegalSection>
 
       <LegalSection title="2. Datos que tratamos">
         <p>
-          Tratamos los datos que nos entregas al llenar el formulario de
-          contacto: nombre, correo o número de WhatsApp, y el detalle de tu
+          Tratamos los datos que nos entregas al llenar el formulario de encargo
+          y por WhatsApp: nombre, correo o número de WhatsApp, y el detalle de tu
           solicitud. No solicitamos datos sensibles.
         </p>
       </LegalSection>
@@ -38,17 +53,18 @@ export default function PrivacidadPage() {
 
       <LegalSection title="4. Conservación y terceros">
         <p>
-          Conservamos los datos durante [tiempo]. Podemos compartirlos con
-          proveedores que nos prestan servicios técnicos (por ejemplo, [proveedor
-          de hosting]), siempre bajo obligaciones de confidencialidad.
+          {dataRetention ? `Conservamos los datos durante ${dataRetention}. ` : ""}
+          Podemos compartirlos con proveedores que nos prestan servicios técnicos
+          {hostingProvider ? ` (por ejemplo, ${hostingProvider})` : ""}, siempre
+          bajo obligaciones de confidencialidad.
         </p>
       </LegalSection>
 
       <LegalSection title="5. Tus derechos">
         <p>
           Puedes conocer, actualizar, rectificar y solicitar la supresión de tus
-          datos, así como revocar la autorización, escribiendo a [correo de
-          privacidad]. Atenderemos tu solicitud en los términos de ley.
+          datos, así como revocar la autorización, escribiendo a{" "}
+          {contactoPrivacidad}. Atenderemos tu solicitud en los términos de ley.
         </p>
       </LegalSection>
     </LegalPage>

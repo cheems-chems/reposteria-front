@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage, LegalSection } from "@/components/store/legal-page";
+import { legalConfig } from "@/lib/legal-config";
 
 export const metadata: Metadata = {
   title: "Términos y condiciones",
@@ -7,6 +8,21 @@ export const metadata: Metadata = {
 };
 
 export default function TerminosPage() {
+  const {
+    businessName,
+    legalName,
+    nit,
+    address,
+    city,
+    email,
+    whatsapp,
+    taxesNote,
+    paymentMethod,
+    cancellationDays,
+    jurisdiction,
+  } = legalConfig;
+  const titular = legalName ?? businessName;
+
   return (
     <LegalPage
       title="Términos y condiciones"
@@ -14,16 +30,18 @@ export default function TerminosPage() {
     >
       <LegalSection title="1. Quién presta el servicio">
         <p>
-          El presente sitio es operado por [razón social / nombre del negocio],
-          identificado con [NIT], con domicilio en [dirección], [ciudad].
-          Puedes contactarnos en [correo] o [WhatsApp].
+          El presente sitio es operado por {titular}
+          {nit ? `, identificado con NIT ${nit}` : ""}
+          {address ? `, con domicilio en ${address}` : ""}, {city}. Puedes
+          contactarnos{email ? ` en ${email}` : ""}
+          {email ? " o" : " en"} {whatsapp}.
         </p>
       </LegalSection>
 
       <LegalSection title="2. Encargos y confirmación">
         <p>
           Los productos se elaboran por encargo. Un pedido queda confirmado
-          únicamente cuando [el negocio] responde aceptando la fecha y el
+          únicamente cuando {businessName} responde aceptando la fecha y el
           detalle. La disponibilidad mostrada en el sitio es informativa y puede
           cambiar.
         </p>
@@ -35,18 +53,20 @@ export default function TerminosPage() {
 
       <LegalSection title="3. Precios y pago">
         <p>
-          Los precios están expresados en pesos colombianos (COP) e incluyen
-          [impuestos / no incluyen impuestos]. El medio de pago es [medio de
-          pago]. Nos reservamos el derecho de corregir errores evidentes de
-          precio.
+          Los precios están expresados en pesos colombianos (COP)
+          {taxesNote ? ` ${taxesNote}` : ""}.
+          {paymentMethod ? ` El medio de pago es ${paymentMethod}.` : ""} Nos
+          reservamos el derecho de corregir errores evidentes de precio.
         </p>
       </LegalSection>
 
       <LegalSection title="4. Cancelaciones">
         <p>
-          Al ser productos elaborados a medida y perecederos, las cancelaciones
-          deben solicitarse con al menos [X] días de anticipación. Consulta la
-          política de envíos y devoluciones para más detalle.
+          Al ser productos elaborados a medida y perecederos,{" "}
+          {cancellationDays
+            ? `las cancelaciones deben solicitarse con al menos ${cancellationDays} días de anticipación.`
+            : "consulta la política de envíos y devoluciones para las condiciones de cancelación."}
+          {cancellationDays ? " Consulta la política de envíos y devoluciones para más detalle." : ""}
         </p>
       </LegalSection>
 
@@ -60,9 +80,9 @@ export default function TerminosPage() {
 
       <LegalSection title="6. Propiedad intelectual y ley aplicable">
         <p>
-          La marca, los textos y las imágenes son propiedad de [razón social].
-          Estos términos se rigen por las leyes de la República de Colombia y
-          cualquier controversia se someterá a [jurisdicción].
+          La marca, los textos y las imágenes son propiedad de {titular}. Estos
+          términos se rigen por las leyes de la República de Colombia
+          {jurisdiction ? ` y cualquier controversia se someterá a ${jurisdiction}` : ""}.
         </p>
       </LegalSection>
     </LegalPage>

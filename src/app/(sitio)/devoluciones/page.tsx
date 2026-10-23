@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage, LegalSection } from "@/components/store/legal-page";
+import { legalConfig } from "@/lib/legal-config";
 
 export const metadata: Metadata = {
   title: "Envíos y devoluciones",
@@ -7,6 +8,17 @@ export const metadata: Metadata = {
 };
 
 export default function DevolucionesPage() {
+  const {
+    city,
+    deliveryMethod,
+    deliveryZones,
+    deliveryCost,
+    cancellationDays,
+    lateCancellationPercent,
+    claimHours,
+    compensationType,
+  } = legalConfig;
+
   return (
     <LegalPage
       title="Envíos y devoluciones"
@@ -14,9 +26,11 @@ export default function DevolucionesPage() {
     >
       <LegalSection title="1. Entrega">
         <p>
-          Ofrecemos [recogida en el obrador / entrega a domicilio] en [ciudad y
-          zonas]. Las entregas a domicilio tienen un costo de [valor] y se
-          coordinan al confirmar el pedido.
+          {deliveryMethod ? `Ofrecemos ${deliveryMethod}` : "Atendemos"} en{" "}
+          {deliveryZones ?? city}.{" "}
+          {deliveryCost
+            ? `Las entregas a domicilio tienen un costo de ${deliveryCost} y se coordinan al confirmar el pedido.`
+            : "Las entregas se coordinan al confirmar el pedido."}
         </p>
         <p>
           La fecha y la franja horaria se acuerdan antes de confirmar. Los
@@ -27,9 +41,15 @@ export default function DevolucionesPage() {
 
       <LegalSection title="2. Cancelaciones">
         <p>
-          Puedes cancelar sin costo si avisas con al menos [X] días de
-          anticipación. Con menos antelación, puede descontarse [porcentaje] por
-          insumos ya preparados.
+          {cancellationDays
+            ? `Puedes cancelar sin costo si avisas con al menos ${cancellationDays} días de anticipación.`
+            : ""}
+          {lateCancellationPercent
+            ? ` Con menos antelación, puede descontarse ${lateCancellationPercent} por insumos ya preparados.`
+            : ""}
+          {!cancellationDays && !lateCancellationPercent
+            ? "Escríbenos por WhatsApp para gestionar una cancelación."
+            : ""}
         </p>
       </LegalSection>
 
@@ -43,9 +63,14 @@ export default function DevolucionesPage() {
 
       <LegalSection title="4. Si algo no salió bien">
         <p>
-          Escríbenos dentro de las [X] horas siguientes a la entrega con una foto
-          y el detalle. Revisaremos el caso y propondremos [reposición /
-          compensación / devolución] según corresponda.
+          Escríbenos
+          {claimHours
+            ? ` dentro de las ${claimHours} horas siguientes a la entrega`
+            : ""}{" "}
+          con una foto y el detalle. Revisaremos el caso y{" "}
+          {compensationType
+            ? `propondremos ${compensationType} según corresponda.`
+            : "te propondremos una solución según corresponda."}
         </p>
       </LegalSection>
     </LegalPage>

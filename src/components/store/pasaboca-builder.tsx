@@ -51,44 +51,49 @@ export function PasabocaBuilder({
           const unitPrice = unitPriceFor(item.unitPrice, preparation);
           const subtotal = unitPrice * quantity;
           return (
-            <li key={item.slug} className="flex flex-col gap-3 py-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex flex-col gap-0.5">
-                  <p className="font-serif text-lg text-vino">
+            <li key={item.slug} className="flex flex-col gap-3 px-2 py-4 sm:px-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-w-0 flex-col gap-0.5">
+                  <p className="break-words font-serif text-lg text-vino sm:truncate">
                     {item.name}
                   </p>
                   <p className="tabular text-sm text-texto-suave">
                     {formatCOP(unitPrice)} por unidad
                   </p>
-                  <p className="text-xs text-texto-suave">
-                    Mínimo {minUnitsPerType}, de a {item.stepQty}.
-                  </p>
+                  {quantity > 0 &&
+                  (quantity < minUnitsPerType || quantity % item.stepQty !== 0) ? (
+                    <p className="text-xs text-fucsia-hover">
+                      Mínimo {minUnitsPerType}, de a {item.stepQty}.
+                    </p>
+                  ) : null}
                 </div>
 
-                <QuantityStepper
-                  value={quantity}
-                  min={minUnitsPerType}
-                  step={item.stepQty}
-                  label={item.name}
-                  normalizeInput={(next) =>
-                    normalizeBuilderQuantity(next, minUnitsPerType, item.stepQty)
-                  }
-                  nextIncrease={(current) =>
-                    increaseBuilderQuantity(
-                      current,
-                      minUnitsPerType,
-                      item.stepQty,
-                    )
-                  }
-                  nextDecrease={(current) =>
-                    decreaseBuilderQuantity(
-                      current,
-                      minUnitsPerType,
-                      item.stepQty,
-                    )
-                  }
-                  onChange={(next) => onChangeQuantity(item.slug, next)}
-                />
+                <div className="flex w-full justify-start sm:w-auto sm:justify-end">
+                  <QuantityStepper
+                    value={quantity}
+                    min={minUnitsPerType}
+                    step={item.stepQty}
+                    label={item.name}
+                    normalizeInput={(next) =>
+                      normalizeBuilderQuantity(next, minUnitsPerType, item.stepQty)
+                    }
+                    nextIncrease={(current) =>
+                      increaseBuilderQuantity(
+                        current,
+                        minUnitsPerType,
+                        item.stepQty,
+                      )
+                    }
+                    nextDecrease={(current) =>
+                      decreaseBuilderQuantity(
+                        current,
+                        minUnitsPerType,
+                        item.stepQty,
+                      )
+                    }
+                    onChange={(next) => onChangeQuantity(item.slug, next)}
+                  />
+                </div>
               </div>
 
               {preparations.length > 0 ? (

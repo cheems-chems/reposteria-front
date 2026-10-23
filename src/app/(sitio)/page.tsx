@@ -112,19 +112,11 @@ export default async function HomePage() {
 							{HERO_TEXTO}
 						</p>
 						<div
-							className="animate-entrada mt-1 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row sm:justify-start"
+							className="animate-entrada mt-1 flex w-full flex-col justify-center sm:w-auto sm:flex-row sm:justify-start"
 							style={{ animationDelay: '240ms' }}
 						>
 							<ButtonLink href="/tienda" size="lg" className="w-full sm:w-auto">
 								Ver la tienda
-							</ButtonLink>
-							<ButtonLink
-								href="/encargo?categoria=combos&modo=armar"
-								size="lg"
-								variant="secondary"
-								className="w-full sm:w-auto"
-							>
-								Arma tu combo
 							</ButtonLink>
 						</div>
 					</div>

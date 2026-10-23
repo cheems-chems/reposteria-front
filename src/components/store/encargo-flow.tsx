@@ -497,7 +497,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
     if (step !== 0 || categorySlug === null) return STEP_TITLES[step];
     if (kind === "single") return category?.name ?? STEP_TITLES[0];
     if (kind === "combo") {
-      if (isBuilderChoice) return "Arma el tuyo desde cero";
+      if (isBuilderChoice) return "Elige tu combo";
       if (isCustom) return "Otra idea";
       return selectedCombo ? "Ajusta tu combo" : (category?.name ?? "Combos");
     }

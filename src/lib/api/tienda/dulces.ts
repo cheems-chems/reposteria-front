@@ -18,22 +18,6 @@ export const DULCES_CATEGORIES: Category[] = [
 
 export const DULCES_PRODUCTS: Product[] = [
 	{
-		slug: 'cookies',
-		name: 'Cupcakes',
-		categorySlug: 'dulces',
-		categoryName: 'Dulces',
-		saleMode: 'single',
-		price: 28000, // EJEMPLO: precio por confirmar.
-		available: true,
-		featured: true,
-		imageUrl: null,
-		shortDescription: 'Hecho en casa, por encargo.',
-		description: 'Hecho en casa, por encargo.',
-		ingredients: [],
-		allergens: null,
-		prepDays: null,
-	},
-	{
 		slug: 'tortas-personalizadas',
 		name: 'Tortas personalizadas',
 		categorySlug: 'dulces',
@@ -43,6 +27,22 @@ export const DULCES_PRODUCTS: Product[] = [
 		available: true,
 		featured: true,
 		imageUrl: '/img/productos/dulces/tortas-personalizadas/01.webp',
+		shortDescription: 'Hecho en casa, por encargo.',
+		description: 'Hecho en casa, por encargo.',
+		ingredients: [],
+		allergens: null,
+		prepDays: null,
+	},
+	{
+		slug: 'cookies',
+		name: 'Cupcakes',
+		categorySlug: 'dulces',
+		categoryName: 'Dulces',
+		saleMode: 'single',
+		price: 28000, // EJEMPLO: precio por confirmar.
+		available: true,
+		featured: true,
+		imageUrl: null,
 		shortDescription: 'Hecho en casa, por encargo.',
 		description: 'Hecho en casa, por encargo.',
 		ingredients: [],

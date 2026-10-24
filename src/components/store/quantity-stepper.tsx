@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Input } from "@/components/ui/field";
+import { cn } from "@/lib/cn";
 
 const stepButton =
-  "inline-flex size-11 shrink-0 items-center justify-center rounded-soft border border-borde font-sans text-xl leading-none text-vino transition-colors duration-200 hover:bg-rosa-claro/40 disabled:cursor-not-allowed disabled:opacity-45";
+  "inline-flex size-11 min-h-[40px] min-w-[40px] shrink-0 items-center justify-center rounded-soft border border-borde font-sans text-xl leading-none text-vino transition-colors duration-200 hover:bg-rosa-claro/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fucsia disabled:cursor-not-allowed disabled:opacity-45";
 
 interface QuantityStepperProps {
   value: number;
@@ -18,6 +20,7 @@ interface QuantityStepperProps {
   normalizeInput?: (value: number) => number;
   nextIncrease?: (value: number) => number;
   nextDecrease?: (value: number) => number;
+  className?: string;
   onChange: (value: number) => void;
 }
 
@@ -32,9 +35,17 @@ export function QuantityStepper({
   normalizeInput,
   nextIncrease,
   nextDecrease,
+  className,
   onChange,
 }: QuantityStepperProps) {
+  const [draft, setDraft] = useState(() =>
+    value > 0 ? String(value) : "",
+  );
+  const [focused, setFocused] = useState(false);
+  const [adjusted, setAdjusted] = useState<number | null>(null);
+
   function decrease() {
+    setAdjusted(null);
     if (value <= min) {
       onChange(0);
       return;
@@ -48,6 +59,7 @@ export function QuantityStepper({
   }
 
   function increase() {
+    setAdjusted(null);
     if (nextIncrease) {
       onChange(nextIncrease(value));
       return;
@@ -60,49 +72,66 @@ export function QuantityStepper({
   }
 
   return (
-    <div className="flex items-center gap-1.5">
-      <button
-        type="button"
-        className={stepButton}
-        aria-label={`Quitar cantidad de ${label}`}
-        onClick={decrease}
-        disabled={value <= 0 || disableDecrease}
-      >
-        −
-      </button>
-      <Input
-        type="number"
-        inputMode="numeric"
-        min={min}
-        step={step}
-        value={value > 0 ? String(value) : ""}
-        aria-label={`Cantidad de ${label}`}
-        aria-invalid={invalid || undefined}
-        onChange={(event) => {
-          const raw = event.target.value;
-          if (raw === "") {
-            onChange(0);
-            return;
-          }
-          const parsed = Math.floor(Number(raw));
-          if (Number.isNaN(parsed)) return;
-          onChange(Math.max(0, parsed));
-        }}
-        onBlur={() => {
-          if (!normalizeInput) return;
-          const normalized = normalizeInput(value);
-          if (normalized !== value) onChange(normalized);
-        }}
-        className="w-14 px-1 text-center"
-      />
-      <button
-        type="button"
-        className={stepButton}
-        aria-label={`Agregar cantidad de ${label}`}
-        onClick={increase}
-      >
-        +
-      </button>
+    <div className={cn("flex items-center gap-1.5", className)}>
+      <div className="flex w-full items-center justify-between gap-1.5 sm:justify-start">
+        <button
+          type="button"
+          className={cn(stepButton, "min-h-[40px] min-w-[40px]")}
+          aria-label={`Quitar cantidad de ${label}`}
+          onClick={decrease}
+          disabled={value <= min || disableDecrease}
+        >
+          −
+        </button>
+        <Input
+          type="number"
+          inputMode="numeric"
+          min={min}
+          step={step}
+          value={focused ? draft : value > 0 ? String(value) : "0"}
+          aria-label={`Cantidad de ${label}`}
+          aria-invalid={invalid || undefined}
+          onFocus={() => {
+            setFocused(true);
+            setAdjusted(null);
+            setDraft(value > 0 ? String(value) : "");
+          }}
+          onChange={(event) => {
+            const raw = event.target.value;
+            setDraft(raw);
+            if (raw === "") {
+              onChange(0);
+              return;
+            }
+            const parsed = Math.floor(Number(raw));
+            if (Number.isNaN(parsed)) return;
+            onChange(Math.max(0, parsed));
+          }}
+          onBlur={() => {
+            setFocused(false);
+            const parsed = draft === "" ? 0 : Math.floor(Number(draft));
+            const base = Number.isFinite(parsed) ? Math.max(0, parsed) : value;
+            const normalized = normalizeInput ? normalizeInput(base) : base;
+            if (normalized !== value) onChange(normalized);
+            setDraft(normalized > 0 ? String(normalized) : "0");
+            setAdjusted(normalized !== base ? normalized : null);
+          }}
+          className="w-[4.25rem] px-1 text-center"
+        />
+        <button
+          type="button"
+          className={cn(stepButton, "min-h-[40px] min-w-[40px]")}
+          aria-label={`Agregar cantidad de ${label}`}
+          onClick={increase}
+        >
+          +
+        </button>
+      </div>
+      {adjusted !== null ? (
+        <p role="status" className="text-xs text-fucsia-hover">
+          Ajustamos la cantidad a {adjusted}.
+        </p>
+      ) : null}
     </div>
   );
 }

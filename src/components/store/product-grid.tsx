@@ -2,12 +2,14 @@ import type { ReactNode } from "react";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { Reveal } from "@/components/home/reveal";
 import { ProductTicket } from "@/components/product/product-ticket";
+import { ButtonLink } from "@/components/ui/button-link";
 import { EmptyState } from "@/components/states/empty-state";
 import { sectionArtKey } from "@/components/ui/section-art";
 import { orderLineForProduct, productPrice, productTypeLabel } from "@/lib/encargo";
 import { cn } from "@/lib/cn";
 import type { BuilderItemProduct, ProductListItem } from "@/lib/api";
 import { getCardImage } from "@/lib/galeria";
+import { precioMinimoTorta } from "@/lib/torta-personalizada";
 
 /** Retardo de entrada: 60 ms por paso, máximo 8 pasos (420 ms). */
 const STAGGER_STEP_MS = 60;
@@ -59,6 +61,7 @@ export function ProductGrid({
         const line = product.available
           ? orderLineForProduct(product, comboItems)
           : null;
+        const isCustomizable = product.purchaseMode === "customizable";
         const ticket = (
           <ProductTicket
             featured={product.slug === featuredSlug}
@@ -66,7 +69,8 @@ export function ProductGrid({
             product={{
               slug: product.slug,
               name: product.name,
-              price: productPrice(product),
+              price: isCustomizable ? precioMinimoTorta() : productPrice(product),
+              pricePrefix: isCustomizable ? "Desde" : undefined,
               category: product.categoryName,
               imageUrl: cardImages[index] ?? null,
               available: product.available,
@@ -75,7 +79,11 @@ export function ProductGrid({
               typeLabel: productTypeLabel(product),
             }}
             action={
-              line ? (
+              isCustomizable ? (
+                <ButtonLink href={`/producto/${product.slug}`} size="sm" fullWidth>
+                  Personalizar
+                </ButtonLink>
+              ) : line ? (
                 <AddToCartButton line={line} size="sm" fullWidth />
               ) : undefined
             }

@@ -121,7 +121,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
       : undefined;
 
   const typeLabel = fichaTypeLabel(product);
-  const esTorta = product.slug === "tortas-personalizadas";
+  const isCustomizable = product.purchaseMode === "customizable";
   const cta =
     product.saleMode === "builder"
       ? { href: `/encargo?categoria=${product.categorySlug}&modo=armar`, label: "Armar mi combo" }
@@ -167,7 +167,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           <h1 className="font-serif text-4xl text-vino sm:text-5xl">
             {product.name}
           </h1>
-          {esTorta ? (
+          {isCustomizable ? (
             <div className="flex flex-col gap-1">
               <PriceSeal
                 amount={precioMinimoTorta()}
@@ -200,7 +200,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           <StatusBadge
             label={product.available ? "Disponible por encargo" : "No disponible"}
             tone={product.available ? "pistacho" : "apagado"}
-            className={esTorta ? "w-fit self-start" : undefined}
+            className={isCustomizable ? "w-fit self-start" : undefined}
           />
           {product.preparations && product.preparations.length > 0 ? (
             <div className="flex flex-wrap gap-2">
@@ -211,13 +211,13 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
               ))}
             </div>
           ) : null}
-          {product.shortDescription && !esTorta ? (
+          {product.shortDescription && !isCustomizable ? (
             <p className="text-texto-suave">{product.shortDescription}</p>
           ) : null}
 
-          {product.slug === "tortas-personalizadas" ? <TortaCalculadora /> : null}
+          {isCustomizable ? <TortaCalculadora /> : null}
 
-          {product.slug !== "tortas-personalizadas" ? (
+          {!isCustomizable ? (
             product.available ? (
               <div className="mt-2 flex flex-col gap-2">
                 <ButtonLink href={cta.href} size="lg" fullWidth>

@@ -31,6 +31,7 @@ function toListItem(product: Product): ProductListItem {
   const base = {
     slug: product.slug,
     name: product.name,
+    purchaseMode: product.purchaseMode,
     categorySlug: product.categorySlug,
     categoryName: product.categoryName,
     available: product.available,

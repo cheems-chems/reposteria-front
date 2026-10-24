@@ -65,6 +65,8 @@ function commit(next: CartItem[]): void {
 }
 
 export function addItem(line: OrderLine): void {
+  if (line.customizable === true) return;
+
   const current = getSnapshot();
   const id = lineId(line);
   const index = current.findIndex((item) => item.id === id);

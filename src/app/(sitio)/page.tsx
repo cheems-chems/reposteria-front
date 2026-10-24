@@ -12,6 +12,7 @@ import { SectionCircle } from '@/components/home/section-circle';
 import { Reveal } from '@/components/home/reveal';
 import { ButtonLink } from '@/components/ui/button-link';
 import { sectionArtKey } from '@/components/ui/section-art';
+import { precioMinimoTorta } from '@/lib/torta-personalizada';
 
 // Selección de "Los más pedidos": ids del catálogo existente (ver src/lib/api/tienda/).
 const FEATURED_IDS = [
@@ -236,6 +237,7 @@ export default async function HomePage() {
 								const line = product.available
 									? orderLineForProduct(product, comboItems)
 									: null;
+								const isCustomizable = product.purchaseMode === 'customizable';
 								return (
 									<Reveal
 										key={product.slug}
@@ -250,7 +252,8 @@ export default async function HomePage() {
 											product={{
 												slug: product.slug,
 												name: product.name,
-												price: productPrice(product),
+												price: isCustomizable ? precioMinimoTorta() : productPrice(product),
+												pricePrefix: isCustomizable ? 'Desde' : undefined,
 												category: product.categoryName,
 												imageUrl: moreProductImages[index] ?? null,
 												available: product.available,
@@ -259,7 +262,11 @@ export default async function HomePage() {
 												typeLabel: productTypeLabel(product),
 											}}
 											action={
-												line ? (
+												isCustomizable ? (
+													<ButtonLink href={`/producto/${product.slug}`} size="sm" fullWidth>
+														Personalizar
+													</ButtonLink>
+												) : line ? (
 													<AddToCartButton line={line} size="sm" fullWidth />
 												) : undefined
 											}

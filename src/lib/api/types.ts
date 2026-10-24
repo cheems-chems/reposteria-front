@@ -37,6 +37,7 @@ export interface PreparationOption {
 export interface ProductBase {
   slug: string;
   name: string;
+  purchaseMode: "direct" | "customizable";
   categorySlug: string;
   categoryName: string;
   available: boolean;
@@ -107,6 +108,7 @@ export interface CompositionDisplay {
 // El backend recalcula siempre los precios: no confiar en el total del cliente (todos los valores son estimados).
 export interface SingleOrderLine {
   kind: "single";
+  customizable?: boolean;
   productSlug: string;
   name: string;
   quantity: number;
@@ -124,6 +126,7 @@ export interface ComboExtra {
 
 export interface ComboOrderLine {
   kind: "combo";
+  customizable?: boolean;
   productSlug: string;
   name: string;
   totalUnits: number;
@@ -141,6 +144,7 @@ export interface ComboOrderLine {
 
 export interface BuilderOrderLine {
   kind: "builder";
+  customizable?: boolean;
   productSlug: string;
   name: string;
   quantity: number;
@@ -149,6 +153,7 @@ export interface BuilderOrderLine {
 
 export interface PackOrderLine {
   kind: "pack";
+  customizable?: boolean;
   productSlug: string;
   name: string;
   packCount: number;

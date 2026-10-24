@@ -35,6 +35,7 @@ import { SALADOS_CATEGORIES, SALADOS_COMBO_ITEMS } from "@/lib/api/tienda/salado
 
 const COOKIE: SingleProduct = {
   saleMode: "single",
+  purchaseMode: "direct",
   slug: "cookies",
   name: "Cookies",
   categorySlug: "dulces",
@@ -51,6 +52,7 @@ const EMPANADAS = COMBO_ITEMS.find((item) => item.slug === "empanadas")!;
 
 const COMBO: ComboProduct = {
   saleMode: "combo",
+  purchaseMode: "direct",
   slug: "combo-1",
   name: "Combo 1",
   categorySlug: "combos",
@@ -70,6 +72,7 @@ const COMBO: ComboProduct = {
 
 const BANDEJA_QUESO: PackProduct = {
   saleMode: "pack",
+  purchaseMode: "direct",
   slug: "bandeja-deditos-de-queso",
   name: "Bandeja de deditos de queso",
   categorySlug: "bandejas",

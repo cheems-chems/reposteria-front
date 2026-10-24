@@ -24,6 +24,7 @@ export interface ProductTicketData {
 	featured?: boolean;
 	/** Tipo de venta legible, p. ej. "Combo · 60 unidades". */
 	typeLabel?: string | null;
+	pricePrefix?: string;
 }
 
 interface ProductTicketProps {
@@ -171,6 +172,7 @@ export function ProductTicket({
 							amount={product.price}
 							compareAt={product.compareAt}
 							size={featured ? 'lg' : 'md'}
+							prefix={product.pricePrefix}
 							groupPop
 						/>
 					</div>

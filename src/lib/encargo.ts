@@ -6,6 +6,7 @@ import type {
   ComboProduct,
   CompositionDisplay,
   OrderLine,
+  PackOrderLine,
   PackProduct,
   PreparationOption,
   ProductListItem,
@@ -81,6 +82,7 @@ export function singleLine(
 ): OrderLine {
   return {
     kind: "single",
+    ...(product.purchaseMode === "customizable" ? { customizable: true } : {}),
     productSlug: product.slug,
     name: product.name,
     quantity,
@@ -333,8 +335,8 @@ export function builderProblems(
 export function buildPackLines(
   packs: PackProduct[],
   selection: PackSelection,
-): OrderLine[] {
-  const lines: OrderLine[] = [];
+): PackOrderLine[] {
+  const lines: PackOrderLine[] = [];
   for (const pack of packs) {
     const packCount = selection[pack.slug] ?? 0;
     if (packCount <= 0) continue;
@@ -394,6 +396,8 @@ export function orderLineForProduct(
   product: ProductListItem,
   comboItems: BuilderItemProduct[] = [],
 ): OrderLine | null {
+  if (product.purchaseMode === "customizable") return null;
+
   switch (product.saleMode) {
     case "single":
       return singleLine(product, 1);

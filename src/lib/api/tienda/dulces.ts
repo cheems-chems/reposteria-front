@@ -23,6 +23,7 @@ export const DULCES_PRODUCTS: Product[] = [
 		categorySlug: 'dulces',
 		categoryName: 'Dulces',
 		saleMode: 'single',
+		purchaseMode: 'customizable',
 		price: 28000, // EJEMPLO: precio por confirmar.
 		available: true,
 		featured: true,
@@ -39,6 +40,7 @@ export const DULCES_PRODUCTS: Product[] = [
 		categorySlug: 'dulces',
 		categoryName: 'Dulces',
 		saleMode: 'single',
+		purchaseMode: 'direct',
 		price: 28000, // EJEMPLO: precio por confirmar.
 		available: true,
 		featured: true,

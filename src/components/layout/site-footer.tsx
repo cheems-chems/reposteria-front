@@ -12,7 +12,7 @@ import { footerContent } from "@/content/footer";
 const linkClass =
   "-mx-2 flex min-h-11 items-center rounded-soft px-2 text-[15px] text-vino/80 transition-colors duration-150 ease-suave hover:bg-rosa-claro/40 hover:text-vino md:min-h-0 md:py-1";
 
-/** +57 316 186 5235 a partir de "573161865235". */
+/** +57 319 519 4925 a partir de "573195194925". */
 function formatWhatsAppNumber(raw?: string | null): string | null {
   const digits = (raw ?? "").replace(/\D/g, "");
   if (!digits) return null;

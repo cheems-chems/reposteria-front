@@ -1,3 +1,5 @@
+import { brand } from "@/lib/brand";
+
 export const legalConfig = {
   esBorrador: true,
   businessName: "Elvi's",
@@ -7,7 +9,10 @@ export const legalConfig = {
   city: "Santa Marta, Magdalena",
   email: null as string | null,
   privacyEmail: null as string | null,
-  whatsapp: "+57 316 186 5235",
+  whatsapp: brand.contact.whatsapp.replace(
+    /^(\d{2})(\d{3})(\d{3})(\d{4})$/,
+    "+$1 $2 $3 $4",
+  ),
   taxesNote: null as string | null, // frase completa: "e incluyen impuestos" o "y no incluyen impuestos"
   paymentMethod: null as string | null,
   cancellationDays: null as number | null,

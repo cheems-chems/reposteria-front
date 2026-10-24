@@ -71,7 +71,7 @@ async function CategoriaContenido({ params }: { params: CategoriaParams }) {
 			>
 				{ctaLabel ? (
 					<ButtonLink
-						href={`/encargo?categoria=${category.slug}`}
+						href={kind === "combo" ? `/encargo?categoria=${category.slug}&modo=armar` : `/encargo?categoria=${category.slug}`}
 						className="mt-6"
 					>
 						{ctaLabel}

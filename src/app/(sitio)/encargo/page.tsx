@@ -39,6 +39,7 @@ async function EncargoLoader({
 
   return (
     <EncargoFlow
+      key={`${params.producto ?? ""}|${params.categoria ?? ""}|${params.modo ?? ""}`}
       products={products}
       comboItems={comboItems}
       categories={categories}

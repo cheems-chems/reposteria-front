@@ -135,6 +135,9 @@ export function EncargoFlow(props: EncargoFlowProps) {
     comboItems,
     categories,
     whatsapp,
+    initialProductSlug,
+    initialCategorySlug,
+    initialMode,
   } = props;
   const router = useRouter();
   const initial = computeInitial(props);
@@ -155,7 +158,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
   );
   const [customProduct, setCustomProduct] = useState("");
   const [date, setDate] = useState("");
-  const [people, setPeople] = useState("");
+  const people = undefined as unknown as string; // mantenido por compatibilidad, ignorado
   const [details, setDetails] = useState("");
   const [fulfillment, setFulfillment] = useState<Fulfillment>("recogida");
   const [address, setAddress] = useState("");
@@ -164,6 +167,29 @@ export function EncargoFlow(props: EncargoFlowProps) {
   const [opened, setOpened] = useState(false);
   const builderRef = useRef<HTMLDivElement | null>(null);
   const autoScrolled = useRef(false);
+
+  const lastKeyRef = useRef<string>("");
+  useEffect(() => {
+    const key = `${initialProductSlug ?? ""}|${initialCategorySlug ?? ""}|${initialMode ?? ""}`;
+    if (lastKeyRef.current === key) return;
+    lastKeyRef.current = key;
+    const next = computeInitial({ ...props, initialProductSlug, initialCategorySlug, initialMode });
+    setStep(0);
+    setCategorySlug(next.categorySlug);
+    setChoice(next.choice);
+    setComboSelection(next.comboSelection);
+    setBuilderSelection(next.builderSelection);
+    setPackSelection(next.packSelection);
+    setCustomProduct("");
+    setDate("");
+    setDetails("");
+    setFulfillment("recogida");
+    setAddress("");
+    setName("");
+    setError(null);
+    setOpened(false);
+    autoScrolled.current = false;
+  }, [initialProductSlug, initialCategorySlug, initialMode, props]);
 
   const category =
     categorySlug !== null
@@ -208,7 +234,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
       });
     }, 50);
     return () => window.clearTimeout(id);
-  }, [props.initialMode, isBuilderChoice]);
+  }, [props.initialMode, isBuilderChoice, categorySlug]);
 
   const orderLines: OrderLine[] = (() => {
     if (categorySlug === null) return [];
@@ -438,7 +464,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
       }
     }
     if (date) lines.push(`Para: ${formatDate(date)}`);
-    if (people) lines.push(`Personas: ${people}`);
+    if ((people as string | undefined)) lines.push(`Personas: ${people}`);
     if (details.trim()) lines.push(`Personalización: ${details.trim()}`);
     if (totals.total > 0) {
       lines.push(
@@ -728,28 +754,13 @@ export function EncargoFlow(props: EncargoFlowProps) {
             ) : null}
 
             {step === 1 ? (
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-1">
                 <Field label="Fecha" htmlFor="encargo-fecha" required>
                   <Input
                     id="encargo-fecha"
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                  />
-                </Field>
-                <Field
-                  label="Para cuántas personas"
-                  htmlFor="encargo-personas"
-                  hint="Opcional"
-                >
-                  <Input
-                    id="encargo-personas"
-                    type="number"
-                    min={1}
-                    inputMode="numeric"
-                    value={people}
-                    onChange={(e) => setPeople(e.target.value)}
-                    placeholder="p. ej. 10"
                   />
                 </Field>
               </div>
@@ -955,12 +966,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
                     {date ? formatDate(date) : "—"}
                   </dd>
                 </div>
-                <div className="flex justify-between gap-4 py-2">
-                  <dt className="text-texto-suave">Personas</dt>
-                  <dd className="tabular text-right text-vino">
-                    {people || "—"}
-                  </dd>
-                </div>
+
                 <div className="flex justify-between gap-4 py-2">
                   <dt className="text-texto-suave">Entrega</dt>
                   <dd className="text-right text-vino">

@@ -124,7 +124,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
   const esTorta = product.slug === "tortas-personalizadas";
   const cta =
     product.saleMode === "builder"
-      ? { href: `/encargo?categoria=${product.categorySlug}`, label: "Armar mi combo" }
+      ? { href: `/encargo?categoria=${product.categorySlug}&modo=armar`, label: "Armar mi combo" }
       : { href: `/encargo?producto=${product.slug}`, label: "Hacer encargo" };
   const cartLine = product.available
     ? orderLineForProduct(product, comboItems)

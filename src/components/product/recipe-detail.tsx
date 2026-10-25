@@ -53,15 +53,15 @@ export function RecipeDetail({ recipe, className }: RecipeDetailProps) {
 
 	const prepText =
 		typeof prepDays === 'number' && prepDays > 0
-			? `avísanos con ${prepDays} ${prepDays === 1 ? 'día' : 'días'} de anticipación`
-			: 'avísanos con anticipación';
+			? `Pídelo con ${prepDays} ${prepDays === 1 ? 'día' : 'días'} de anticipación.`
+			: 'Lo hacemos por encargo: avísanos con anticipación.';
 
 	return (
 		<div className={cn('flex flex-col gap-6', className)}>
 			{/* Tiempo de preparación como dato protagonista */}
-			<div className="texture-paper border border-vino bg-vino px-4 py-4 text-lienzo">
+			<div className="texture-paper -mx-5 border-y border-vino bg-vino px-5 py-4 text-lienzo">
 				<p className="mt-1 font-serif text-2xl italic leading-snug">
-					Lo hacemos por encargo: {prepText}.
+					{prepText}
 				</p>
 			</div>
 
@@ -76,7 +76,9 @@ export function RecipeDetail({ recipe, className }: RecipeDetailProps) {
 						className="mb-3 flex items-center gap-2 border-b border-borde pb-1 font-serif text-xl text-vino"
 					>
 						Composición
-						<span aria-hidden="true" className="text-fucsia">♥</span>
+						<span aria-hidden="true" className="text-fucsia">
+							♥
+						</span>
 					</h3>
 					<ul className="flex flex-col gap-2">
 						{composition.map((item) => (

@@ -44,6 +44,8 @@ export interface ProductBase {
   featured?: boolean;
   // null si el negocio aún no la sube.
   imageUrl?: string | null;
+  /** Fotos del producto; la primera es la principal si existe. */
+  images?: string[];
   /** Precio anterior tachado, si el backend envía descuento. */
   compareAt?: number | null;
   shortDescription?: string | null;

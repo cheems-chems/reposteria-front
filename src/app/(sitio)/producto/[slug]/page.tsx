@@ -12,6 +12,7 @@ import { PriceSeal } from "@/components/ui/price-seal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Skeleton } from "@/components/states/skeleton";
 import { orderLineForProduct } from "@/lib/encargo";
+import { comboGalleryImages } from "@/lib/combo-gallery";
 
 import { getProductImages } from "@/lib/galeria";
 import { ProductGallery } from "@/components/product/product-gallery";
@@ -21,6 +22,7 @@ import {
   getComboItems,
   getProductBySlug,
   getProducts,
+  productGalleryImages,
   type Product,
 } from "@/lib/api";
 
@@ -103,14 +105,18 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
 
   if (!product) notFound();
 
-  const productImages = await getProductImages(product.slug, product.imageUrl);
+  const comboItems =
+    product.saleMode === "combo" ? await getComboItems() : [];
+  const productImages = product.saleMode === "combo"
+    ? comboGalleryImages(product, comboItems)
+    : product.images?.some((image) => image.length > 0)
+      ? productGalleryImages(product, [])
+      : await getProductImages(product.slug, product.imageUrl);
   const esCongeladoOBandeja = ["congelados", "bandejas"].includes(
     product.categorySlug,
   );
   const sinImagenesPropias = esCongeladoOBandeja && productImages.length === 0;
 
-  const comboItems =
-    product.saleMode === "combo" ? await getComboItems() : [];
   const composition =
     product.saleMode === "combo"
       ? product.composition.map((item) => ({
@@ -148,6 +154,7 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
           <ProductGallery
             images={productImages}
             productName={product.name}
+            showSingleImageCounter={product.saleMode !== "combo"}
             fallback={
               sinImagenesPropias ? (
                 <CongeladosPlaceholder />

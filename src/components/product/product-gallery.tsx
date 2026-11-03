@@ -14,6 +14,7 @@ interface ProductGalleryProps {
 	images: string[];
 	productName: string;
 	fallback: ReactNode;
+	showSingleImageCounter?: boolean;
 }
 
 const controlClass =
@@ -26,6 +27,7 @@ export function ProductGallery({
 	images,
 	productName,
 	fallback,
+	showSingleImageCounter = true,
 }: ProductGalleryProps) {
 	const [active, setActive] = useState(0);
 	const [expanded, setExpanded] = useState(false);
@@ -272,9 +274,11 @@ export function ProductGallery({
 								className="relative flex h-[85vh] max-h-full w-full max-w-6xl flex-col items-center gap-4"
 							>
 								<div className="flex w-full items-center justify-between">
-									<p aria-live="polite" className="font-sans text-sm tabular">
-										{active + 1} / {images.length}
-									</p>
+									{images.length > 1 || showSingleImageCounter ? (
+										<p aria-live="polite" className="font-sans text-sm tabular">
+											{active + 1} / {images.length}
+										</p>
+									) : null}
 									<button
 										ref={closeRef}
 										type="button"

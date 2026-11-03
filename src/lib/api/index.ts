@@ -13,6 +13,7 @@ import type {
   BuilderItemProduct,
   Category,
   Product,
+  ProductBase,
   ProductListItem,
   Review,
   Section,
@@ -21,6 +22,24 @@ import type {
 
 export * from "./types";
 export { useProvisionalData, apiBaseUrl } from "./config";
+
+export function primaryProductImage(
+  product: Pick<ProductBase, "imageUrl" | "images">,
+): string | null {
+  return product.images?.find((image) => image.length > 0) ?? product.imageUrl ?? null;
+}
+
+export function productGalleryImages(
+  product: Pick<ProductBase, "images">,
+  fallbackImages: string[],
+): string[] {
+  const images = product.images?.filter((image) => image.length > 0) ?? [];
+  return images.length > 0 ? images : fallbackImages;
+}
+
+function withPrimaryImage<T extends ProductBase>(product: T): T {
+  return { ...product, imageUrl: primaryProductImage(product) };
+}
 
 export async function getSections(): Promise<Section[]> {
   if (useProvisionalData) return DEV_SECTIONS;
@@ -36,7 +55,8 @@ function toListItem(product: Product): ProductListItem {
     categoryName: product.categoryName,
     available: product.available,
     featured: product.featured,
-    imageUrl: product.imageUrl,
+    imageUrl: primaryProductImage(product),
+    images: product.images,
     compareAt: product.compareAt,
     shortDescription: product.shortDescription,
     unitLabel: product.unitLabel,
@@ -108,7 +128,7 @@ export async function getProducts(
   const query = categorySlug
     ? `?category=${encodeURIComponent(categorySlug)}`
     : "";
-  return fetchJson<ProductListItem[]>(`/products${query}`);
+  return (await fetchJson<ProductListItem[]>(`/products${query}`)).map(withPrimaryImage);
 }
 
 // Ítems de armador: no se muestran en la tienda; se usan en el encargo.
@@ -120,12 +140,12 @@ export async function getComboItems(
       (p) =>
         p.saleMode === "builder" &&
         (!categorySlug || p.categorySlug === categorySlug),
-    ) as BuilderItemProduct[];
+    ).map(withPrimaryImage) as BuilderItemProduct[];
   }
   const query = categorySlug
     ? `?category=${encodeURIComponent(categorySlug)}&saleMode=builder`
     : "?saleMode=builder";
-  return fetchJson<BuilderItemProduct[]>(`/products${query}`);
+  return (await fetchJson<BuilderItemProduct[]>(`/products${query}`)).map(withPrimaryImage);
 }
 
 export async function getFeaturedProducts(): Promise<ProductListItem[]> {
@@ -134,14 +154,16 @@ export async function getFeaturedProducts(): Promise<ProductListItem[]> {
       (p) => p.featured && p.saleMode !== "builder",
     ).map(toListItem);
   }
-  return fetchJson<ProductListItem[]>("/products?featured=true");
+  return (await fetchJson<ProductListItem[]>("/products?featured=true")).map(withPrimaryImage);
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   if (useProvisionalData) {
-    return DEV_PRODUCTS.find((p) => p.slug === slug) ?? null;
+    const product = DEV_PRODUCTS.find((p) => p.slug === slug);
+    return product ? withPrimaryImage(product) : null;
   }
-  return fetchJson<Product | null>(`/products/${encodeURIComponent(slug)}`);
+  const product = await fetchJson<Product | null>(`/products/${encodeURIComponent(slug)}`);
+  return product ? withPrimaryImage(product) : null;
 }
 
 export async function getStoreInfo(): Promise<StoreInfo> {

@@ -90,7 +90,13 @@ describe("galería de combos", () => {
 
   it("omite ingredientes sin foto, vacíos y rutas duplicadas", () => {
     const combo = makeCombo({
-      images: ["/test/igual.webp", "", "  ", "/test/otra.webp", "/test/igual.webp"],
+      images: [
+        "/test/igual.webp",
+        "",
+        "  ",
+        "/test/otra.webp",
+        "/test/igual.webp ",
+      ],
       composition: [
         { productSlug: "deditos", quantity: 1 },
         { productSlug: "empanadas", quantity: 1 },

@@ -11,8 +11,9 @@ function firstPhoto(
 
 function uniquePhotos(images?: string[]): string[] {
   const photos = new Set<string>();
-  for (const image of images ?? []) {
-    if (image.trim().length > 0) photos.add(image);
+  for (const candidate of images ?? []) {
+    const image = candidate.trim();
+    if (image.length > 0) photos.add(image);
   }
   return [...photos];
 }

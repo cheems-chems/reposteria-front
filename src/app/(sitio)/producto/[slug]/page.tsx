@@ -32,6 +32,7 @@ function priceAmount(product: Product): number {
 }
 
 function fichaTypeLabel(product: Product): string | null {
+  if (product.unitLabel && product.unitCount) return `Por ${product.unitLabel}`;
   switch (product.saleMode) {
     case "combo":
       return `Combo · ${product.totalUnits} unidades`;

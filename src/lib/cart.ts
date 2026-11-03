@@ -48,6 +48,9 @@ export function itemDescription(item: CartItem): string | null {
         : `${item.line.totalUnits} unidades`;
     case "pack":
       return `${item.line.unitsPerPack} u. por bandeja`;
+    case "single":
+      if (!item.line.unitLabel) return null;
+      return `${item.quantity} ${item.line.unitLabel}${item.quantity === 1 ? "" : "s"} · ${item.line.unitCount} unidades`;
     default:
       return null;
   }
@@ -57,6 +60,9 @@ export function itemQuantityLabel(item: CartItem): string {
   const n = item.quantity;
   if (item.line.kind === "combo") return `${n} ${n === 1 ? "combo" : "combos"}`;
   if (item.line.kind === "pack") return `${n} ${n === 1 ? "bandeja" : "bandejas"}`;
+  if (item.line.kind === "single" && item.line.unitLabel) {
+    return `${n} ${item.line.unitLabel}${n === 1 ? "" : "s"}`;
+  }
   return `×${n}`;
 }
 
@@ -109,7 +115,13 @@ export function buildCartMessage(items: CartItem[]): string {
         );
         break;
       case "single":
-        lines.push(`- ${line.name} ×${item.quantity} — ${formatCOP(itemTotal(item))}`);
+        lines.push(
+          `- ${line.name} · ${
+            line.unitLabel
+              ? `${item.quantity} ${line.unitLabel}${item.quantity === 1 ? "" : "s"}`
+              : `×${item.quantity}`
+          } — ${formatCOP(itemTotal(item))}`,
+        );
         break;
     }
   }

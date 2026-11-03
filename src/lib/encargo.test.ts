@@ -111,6 +111,31 @@ describe("saleMode single", () => {
     expect(lineTotal(line)).toBe(135000);
     expect(orderTotals([line])).toEqual({ units: 3, total: 135000 });
   });
+
+  it("cobra cada docena como una unidad de venta y cuenta sus 12 unidades", () => {
+    const cupcakes: SingleProduct = {
+      ...COOKIE,
+      name: "Cupcakes",
+      price: 38000,
+      unitLabel: "docena",
+      unitCount: 12,
+    };
+    const line = singleLine(cupcakes, 3);
+    expect(lineTotal(line)).toBe(114000);
+    expect(orderTotals([line])).toEqual({ units: 36, total: 114000 });
+    expect(productTypeLabel(cupcakes)).toBe("Por docena");
+  });
+
+  it("suma tres bandejas de queso a $36.000", () => {
+    const queso: PackProduct = {
+      ...BANDEJA_QUESO,
+      price: 12000,
+      unitsPerPack: 20,
+    };
+    const line = buildPackLines([queso], { [queso.slug]: 3 })[0];
+    expect(lineTotal(line)).toBe(36000);
+    expect(orderTotals([line])).toEqual({ units: 60, total: 36000 });
+  });
 });
 
 describe("saleMode combo", () => {

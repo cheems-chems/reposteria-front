@@ -411,7 +411,11 @@ export function EncargoFlow(props: EncargoFlowProps) {
       for (const line of orderLines) {
         switch (line.kind) {
           case "single":
-            lines.push(`Producto: ${line.name}`);
+            lines.push(
+              line.unitLabel
+                ? `Producto: ${line.name} · 1 ${line.unitLabel}`
+                : `Producto: ${line.name}`,
+            );
             break;
           case "combo": {
             lines.push(`Combo: ${line.name} (${line.totalUnits} unidades)`);

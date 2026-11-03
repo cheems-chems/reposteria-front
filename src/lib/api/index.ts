@@ -39,6 +39,8 @@ function toListItem(product: Product): ProductListItem {
     imageUrl: product.imageUrl,
     compareAt: product.compareAt,
     shortDescription: product.shortDescription,
+    unitLabel: product.unitLabel,
+    unitCount: product.unitCount,
     preparations: product.preparations,
   };
 

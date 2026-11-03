@@ -47,6 +47,9 @@ export interface ProductBase {
   /** Precio anterior tachado, si el backend envía descuento. */
   compareAt?: number | null;
   shortDescription?: string | null;
+  /** Unidad de venta opcional para productos con presentación fija. */
+  unitLabel?: string;
+  unitCount?: number;
   preparations?: PreparationOption[] | null;
 }
 
@@ -113,6 +116,8 @@ export interface SingleOrderLine {
   name: string;
   quantity: number;
   unitPrice: number;
+  unitLabel?: string;
+  unitCount?: number;
 }
 
 /** Unidades por encima del combo, con su precio unitario. */

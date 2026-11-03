@@ -62,6 +62,7 @@ export function productPrice(product: ProductListItem): number {
 }
 
 export function productTypeLabel(product: ProductListItem): string | null {
+  if (product.unitLabel && product.unitCount) return `Por ${product.unitLabel}`;
   switch (product.saleMode) {
     case "combo":
       return `Combo · ${product.totalUnits} ${
@@ -87,6 +88,8 @@ export function singleLine(
     name: product.name,
     quantity,
     unitPrice: product.price,
+    ...(product.unitLabel ? { unitLabel: product.unitLabel } : {}),
+    ...(product.unitCount ? { unitCount: product.unitCount } : {}),
   };
 }
 
@@ -368,6 +371,7 @@ export function lineTotal(line: OrderLine): number {
 export function lineUnits(line: OrderLine): number {
   switch (line.kind) {
     case "single":
+      return line.quantity * (line.unitCount ?? 1);
     case "builder":
       return line.quantity;
     case "combo":

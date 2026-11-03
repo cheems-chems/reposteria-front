@@ -164,7 +164,7 @@ export const SALADOS_PRODUCTS: Product[] = [
 		],
 		available: true,
 		featured: true,
-		imageUrl: '/img/productos/salados/combos/01.webp',
+		imageUrl: '/img/productos/salados/combos/combo-pasabocas-variados.webp',
 		shortDescription:
 			'60 unidades — Deditos 15, Empanadas 15, Ojitos 15, Bolitas de carne 15.',
 		description: 'Combo 1 (60 unidades), editable en el encargo.',
@@ -191,7 +191,7 @@ export const SALADOS_PRODUCTS: Product[] = [
 		],
 		available: true,
 		featured: false,
-		imageUrl: '/img/productos/salados/combos/01.webp',
+		imageUrl: '/img/productos/salados/combos/combo-pasabocas-variados.webp',
 		shortDescription:
 			'100 unidades — Deditos 25, Empanadas 25, Ojitos 25, Bolitas de carne 25.',
 		description: 'Combo 2 (100 unidades), editable en el encargo.',
@@ -218,7 +218,7 @@ export const SALADOS_PRODUCTS: Product[] = [
 		],
 		available: true,
 		featured: false,
-		imageUrl: '/img/productos/salados/combos/01.webp',
+		imageUrl: '/img/productos/salados/combos/combo-pasabocas-variados.webp',
 		shortDescription:
 			'160 unidades — Deditos 40, Empanadas 40, Ojitos 40, Bolitas de carne 40.',
 		description: 'Combo 3 (160 unidades), editable en el encargo.',
@@ -247,7 +247,7 @@ export const SALADOS_PRODUCTS: Product[] = [
 		],
 		available: true,
 		featured: false,
-		imageUrl: '/img/productos/salados/combos/01.webp',
+		imageUrl: '/img/productos/salados/combos/combo-pasabocas-variados.webp',
 		shortDescription:
 			'120 unidades — Deditos 20, Empanadas 20, Ojitos 20, Bolitas de carne 20, Pinchitos 20, Papitas rellenas 20.',
 		description: 'Combo 4 (120 unidades), editable en el encargo.',

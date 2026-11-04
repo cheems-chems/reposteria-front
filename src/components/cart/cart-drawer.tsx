@@ -51,9 +51,6 @@ export function CartDrawer() {
         <header className="flex items-center justify-between gap-4 border-b border-borde px-5 py-4">
           <div>
             <h2 className="font-serif text-2xl text-vino">Mi encargo</h2>
-            <p className="font-sans text-xs text-texto-suave">
-              Sin pago en línea: lo confirmamos por WhatsApp.
-            </p>
           </div>
           <button
             ref={closeRef}

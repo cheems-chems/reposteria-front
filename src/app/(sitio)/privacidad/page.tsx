@@ -4,7 +4,7 @@ import { legalConfig } from "@/lib/legal-config";
 
 export const metadata: Metadata = {
   title: "Política de privacidad",
-  description: "Borrador de política de tratamiento de datos personales.",
+  description: "Política de tratamiento de datos personales.",
 };
 
 export default function PrivacidadPage() {

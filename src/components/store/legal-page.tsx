@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
-import { Alert } from "@/components/ui/alert";
 import { PageHeader } from "./page-header";
-import { legalConfig } from "@/lib/legal-config";
 
 interface LegalPageProps {
   title: string;
@@ -9,25 +7,13 @@ interface LegalPageProps {
   children: ReactNode;
 }
 
-/** Borrador sin revisar; los datos entre corchetes se completan con información real del negocio. */
 export function LegalPage({ title, description, children }: LegalPageProps) {
-  const esBorrador = legalConfig.esBorrador;
-
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-10 sm:px-8">
       <PageHeader
-        eyebrow={esBorrador ? "Legal · Borrador" : "Legal"}
         title={title}
         description={description}
       />
-
-      {esBorrador ? (
-        <Alert tone="warning" title="Borrador sin revisar" className="mt-8">
-          Este texto es un borrador de trabajo. Debe ser revisado por asesoría
-          legal antes de publicarse. Los datos entre corchetes se completan con la
-          información real del negocio.
-        </Alert>
-      ) : null}
 
       <div className="mt-8 flex flex-col gap-8">{children}</div>
     </main>

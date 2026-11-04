@@ -4,7 +4,7 @@ import { legalConfig } from "@/lib/legal-config";
 
 export const metadata: Metadata = {
   title: "Términos y condiciones",
-  description: "Borrador de términos y condiciones de compra y encargos.",
+  description: "Términos y condiciones de compra y encargos.",
 };
 
 export default function TerminosPage() {

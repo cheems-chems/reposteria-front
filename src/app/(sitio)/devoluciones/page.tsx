@@ -4,7 +4,7 @@ import { legalConfig } from "@/lib/legal-config";
 
 export const metadata: Metadata = {
   title: "Envíos y devoluciones",
-  description: "Borrador de política de entrega, cancelaciones y devoluciones.",
+  description: "Política de entrega, cancelaciones y devoluciones.",
 };
 
 export default function DevolucionesPage() {

@@ -37,9 +37,14 @@ export default function PrivacidadPage() {
 
       <LegalSection title="2. Datos que tratamos">
         <p>
-          Tratamos los datos que nos entregas al llenar el formulario de encargo
-          y por WhatsApp: nombre, correo o número de WhatsApp, y el detalle de tu
-          solicitud. No solicitamos datos sensibles.
+          En el formulario de encargo tratamos tu nombre, la fecha, la modalidad
+          de entrega (recogida o domicilio), la dirección si eliges domicilio y
+          el texto libre de personalización. En el formulario de contacto
+          tratamos tu nombre, correo o WhatsApp, el tipo de consulta y el
+          mensaje. También tratamos las imágenes de referencia que nos envíes
+          por WhatsApp. No solicitamos datos sensibles; te pedimos no incluirlos
+          en tus mensajes salvo que sean necesarios para tu pedido (por ejemplo,
+          una alergia).
         </p>
       </LegalSection>
 
@@ -56,7 +61,8 @@ export default function PrivacidadPage() {
           {dataRetention ? `Conservamos los datos durante ${dataRetention}. ` : ""}
           Podemos compartirlos con proveedores que nos prestan servicios técnicos
           {hostingProvider ? ` (por ejemplo, ${hostingProvider})` : ""}, siempre
-          bajo obligaciones de confidencialidad.
+          bajo obligaciones de confidencialidad. Los pedidos se envían y
+          confirman por WhatsApp.
         </p>
       </LegalSection>
 

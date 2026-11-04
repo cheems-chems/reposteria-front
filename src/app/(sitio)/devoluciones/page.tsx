@@ -9,12 +9,6 @@ export const metadata: Metadata = {
 
 export default function DevolucionesPage() {
   const {
-    city,
-    deliveryMethod,
-    deliveryZones,
-    deliveryCost,
-    cancellationDays,
-    lateCancellationPercent,
     claimHours,
     compensationType,
   } = legalConfig;
@@ -26,11 +20,9 @@ export default function DevolucionesPage() {
     >
       <LegalSection title="1. Entrega">
         <p>
-          {deliveryMethod ? `Ofrecemos ${deliveryMethod}` : "Atendemos"} en{" "}
-          {deliveryZones ?? city}.{" "}
-          {deliveryCost
-            ? `Las entregas a domicilio tienen un costo de ${deliveryCost} y se coordinan al confirmar el pedido.`
-            : "Las entregas se coordinan al confirmar el pedido."}
+          El domicilio no está incluido en el precio acordado y se cobra aparte
+          según la distancia hasta el lugar de entrega. Te informamos el valor
+          antes de confirmar.
         </p>
         <p>
           La fecha y la franja horaria se acuerdan antes de confirmar. Los
@@ -41,15 +33,8 @@ export default function DevolucionesPage() {
 
       <LegalSection title="2. Cancelaciones">
         <p>
-          {cancellationDays
-            ? `Puedes cancelar sin costo si avisas con al menos ${cancellationDays} días de anticipación.`
-            : ""}
-          {lateCancellationPercent
-            ? ` Con menos antelación, puede descontarse ${lateCancellationPercent} por insumos ya preparados.`
-            : ""}
-          {!cancellationDays && !lateCancellationPercent
-            ? "Escríbenos por WhatsApp para gestionar una cancelación."
-            : ""}
+          Una vez agendado el pedido no se hacen devoluciones de dinero ni se
+          reembolsa el adelanto.
         </p>
       </LegalSection>
 

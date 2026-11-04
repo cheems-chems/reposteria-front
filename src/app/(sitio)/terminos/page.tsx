@@ -17,8 +17,6 @@ export default function TerminosPage() {
     email,
     whatsapp,
     taxesNote,
-    paymentMethod,
-    cancellationDays,
     jurisdiction,
   } = legalConfig;
   const titular = legalName ?? businessName;
@@ -49,24 +47,31 @@ export default function TerminosPage() {
           Cada producto indica los días de anticipación necesarios. Los pedidos
           por fuera de ese plazo pueden no ser aceptados.
         </p>
+        <p>
+          Trabajamos con imagen de referencia: puedes enviarnos una foto y
+          haremos tu torta lo más parecida posible, pero no queda idéntica. El
+          sabor (por ejemplo chocolate, vainilla, zanahoria o envinada) se
+          acuerda al hacer el pedido.
+        </p>
       </LegalSection>
 
       <LegalSection title="3. Precios y pago">
         <p>
           Los precios están expresados en pesos colombianos (COP)
-          {taxesNote ? ` ${taxesNote}` : ""}.
-          {paymentMethod ? ` El medio de pago es ${paymentMethod}.` : ""} Nos
-          reservamos el derecho de corregir errores evidentes de precio.
+          {taxesNote ? ` ${taxesNote}` : ""}. Nos reservamos el derecho de
+          corregir errores evidentes de precio.
+        </p>
+        <p>
+          Para agendar una torta se paga el 50% de adelanto o el 100% del precio
+          acordado. El precio acordado no incluye el domicilio, que se cobra
+          aparte.
         </p>
       </LegalSection>
 
       <LegalSection title="4. Cancelaciones">
         <p>
-          Al ser productos elaborados a medida y perecederos,{" "}
-          {cancellationDays
-            ? `las cancelaciones deben solicitarse con al menos ${cancellationDays} días de anticipación.`
-            : "consulta la política de envíos y devoluciones para las condiciones de cancelación."}
-          {cancellationDays ? " Consulta la política de envíos y devoluciones para más detalle." : ""}
+          Una vez agendado el pedido no se hacen devoluciones de dinero.
+          Consulta también Envíos y devoluciones.
         </p>
       </LegalSection>
 
@@ -75,6 +80,10 @@ export default function TerminosPage() {
           Los productos pueden contener o tener contacto con alérgenos declarados
           en cada ficha. Si tienes una alergia o intolerancia, indícalo antes de
           confirmar el pedido.
+        </p>
+        <p>
+          Nuestras tortas se elaboran con ingredientes como leche, huevo,
+          mantequilla, queso, harina, chocolate, cocoa y esencias.
         </p>
       </LegalSection>
 

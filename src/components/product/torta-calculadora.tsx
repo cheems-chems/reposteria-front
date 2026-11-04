@@ -577,14 +577,14 @@ export function TortaCalculadora() {
 								rel="noopener noreferrer"
 								className={buttonClasses({ fullWidth: true, size: 'lg' })}
 							>
-								Enviar mi torta por WhatsApp
+								Pedir mi torta por WhatsApp
 							</a>
 						) : wa ? (
 							<button
 								type="submit"
 								className={buttonClasses({ fullWidth: true, size: 'lg' })}
 							>
-								Enviar mi torta por WhatsApp
+								Pedir mi torta por WhatsApp
 							</button>
 						) : (
 							<p className="text-sm text-texto-suave">

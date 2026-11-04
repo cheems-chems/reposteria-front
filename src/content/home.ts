@@ -21,7 +21,7 @@ export const trust: TrustItem[] = [
     path: "M3 10.5 12 3l9 7.5M5.5 9.5V21h13V9.5M10 21v-6h4v6",
   },
   {
-    text: "Encargos con 48 horas de anticipación (ejemplo)",
+    text: "Encargos con 48 horas de anticipación",
     path: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zm0-13v5l3 2",
   },
   {

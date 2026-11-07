@@ -881,9 +881,6 @@ export function EncargoFlow(props: EncargoFlowProps) {
                 <span className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
                   Mi encargo
                 </span>
-                <span className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
-                  Borrador
-                </span>
               </div>
               <dl className="flex flex-col divide-y divide-dashed divide-vino/30 px-4 py-3 text-sm">
                 <div className="flex flex-col gap-2 py-2">

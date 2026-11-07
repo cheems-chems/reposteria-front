@@ -333,7 +333,12 @@ export function EncargoFlow(props: EncargoFlowProps) {
         if (!selectedSingle) return "Elige un producto para continuar.";
       } else if (kind === "combo") {
         if (isBuilderChoice) {
-          const problems = builderProblems(builderSelection, minUnitsPerType);
+          const problems = builderProblems(
+            builderSelection,
+            minUnitsPerType,
+            5,
+            categoryItems,
+          );
           if (problems.length > 0) return problems[0];
         } else if (selectedCombo) {
           if (selectedCombo.editable) {
@@ -405,7 +410,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
     } else {
       if (isBuilderChoice) {
         lines.push(
-          "Armado desde cero (mínimo 15 unidades por tipo de pasaboca):",
+          `Armado desde cero (mínimo ${minUnitsPerType} unidades por tipo de pasaboca y ${formatCOP(40000)} en total):`,
         );
       }
       for (const line of orderLines) {
@@ -491,6 +496,8 @@ export function EncargoFlow(props: EncargoFlowProps) {
       const builderProblem = builderProblems(
         builderSelection,
         minUnitsPerType,
+        5,
+        categoryItems,
       )[0];
       if (builderProblem) {
         setError(builderProblem);

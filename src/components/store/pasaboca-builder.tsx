@@ -38,7 +38,7 @@ export function PasabocaBuilder({
   const lines = buildBuilderLines(items, selection);
   const totals = orderTotals(lines);
   const units = builderUnitCount(selection);
-  const problems = builderProblems(selection, minUnitsPerType);
+  const problems = builderProblems(selection, minUnitsPerType, 5, items);
 
   return (
     <div className="flex flex-col">
@@ -54,7 +54,8 @@ export function PasabocaBuilder({
           const subtotal = unitPrice * quantity;
           const warning =
             quantity > 0 &&
-            (quantity < minUnitsPerType || quantity % item.stepQty !== 0)
+            (quantity < minUnitsPerType ||
+              (quantity - minUnitsPerType) % item.stepQty !== 0)
               ? `Mínimo ${minUnitsPerType}, de a ${item.stepQty}.`
               : undefined;
           return (
@@ -63,7 +64,7 @@ export function PasabocaBuilder({
                 name={item.name}
                 priceLine={`${formatCOP(unitPrice)} por unidad`}
                 value={quantity}
-                min={minUnitsPerType}
+                min={0}
                 step={item.stepQty}
                 normalizeInput={(next) =>
                   normalizeBuilderQuantity(next, minUnitsPerType, item.stepQty)
@@ -132,6 +133,9 @@ export function PasabocaBuilder({
             {units} {units === 1 ? "unidad" : "unidades"} ·{" "}
             {formatCOP(totals.total)}
           </p>
+          <p className="font-sans text-[11px] text-texto-suave">
+            Mínimo para encargar: {formatCOP(40000)}
+          </p>
           <details>
             <summary className="cursor-pointer font-sans text-xs text-fucsia-hover">
               Ver detalle
@@ -176,6 +180,9 @@ export function PasabocaBuilder({
             </p>
             <p className="tabular font-serif text-xl font-semibold text-fucsia-hover">
               {formatCOP(totals.total)}
+            </p>
+            <p className="font-sans text-xs text-texto-suave">
+              Mínimo para encargar: {formatCOP(40000)}
             </p>
           </div>
         </div>

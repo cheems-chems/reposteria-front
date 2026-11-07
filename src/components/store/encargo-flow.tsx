@@ -165,8 +165,23 @@ export function EncargoFlow(props: EncargoFlowProps) {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [opened, setOpened] = useState(false);
+  const flowRef = useRef<HTMLDivElement | null>(null);
+  const isFirstRender = useRef(true);
   const builderRef = useRef<HTMLDivElement | null>(null);
   const autoScrolled = useRef(false);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth";
+
+    flowRef.current?.scrollIntoView({ behavior, block: "start" });
+  }, [step]);
 
   const lastKeyRef = useRef<string>("");
   useEffect(() => {
@@ -543,7 +558,7 @@ export function EncargoFlow(props: EncargoFlowProps) {
   })();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div ref={flowRef} className="scroll-mt-24 flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
         <p className="font-sans text-xs uppercase tracking-[0.2em] text-texto-suave">
           {isSummary ? "Resumen" : `Paso ${step + 1} de ${STEP_TITLES.length}`}

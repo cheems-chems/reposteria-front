@@ -111,7 +111,9 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
     ? comboGalleryImages(product, comboItems)
     : product.images?.some((image) => image.length > 0)
       ? productGalleryImages(product, [])
-      : await getProductImages(product.slug, product.imageUrl);
+      : product.imageUrl
+        ? [product.imageUrl]
+        : await getProductImages(product.slug, product.imageUrl);
   const esCongeladoOBandeja = ["congelados", "bandejas"].includes(
     product.categorySlug,
   );

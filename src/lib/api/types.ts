@@ -42,9 +42,9 @@ export interface ProductBase {
   categoryName: string;
   available: boolean;
   featured?: boolean;
-  // null si el negocio aún no la sube.
-  imageUrl?: string | null;
-  /** Fotos del producto; la primera es la principal si existe. */
+  // Acepta una URL o varias; al normalizar, la primera se usa como principal.
+  imageUrl?: string | string[] | null;
+  /** Compatibilidad con respuestas que envían las fotos en un campo separado. */
   images?: string[];
   /** Precio anterior tachado, si el backend envía descuento. */
   compareAt?: number | null;

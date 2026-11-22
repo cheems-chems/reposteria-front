@@ -47,6 +47,9 @@ foto real:
 4. En el producto, pon `imageUrl` con la ruta pública del WebP correspondiente,
    por ejemplo
    `/img/productos/dulces/tortas-personalizadas/tortas-personalizadas-01.webp`.
+   Para una galería, `imageUrl` también acepta una lista de rutas, por ejemplo
+   `imageUrl: ["/img/productos/categoria/foto-01.webp", "/img/productos/categoria/foto-02.webp"]`;
+   la primera se usa como principal y las demás aparecen en la ficha.
 
 Para revisar qué generaría una carpeta sin escribir archivos usa
 `node scripts/optimizar-fotos.mjs --dry-run --folder <ruta-relativa>`. El álbum

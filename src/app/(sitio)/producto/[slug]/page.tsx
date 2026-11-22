@@ -22,7 +22,6 @@ import {
   getComboItems,
   getProductBySlug,
   getProducts,
-  productGalleryImages,
   type Product,
 } from "@/lib/api";
 
@@ -107,13 +106,17 @@ async function ProductoDetalle({ params }: { params: ProductoParams }) {
 
   const comboItems =
     product.saleMode === "combo" ? await getComboItems() : [];
-  const productImages = product.saleMode === "combo"
-    ? comboGalleryImages(product, comboItems)
-    : product.images?.some((image) => image.length > 0)
-      ? productGalleryImages(product, [])
+  const configuredProductImages = product.images?.filter((image) => image.length > 0)
+    ?? (Array.isArray(product.imageUrl)
+      ? product.imageUrl.filter((image) => image.length > 0)
       : product.imageUrl
         ? [product.imageUrl]
-        : await getProductImages(product.slug, product.imageUrl);
+        : []);
+  const productImages = product.saleMode === "combo"
+    ? comboGalleryImages(product, comboItems)
+    : configuredProductImages.length > 0
+      ? configuredProductImages
+      : await getProductImages(product.slug);
   const esCongeladoOBandeja = ["congelados", "bandejas"].includes(
     product.categorySlug,
   );

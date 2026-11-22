@@ -113,8 +113,10 @@ secciones, categorías y productos desde el panel (no se fijan en el código).
 ```
 
 Notas:
-- `imageUrl` es la URL absoluta de la foto real; `null` si el negocio aún no
-  la ha subido (el frontend muestra un marcador honesto, nunca stock).
+- `imageUrl` puede ser una URL absoluta o una lista de URLs absolutas; la
+  primera imagen se usa como principal y las restantes forman la galería.
+  `null` si el negocio aún no la ha subido (el frontend muestra un marcador
+  honesto, nunca stock).
 - `compareAt` se usa para mostrar el precio anterior tachado.
 - `saleMode` describe cómo se vende (ver sección 6): `"single"`, `"combo"`,
   `"builder"` o `"pack"`. Cada tipo lleva solo sus campos.

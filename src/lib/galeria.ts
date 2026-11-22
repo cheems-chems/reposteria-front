@@ -49,10 +49,13 @@ function listFolderImages(folder: string): string[] {
 
 export function getCardImage(
   slug: string,
-  imageUrl?: string | null,
+  imageUrl?: string | string[] | null,
 ): string | null {
   const folder = GALERIA_POR_PRODUCTO[slug];
-  if (imageUrl) return imageUrl;
+  const primaryImage = Array.isArray(imageUrl)
+    ? imageUrl.find((image) => image.length > 0) ?? null
+    : imageUrl;
+  if (primaryImage) return primaryImage;
   if (folder && SHARED_GALLERY_FOLDERS.has(folder)) return null;
   if (!folder) return null;
   return listFolderImages(folder)[0] ?? null;
@@ -60,12 +63,17 @@ export function getCardImage(
 
 export async function getProductImages(
   slug: string,
-  imageUrl?: string | null,
+  imageUrl?: string | string[] | null,
 ): Promise<string[]> {
   const folder = GALERIA_POR_PRODUCTO[slug];
   if (!folder) return [];
-  if (folder === "congelados") return imageUrl ? [imageUrl] : [];
+  const configuredImages = Array.isArray(imageUrl)
+    ? imageUrl.filter((image) => image.length > 0)
+    : imageUrl
+      ? [imageUrl]
+      : [];
+  if (folder === "congelados") return configuredImages;
 
   const images = listFolderImages(folder);
-  return images.length > 0 ? images : imageUrl ? [imageUrl] : [];
+  return images.length > 0 ? images : configuredImages;
 }

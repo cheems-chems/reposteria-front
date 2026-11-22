@@ -39,8 +39,7 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		stepPacks: 1,
 		available: true,
 		featured: true,
-		imageUrl: '/img/productos/congelados/deditos-congelados.webp',
-		images: [
+		imageUrl: [
 			'/img/productos/congelados/deditos-congelados.webp',
 			'/img/productos/congelados/deditos-en-preparacion.webp',
 		],
@@ -64,8 +63,7 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		stepPacks: 1,
 		available: true,
 		featured: false,
-		imageUrl: '/img/productos/congelados/deditos-congelados.webp',
-		images: [
+		imageUrl: [
 			'/img/productos/congelados/deditos-congelados.webp',
 			'/img/productos/congelados/deditos-en-preparacion.webp',
 		],
@@ -89,7 +87,10 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		stepPacks: 1,
 		available: true,
 		featured: false,
-		imageUrl: '/img/productos/congelados/deditos-congelados.webp',
+		imageUrl: [
+			'/img/productos/congelados/deditos-congelados.webp',
+			'/img/productos/congelados/deditos-en-preparacion.webp',
+		],
 		shortDescription: '20 unidades: 10 de queso y 10 de bocadillo.',
 		description:
 			'Bandeja mixta congelada con 10 deditos de queso y 10 deditos de bocadillo.',
@@ -110,7 +111,10 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		stepPacks: 1,
 		available: true,
 		featured: false,
-		imageUrl: '/img/productos/congelados/deditos-congelados.webp',
+		imageUrl: [
+			'/img/productos/congelados/deditos-congelados.webp',
+			'/img/productos/congelados/deditos-en-preparacion.webp',
+		],
 		shortDescription: '16 deditos que combinan queso y bocadillo.',
 		description:
 			'Bandeja de 16 deditos de bocaqueso congelados, con ambos sabores en cada dedito.',

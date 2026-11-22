@@ -26,7 +26,12 @@ export { useProvisionalData, apiBaseUrl } from "./config";
 export function primaryProductImage(
   product: Pick<ProductBase, "imageUrl" | "images">,
 ): string | null {
-  return product.images?.find((image) => image.length > 0) ?? product.imageUrl ?? null;
+  const imageList = Array.isArray(product.imageUrl) ? product.imageUrl : [];
+  return (
+    product.images?.find((image) => image.length > 0) ??
+    imageList.find((image) => image.length > 0) ??
+    (typeof product.imageUrl === "string" ? product.imageUrl : null)
+  );
 }
 
 export function productGalleryImages(
@@ -37,8 +42,17 @@ export function productGalleryImages(
   return images.length > 0 ? images : fallbackImages;
 }
 
-function withPrimaryImage<T extends ProductBase>(product: T): T {
-  return { ...product, imageUrl: primaryProductImage(product) };
+type NormalizedProduct<T extends ProductBase> = T extends ProductBase
+  ? Omit<T, "imageUrl" | "images"> & { imageUrl: string | null; images?: string[] }
+  : never;
+
+function withPrimaryImage<T extends ProductBase>(product: T): NormalizedProduct<T> {
+  const images = product.images?.length
+    ? product.images
+    : Array.isArray(product.imageUrl)
+      ? product.imageUrl
+      : undefined;
+  return { ...product, imageUrl: primaryProductImage(product), images } as unknown as NormalizedProduct<T>;
 }
 
 export async function getSections(): Promise<Section[]> {
@@ -56,7 +70,7 @@ function toListItem(product: Product): ProductListItem {
     available: product.available,
     featured: product.featured,
     imageUrl: primaryProductImage(product),
-    images: product.images,
+    images: product.images ?? (Array.isArray(product.imageUrl) ? product.imageUrl : undefined),
     compareAt: product.compareAt,
     shortDescription: product.shortDescription,
     unitLabel: product.unitLabel,

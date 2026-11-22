@@ -6,7 +6,12 @@ type IngredientGallerySource = Pick<BuilderItemProduct, "slug" | "imageUrl" | "i
 function firstPhoto(
   product: Pick<BuilderItemProduct, "imageUrl" | "images">,
 ): string | null {
-  return product.images?.find((image) => image.trim().length > 0) ?? product.imageUrl ?? null;
+  const imageList = Array.isArray(product.imageUrl) ? product.imageUrl : [];
+  return (
+    product.images?.find((image) => image.trim().length > 0) ??
+    imageList.find((image) => image.trim().length > 0) ??
+    (typeof product.imageUrl === "string" ? product.imageUrl : null)
+  );
 }
 
 function uniquePhotos(images?: string[]): string[] {
@@ -23,7 +28,9 @@ export function comboGalleryImages(
   combo: ComboGallerySource,
   ingredients: IngredientGallerySource[],
 ): string[] {
-  const ownPhotos = uniquePhotos(combo.images);
+  const ownPhotos = uniquePhotos(
+    combo.images ?? (Array.isArray(combo.imageUrl) ? combo.imageUrl : undefined),
+  );
   if (ownPhotos.length > 0) return ownPhotos;
 
   const ingredientBySlug = new Map(

@@ -40,6 +40,10 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		available: true,
 		featured: true,
 		imageUrl: '/img/productos/congelados/deditos-congelados.webp',
+		images: [
+			'/img/productos/congelados/deditos-congelados.webp',
+			'/img/productos/congelados/deditos-en-preparacion.webp',
+		],
 		shortDescription: '20 deditos de queso congelados.',
 		description:
 			'Bandeja de 20 deditos de queso, crudos y congelados para preparar en casa.',
@@ -61,6 +65,10 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		available: true,
 		featured: false,
 		imageUrl: '/img/productos/congelados/deditos-congelados.webp',
+		images: [
+			'/img/productos/congelados/deditos-congelados.webp',
+			'/img/productos/congelados/deditos-en-preparacion.webp',
+		],
 		shortDescription: '20 deditos de bocadillo congelados.',
 		description:
 			'Bandeja de 20 deditos de bocadillo, crudos y congelados para preparar en casa.',

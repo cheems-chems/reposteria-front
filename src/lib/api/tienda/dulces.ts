@@ -27,7 +27,7 @@ export const DULCES_PRODUCTS: Product[] = [
 		price: 28000, // EJEMPLO: precio por confirmar.
 		available: true,
 		featured: true,
-		imageUrl: '/img/productos/dulces/tortas-personalizadas/01.webp',
+		imageUrl: '/img/productos/dulces/tortas-personalizadas/tortas-personalizadas-01.webp',
 		shortDescription: 'Diseñada a tu gusto para tu celebración.',
 		description: 'Tortas hechas a tu medida. El precio parte desde $35.000 y depende del sabor y la decoración. Cuéntanos tu idea y la hacemos realidad.',
 		ingredients: [],

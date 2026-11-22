@@ -6,21 +6,11 @@ páginas.
 
 ## Foto del héroe (portada)
 
-La portada reserva un espacio 3:2 para una foto grande del producto. Mientras
-no haya archivo, se muestra un marcador rosa de **"Foto pendiente"**.
+La portada usa `public/img/hero/hero-rosa.png`.
 
-1. Guarda tu imagen en `public/brand/hero.jpg` (o `.png` / `.webp`).
-2. Abre `src/lib/brand.ts` y edita el bloque `hero`:
-
-   ```ts
-   hero: {
-     image: "/brand/hero.jpg", // antes: null
-     alt: "Torta de milhojas con guayaba de Elvi's", // describe la foto real
-   },
-   ```
-
-3. Listo. La portada la usará con `next/image`, proporción 3:2 y carga
-   prioritaria (`preload`).
+Para cambiarla, guarda la foto en `public/img/hero/` y actualiza `HERO_IMAGE`
+en `src/app/(sitio)/page.tsx` con su ruta pública. La portada la muestra con
+`next/image`, proporción 3:2 y carga prioritaria (`preload`).
 
 Recomendaciones para que se vea bien:
 
@@ -55,11 +45,12 @@ pedidos" de la portada, combo destacado y ficha `/producto/[slug]`). Mientras no
 haya archivo se muestra un marcador rosa honesto de **"foto pendiente"** (nunca
 stock).
 
-- Guarda las fotos en `public/products/` y usa preferiblemente nombres iguales al
-  `slug` del producto, p. ej. `public/products/milhojas-de-guayaba.jpg`.
+- Las fotos optimizadas están en `public/img/productos/<categoría>/`, con la
+  misma ruta de categoría que `fotos-originales/`. Las fotos de cookies y tortas
+  personalizadas usan nombres numerados (`01.webp`, `02.webp`, etc.).
 - La URL la entrega el backend en el campo `imageUrl` del producto (ver
-  `docs/ENDPOINTS-NECESARIOS.md` → `GET /products`). En datos de desarrollo el
-  campo vive en `src/lib/api/dev-data.ts` (`DEV_PRODUCTS`).
+  `docs/ENDPOINTS-NECESARIOS.md` → `GET /products`). En datos provisionales, las
+  rutas están en `src/lib/api/tienda/*.ts`.
 - Proporciones de diseño: las fichas de la tienda usan **4:5** y el combo
   destacado de la portada usa **4:3**. Exporta al menos 800 px de ancho y usa
   `object-cover` (la foto se recorta para llenar el marco).
@@ -67,12 +58,12 @@ stock).
 ## Banner de combos
 
 El banner "Arma tu combo" usa `src/lib/brand.ts` → `banner.combos`. `null` = sin
-imagen (se diseña sin foto). Cuando haya archivo, por ejemplo
-`public/brand/combos.jpg`, pon la ruta:
+imagen. Si se agrega una imagen, guárdala en `public/brand/` y asigna a
+`banner.combos` su ruta pública, que empieza por `/brand/`.
 
 ```ts
 banner: {
-  combos: "/brand/combos.jpg",
+  combos: null,
 },
 ```
 

@@ -248,7 +248,7 @@ export const CONGELADOS_PRODUCTS: Product[] = [
 		stepPacks: 1,
 		available: true,
 		featured: false,
-		imageUrl: '/img/productos/congelados/Ojitos.webp',
+		imageUrl: '/img/productos/congelados/ojitos.webp',
 		shortDescription: '24 ojitos de salchicha congelados.',
 		description: 'Bandeja de 24 ojitos de salchicha congelados.',
 		ingredients: [],

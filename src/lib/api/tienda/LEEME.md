@@ -37,13 +37,16 @@ deja de venderse hasta que lo actives de nuevo.
 Sin foto se ve el dibujo SVG de su sección sobre fondo de color. Para poner
 foto real:
 
-1. Copia el archivo a `public/products/<slug>.jpg` (p. ej.
-   `public/products/tarta-de-limon.jpg`).
-2. En el producto, pon `imageUrl: "/products/tarta-de-limon.jpg"`.
+1. Guarda el original en `fotos-originales/<categoría>/<subcategoría>/`.
+2. Para galerías procesadas por el optimizador, conserva la ruta relativa y
+   ejecuta `npm run fotos`; se generan WebP numerados en
+   `public/img/productos/<categoría>/<subcategoría>/`.
+3. En el producto, pon `imageUrl` con la ruta pública del WebP correspondiente,
+   por ejemplo `/img/productos/dulces/tortas-personalizadas/01.webp`.
 
 Si `imageUrl` no está definido o la ruta falla, se sigue viendo el dibujo;
 una foto rota no rompe la página. La foto de la sección funciona igual
-(`imageUrl` en la sección, archivo en `public/sections/<slug>.jpg`).
+(`imageUrl` en la sección, archivo bajo `public/` y ruta pública coincidente).
 
 ## Validación
 

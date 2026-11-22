@@ -37,12 +37,20 @@ deja de venderse hasta que lo actives de nuevo.
 Sin foto se ve el dibujo SVG de su sección sobre fondo de color. Para poner
 foto real:
 
-1. Guarda el original en `fotos-originales/<categoría>/<subcategoría>/`.
-2. Para galerías procesadas por el optimizador, conserva la ruta relativa y
-   ejecuta `npm run fotos`; se generan WebP numerados en
-   `public/img/productos/<categoría>/<subcategoría>/`.
-3. En el producto, pon `imageUrl` con la ruta pública del WebP correspondiente,
-   por ejemplo `/img/productos/dulces/tortas-personalizadas/01.webp`.
+1. Coloca temporalmente la foto fuente en
+   `public/img/productos/<categoría>/<subcategoría>/`, junto a las imágenes del
+   álbum.
+2. Usa un nombre descriptivo en minúsculas y sin espacios y genera el WebP
+   correspondiente con `npm run fotos -- --folder <ruta-relativa>`.
+3. Revisa el WebP y quita el archivo fuente temporal para dejar un solo archivo
+   por foto.
+4. En el producto, pon `imageUrl` con la ruta pública del WebP correspondiente,
+   por ejemplo
+   `/img/productos/dulces/tortas-personalizadas/tortas-personalizadas-01.webp`.
+
+Para revisar qué generaría una carpeta sin escribir archivos usa
+`node scripts/optimizar-fotos.mjs --dry-run --folder <ruta-relativa>`. El álbum
+único de productos es `public/img/productos/`.
 
 Si `imageUrl` no está definido o la ruta falla, se sigue viendo el dibujo;
 una foto rota no rompe la página. La foto de la sección funciona igual

@@ -45,9 +45,9 @@ pedidos" de la portada, combo destacado y ficha `/producto/[slug]`). Mientras no
 haya archivo se muestra un marcador rosa honesto de **"foto pendiente"** (nunca
 stock).
 
-- Las fotos optimizadas están en `public/img/productos/<categoría>/`, con la
-  misma ruta de categoría que `fotos-originales/`. Las fotos de cookies y tortas
-  personalizadas usan nombres numerados (`01.webp`, `02.webp`, etc.).
+- Las fotos de productos están únicamente en `public/img/productos/<categoría>/`
+  y usan nombres descriptivos, por ejemplo
+  `tortas-personalizadas-01.webp`.
 - La URL la entrega el backend en el campo `imageUrl` del producto (ver
   `docs/ENDPOINTS-NECESARIOS.md` → `GET /products`). En datos provisionales, las
   rutas están en `src/lib/api/tienda/*.ts`.
